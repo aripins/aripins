@@ -13,7 +13,7 @@ I am an IT student who is passionate about networking, coding, and database.
 
 ### 🤖 Fun Facts:
 ☸ My programming journey started with ‘Hello, World!’ and now it's more like ‘Why isn't this working?’  
-☸ "My best ideas for assignments come at 2am—fast Wi-Fi and a quiet world!"
+☸ My best ideas for assignments come at 2am—fast Wi-Fi and a quiet world!
 
 ## Connect With Me:
 [![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://instagram.com/aripins01) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/aripin-sihabudin01)
