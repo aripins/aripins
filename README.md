@@ -1,7 +1,12 @@
-# Hey Folks! 🌎
-<br>I'm Aripin Sihabudin, an IT student passionate about networking, coding, and data. <br>My best coding ideas come at 2 AM—because bugs fear the dark.
+![MasterHead](https://64.media.tumblr.com/61d4fea89f86eb4cb5a7e616d9cd4832/tumblr_owi25v6uAo1r4gsiio1_1280.gif)
 
-![Profile Views](https://img.shields.io/github/watchers/aripins/aripins?style=social)
+<h1 align="center">Hallo Folks 👋, I'm Aripin Sihabudin</h1>
+<h3 align="center">Exploring Technology and Code.</h3>
+
+<img align="right" alt="Coding" width="400" src="https://media1.tenor.com/m/s9XbYudjElkAAAAC/snorlax-sleeping.gif">
+
+
+<p align="left"> <img src="https://komarev.com/ghpvc/?username=aripins&label=Profile%20views&color=0e75b6&style=flat" alt="aripins" /> </p>
 
 ## Connect With Me:
 [![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://instagram.com/aripins01) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/aripin-sihabudin01)
