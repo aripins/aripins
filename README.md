@@ -1,12 +1,19 @@
 ![MasterHead](https://64.media.tumblr.com/61d4fea89f86eb4cb5a7e616d9cd4832/tumblr_owi25v6uAo1r4gsiio1_1280.gif)
-
-<h1 align="center">Hallo Folks 👋, I'm Aripin Sihabudin</h1>
-<h3 align="center">Exploring Technology and Code.</h3>
-
-<img align="right" alt="Coding" width="400" src="https://media1.tenor.com/m/s9XbYudjElkAAAAC/snorlax-sleeping.gif">
-
-
+<h1 align="center">Hi👋, <br> I'm Aripin Sihabudin </h1>
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=aripins&label=Profile%20views&color=0e75b6&style=flat" alt="aripins" /> </p>
+
+### 👨‍💻 About Me:
+I am an IT student who is passionate about networking, coding, and database.  
+
+### 🛠️ Expertise:
+☑ Coding: Python 🐍, Java ☕, JavaScript ⚡  
+☑ Networking: AWS & Cisco certified (aka online lab warrior) 🌐  
+☑ Data & Database: Power BI 📊, MySQL 🛢️  
+☑ Design & Docs: Canva & Figma 🎨, Microsoft Office 📄  
+
+### 🤖 Fun Facts:
+☸ My programming journey started with ‘Hello, World!’ and now it's more like ‘Why isn't this working?’  
+☸ "My best ideas for assignments come at 2am—fast Wi-Fi and a quiet world!"
 
 ## Connect With Me:
 [![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://instagram.com/aripins01) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/aripin-sihabudin01)
