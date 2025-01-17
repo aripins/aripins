@@ -1,5 +1,5 @@
 # 💫 About Me:
-Hey Folks! 🌎 <br>I'm Aripin Sihabudin, an IT student passionate about networking, coding, and data. My best coding ideas come at 2 AM—because bugs fear the dark.
+Hey Folks! 🌎 <br>I'm Aripin Sihabudin, an IT student passionate about networking, coding, and data. <br>My best coding ideas come at 2 AM—because bugs fear the dark.
 
 ## 🌐 Socials:
 [![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://instagram.com/aripins01) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](www.linkedin.com/in/aripin-sihabudin01) 
