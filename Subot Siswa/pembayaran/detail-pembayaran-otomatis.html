@@ -1,0 +1,1055 @@
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8" />
+
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+  <title>Pembayaran Otomatis - SubotApp</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+
+    .sidebar-mobile-scroll {
+
+      overflow-x: auto;
+
+      white-space: nowrap;
+
+      -webkit-overflow-scrolling: touch;
+
+    }
+
+    .sidebar-mobile-scroll::-webkit-scrollbar {
+
+      display: none;
+
+    }
+
+    .sidebar-mobile-item {
+
+      display: inline-flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      padding: 0.75rem 1rem;
+
+      gap: 0.5rem;
+
+      width: auto;
+
+      min-width: 80px;
+
+    }
+
+    .sidebar-mobile-item .icon-wrapper {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      width: 32px;
+
+      height: 32px;
+
+      border-radius: 9999px;
+
+    }
+
+    .sidebar-mobile-item.active .icon-wrapper {
+
+      background-color: #0B4C66;
+
+      color: white;
+
+    }
+
+    .sidebar-mobile-item.active .text-label {
+
+      color: #0B4C66;
+
+      font-weight: 600;
+
+    }
+
+    .sidebar-mobile-item:not(.active) .icon-wrapper {
+
+      background-color: transparent;
+
+      color: #6B7280;
+
+    }
+
+    .sidebar-mobile-item:not(.active) .text-label {
+
+      color: #6B7280;
+
+      font-weight: 400;
+
+    }
+
+
+
+    .icon-box-size {
+
+      width: 2.5rem;
+
+      height: 2.5rem;
+
+    }
+
+
+
+    .bank-option {
+
+      display: flex;
+
+      align-items: center;
+
+      padding: 1rem;
+
+      border: 1px solid #e5e7eb;
+
+      border-radius: 0.5rem;
+
+      margin-bottom: 0.75rem;
+
+      cursor: pointer;
+
+      transition: all 0.2s ease-in-out;
+
+    }
+
+    .bank-option:hover,
+
+    .bank-option.selected {
+
+      border-color: #0B4C66;
+
+      background-color: #D9E9FF;
+
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    }
+
+    .bank-option .bank-icon {
+
+      height: 32px;
+
+      width: 32px;
+
+      font-size: 1.5rem;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      margin-right: 1rem;
+
+      color: #0B4C66;
+
+    }
+
+    .bank-option span {
+
+      font-weight: 600;
+
+      color: #1a202c;
+
+    }
+
+
+
+    .virtual-account-info {
+
+      background-color: #f7fafc;
+
+      border: 1px dashed #D9E9FF;
+
+      border-radius: 0.5rem;
+
+      padding: 1.5rem;
+
+      margin-top: 1.5rem;
+
+    }
+
+    .virtual-account-info h4 {
+
+      font-weight: 700;
+
+      font-size: 1rem;
+
+      color: #0B4C66;
+
+      margin-bottom: 0.75rem;
+
+    }
+
+    .virtual-account-number {
+
+      font-size: 1.25rem;
+
+      font-weight: 800;
+
+      color: #1a202c;
+
+      margin-bottom: 0.5rem;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      flex-wrap: wrap;
+
+    }
+
+    .virtual-account-number button {
+
+      background-color: #0B4C66;
+
+      color: white;
+
+      padding: 0.25rem 0.75rem;
+
+      border-radius: 0.375rem;
+
+      font-size: 0.75rem;
+
+      margin-left: 0.5rem;
+
+      transition: background-color 0.2s ease;
+
+    }
+
+    .virtual-account-number button:hover {
+
+      background-color: #0A3C52;
+
+    }
+
+    .payment-instructions ol {
+
+      list-style-type: decimal;
+
+      list-style-position: inside;
+
+      margin-top: 1rem;
+
+      font-size: 0.875rem;
+
+      color: #4a5568;
+
+    }
+
+    .payment-instructions ol li {
+
+      margin-bottom: 0.5rem;
+
+    }
+
+
+
+    /* Modal Styles */
+
+    .modal-overlay {
+
+      position: fixed;
+
+      top: 0;
+
+      left: 0;
+
+      width: 100%;
+
+      height: 100%;
+
+      background-color: rgba(0, 0, 0, 0.5);
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      z-index: 1000;
+
+      opacity: 0;
+
+      visibility: hidden;
+
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+
+    }
+
+    .modal-overlay.open {
+
+      opacity: 1;
+
+      visibility: visible;
+
+    }
+
+    .modal-content-payment {
+
+      background-color: white;
+
+      padding: 1.5rem;
+
+      border-radius: 0.5rem;
+
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+      width: 90%;
+
+      max-width: 400px;
+
+      transform: translateY(-20px);
+
+      transition: transform 0.3s ease;
+
+      z-index: 1001;
+
+      position: relative;
+
+    }
+
+    .modal-overlay.open .modal-content-payment {
+
+      transform: translateY(0);
+
+    }
+
+
+
+    .blur-background {
+
+      filter: blur(5px);
+
+      transition: filter 0.3s ease;
+
+      pointer-events: none;
+
+      user-select: none;
+
+    }
+
+
+
+    .confirm-payment-button-section {
+
+      background-color: #f7fafc;
+
+      border: 1px dashed #D9E9FF;
+
+      border-radius: 0.5rem;
+
+      padding: 1.5rem;
+
+      margin-top: 1.5rem;
+
+      text-align: center;
+
+      position: relative;
+
+      z-index: 10;
+
+      padding-bottom: calc(1.5rem + 60px);
+
+    }
+
+
+
+    @media (max-width: 767px) {
+
+      main {
+
+        padding-bottom: 5rem;
+
+      }
+
+      .confirm-payment-button-section {
+
+        padding-bottom: 1.5rem;
+
+      }
+
+      .flex-1.p-6 {
+
+        padding-bottom: 5rem !important;
+
+      }
+
+    }
+
+    .modal-instructions-img {
+
+      max-width: 100%;
+
+      height: auto;
+
+      display: block;
+
+      margin: 1rem auto;
+
+      border-radius: 0.5rem;
+
+    }
+
+  </style>
+
+</head>
+
+<body class="bg-[#F7F9FC] min-h-screen text-gray-700">
+
+  <div id="mainLayout" class="flex flex-col md:flex-row min-h-screen">
+
+    <aside class="w-full md:w-64 bg-white border-b md:border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col md:sticky md:top-0 md:h-screen">
+
+      <div>
+        <div class="px-6 py-5 border-b border-gray-200">
+            <img src="../asset/logo fix sukarobot.jpg" alt="Sukarobot Academy Logo" class="h-10 w-auto object-contain mx-auto">
+          </div>
+        <a href="pengaturan-profil.html" class="px-6 py-5 flex items-center space-x-4 border-b border-gray-200">
+            <img alt="Profile picture" class="w-10 h-10 rounded-full object-cover" height="40" src="/asset/real.jpg" width="40"/>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold text-gray-900 truncate">
+                Aripin Sihabudin
+              </p>
+              <p class="text-xs text-gray-400 truncate">
+                Siswa
+              </p>
+            </div>
+            <button aria-label="Logout" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+            </button>
+          </a>
+                    <button aria-label="Logout" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+          </button>
+        </div>
+        <nav class="flex flex-col mt-6 space-y-1 px-2 flex-grow overflow-y-auto">
+
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="/index.html">
+
+            <i class="fas fa-home text-base"></i>
+
+            Dashboard
+
+          </a>
+
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="../public/kehadiran.html">
+
+            <i class="fas fa-calendar-check text-base"></i>
+
+            Kehadiran
+
+          </a>
+
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="../public/laporan.html">
+
+            <i class="fas fa-file-alt text-base"></i>
+
+            Laporan
+
+          </a>
+
+          <a aria-current="page" class="flex items-center gap-3 px-4 py-2 rounded-lg bg-[#D9E9FF] text-[#0B4C66] font-semibold text-sm" href="pembayaran.html">
+
+            <i class="fas fa-credit-card text-base"></i>
+
+            Pembayaran
+
+          </a>
+
+        </nav>
+
+      </div>
+
+      <button aria-label="Logout" class="w-full flex justify-center py-3 border-t border-gray-200 text-gray-500 hover:text-gray-700">
+
+      </button>
+
+    </aside>
+
+
+
+    <main id="contentToBlur" class="flex-1 p-6 max-w-7xl mx-auto">
+
+      <div class="flex items-center mb-4">
+
+        <a href="javascript:history.back()" class="text-gray-500 hover:text-gray-700 mr-4">
+
+          <i class="fas fa-arrow-left text-lg"></i>
+
+        </a>
+
+        <h2 class="text-xl font-extrabold select-none">
+
+          Pembayaran Otomatis
+
+        </h2>
+
+      </div>
+
+      <p class="text-gray-600 mb-6">
+
+        Lakukan pembayaran untuk tagihan <span id="tagihanTitle" class="font-semibold text-black"></span>.
+
+      </p>
+
+
+
+      <section class="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-6">
+
+        <h3 class="font-semibold text-black text-lg mb-4">Rincian Tagihan</h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mb-4">
+
+          <div>
+
+            <p class="text-gray-600">Nama Tagihan:</p>
+
+            <p class="font-semibold text-black" id="summaryTitle"></p>
+
+          </div>
+
+          <div>
+
+            <p class="text-gray-600">Deskripsi:</p>
+
+            <p class="font-semibold text-black" id="summaryDescription"></p>
+
+          </div>
+
+          <div>
+
+            <p class="text-gray-600">Jatuh Tempo:</p>
+
+            <p class="font-semibold text-black" id="summaryDueDate"></p>
+
+          </div>
+
+          <div>
+
+            <p class="text-gray-600">Biaya Admin:</p>
+
+            <p class="font-semibold text-black" id="summaryAdminFee"></p>
+
+          </div>
+
+        </div>
+
+        <div class="border-t border-gray-200 pt-4 flex justify-between items-center">
+
+          <p class="font-bold text-lg text-black">Total Bayar:</p>
+
+          <p class="font-extrabold text-2xl text-[#0B4C66]" id="summaryTotalAmount"></p>
+
+        </div>
+
+      </section>
+
+
+
+      <section class="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-6">
+
+        <h3 class="font-semibold text-black text-lg mb-4">Pilih Metode Pembayaran</h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+          <div class="bank-option" data-method-type="bank" data-bank="BCA">
+
+            <div class="bank-icon"><i class="fas fa-building"></i></div>
+
+            <span>Bank Central Asia (BCA)</span>
+
+          </div>
+
+          <div class="bank-option" data-method-type="bank" data-bank="Mandiri">
+
+            <div class="bank-icon"><i class="fas fa-university"></i></div>
+
+            <span>Bank Mandiri</span>
+
+          </div>
+
+          <div class="bank-option" data-method-type="bank" data-bank="BNI">
+
+            <div class="bank-icon"><i class="fas fa-landmark"></i></div>
+
+            <span>Bank Negara Indonesia (BNI)</span>
+
+          </div>
+
+          <div class="bank-option" data-method-type="bank" data-bank="BRI">
+
+            <div class="bank-icon"><i class="fas fa-piggy-bank"></i></div>
+
+            <span>Bank Rakyat Indonesia (BRI)</span>
+
+          </div>
+
+
+
+          <div class="bank-option" data-method-type="ewallet" data-ewallet="Dana">
+
+            <div class="bank-icon"><i class="fas fa-wallet"></i></div>
+
+            <span>Dana</span>
+
+          </div>
+
+          <div class="bank-option" data-method-type="ewallet" data-ewallet="OVO">
+
+            <div class="bank-icon"><i class="fas fa-mobile-alt"></i></div>
+
+            <span>OVO</span>
+
+          </div>
+
+          <div class="bank-option" data-method-type="ewallet" data-ewallet="GoPay">
+
+            <div class="bank-icon"><i class="fas fa-qrcode"></i></div>
+
+            <span>GoPay</span>
+
+          </div>
+
+          <div class="bank-option" data-method-type="ewallet" data-ewallet="ShopeePay">
+
+            <div class="bank-icon"><i class="fas fa-shopping-bag"></i></div>
+
+            <span>ShopeePay</span>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+    </main>
+
+  </div>
+
+
+
+  <div id="confirmationModal" class="modal-overlay" aria-modal="true" role="dialog" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+
+    <div class="modal-content-payment" tabindex="-1">
+
+      <div class="flex justify-between items-center mb-4 pb-2 border-b border-blue-100">
+
+        <h3 id="modalTitle" class="text-lg font-extrabold text-[#0B4C66]">Konfirmasi Pilihan</h3>
+
+        <button class="text-gray-500 hover:text-gray-700" onclick="closeConfirmationModal()" aria-label="Close modal">
+
+          <i class="fas fa-times"></i>
+
+        </button>
+
+      </div>
+
+      <p id="modalDesc" class="text-gray-700 mb-4 text-center">Anda telah memilih <span id="selectedMethodDisplay" class="font-semibold text-black"></span> sebagai metode pembayaran.</p>
+
+      <p class="text-gray-600 mb-6 text-center">Klik "Lanjutkan Pembayaran" untuk melihat petunjuk pembayaran.</p>
+
+
+
+      <div class="mt-6 text-center">
+
+        <button id="btnLanjutkanPembayaranModal" class="bg-[#28a745] hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-md text-base focus:outline-none">
+
+          <i class="fas fa-chevron-right mr-2"></i> Lanjutkan Pembayaran
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <aside class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 p-2 flex md:hidden">
+
+    <nav class="flex justify-around items-center w-full sidebar-mobile-scroll">
+
+      <a class="sidebar-mobile-item" href="/index.html">
+
+        <div class="icon-wrapper">
+
+          <i class="fas fa-home text-base"></i>
+
+        </div>
+
+        <span class="text-label">Dashboard</span>
+
+      </a>
+
+      <a class="sidebar-mobile-item" href="../public/kehadiran.html">
+
+        <div class="icon-wrapper">
+
+          <i class="fas fa-calendar-check text-base"></i>
+
+        </div>
+
+        <span class="text-label">Kehadiran</span>
+
+      </a>
+
+      <a class="sidebar-mobile-item" href="../public/laporan.html">
+
+        <div class="icon-wrapper">
+
+          <i class="fas fa-file-alt text-base"></i>
+
+        </div>
+
+        <span class="text-label">Laporan</span>
+
+      </a>
+
+      <a aria-current="page" class="sidebar-mobile-item active" href="pembayaran.html">
+
+        <div class="icon-wrapper">
+
+          <i class="fas fa-credit-card text-base"></i>
+
+        </div>
+
+        <span class="text-label">Pembayaran</span>
+
+      </a>
+      <a class="sidebar-mobile-item" href="pengaturan-profil.html">
+      <div class="icon-wrapper">
+        <i class="fas fa-user-circle text-base"></i>
+      </div>
+      <span class="text-label">Profil</span>
+    </a>
+
+    </nav>
+
+  </aside>
+
+
+
+  <script>
+
+    const paymentData = [
+
+      { id: 1, title: 'Biaya Kelas Robotik', description: 'Level Beginner - Batch 23', status: 'Belum Dibayar', dueDate: '28 Feb 2025', amount: 1500000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null },
+
+      { id: 2, title: 'Biaya Pendaftaran', description: 'Registrasi Awal', status: 'Sudah Dibayar', paidDate: '15 Jan 2025', amount: 500000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2025010002', deadlineTime: null },
+
+      { id: 3, title: 'SPP Bulan Januari 2025', description: 'Kelas Robotik - Level 2', status: 'Belum Dibayar', dueDate: '10 Jan 2025', amount: 550000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null },
+
+      { id: 4, title: 'Biaya Praktikum', description: 'Kelas Robotik - Level 2', status: 'Belum Dibayar', dueDate: '15 Jan 2025', amount: 250000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null },
+
+      { id: 5, title: 'SPP Bulan Juni 2024', description: 'Kelas Robotik - Level 1', status: 'Sudah Dibayar', paidDate: '10 Jun 2024', amount: 550000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2024060005', deadlineTime: null },
+
+      { id: 6, title: 'Pembelian Alat', description: 'Robot Sumo', status: 'Sudah Dibayar', paidDate: '10 Jun 2024', amount: 1000000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2024060006', deadlineTime: null },
+
+      { id: 7, title: 'Biaya Kelas Graphic Design', description: 'Level Basic - Batch 1', status: 'Belum Dibayar', dueDate: '15 Mar 2025', amount: 1200000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null },
+
+      { id: 8, title: 'SPP Bulan Februari 2025', description: 'Kelas Graphic Design - Level 1', status: 'Sudah Dibayar', paidDate: '05 Feb 2025', amount: 550000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2025020008', deadlineTime: null },
+
+      { id: 9, title: 'Biaya Ujian Sertifikasi', description: 'Ujian Nasional Robotik', status: 'Belum Dibayar', dueDate: '30 Apr 2025', amount: 300000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null },
+
+    ];
+
+
+
+    function getUrlParameter(name) {
+
+      name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+
+      const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+
+      const results = regex.exec(location.search);
+
+      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+
+    }
+
+
+
+    function formatRupiah(amount) {
+
+      return new Intl.NumberFormat('id-ID', {
+
+        style: 'currency',
+
+        currency: 'IDR',
+
+        minimumFractionDigits: 0,
+
+        maximumFractionDigits: 0
+
+      }).format(amount);
+
+    }
+
+
+
+    const tagihanId = parseInt(getUrlParameter('tagihanId'));
+
+    const currentTagihan = paymentData.find(item => item.id === tagihanId);
+
+
+
+    const tagihanTitleElement = document.getElementById('tagihanTitle');
+
+    const summaryTitleEl = document.getElementById('summaryTitle');
+
+    const summaryDescriptionEl = document.getElementById('summaryDescription');
+
+    const summaryDueDateEl = document.getElementById('summaryDueDate');
+
+    const summaryAdminFeeEl = document.getElementById('summaryAdminFee');
+
+    const summaryTotalAmountEl = document.getElementById('summaryTotalAmount');
+
+
+
+    const bankOptions = document.querySelectorAll('.bank-option');
+
+
+
+    // Elements for the confirmation modal
+
+    const confirmationModal = document.getElementById('confirmationModal');
+
+    const selectedMethodDisplay = document.getElementById('selectedMethodDisplay');
+
+    const btnLanjutkanPembayaranModal = document.getElementById('btnLanjutkanPembayaranModal');
+
+    const contentToBlur = document.getElementById('contentToBlur');
+
+
+
+    let selectedMethodDetails = {}; // Store chosen method data for passing to the next page
+
+
+
+    function openConfirmationModal(methodName) {
+
+      selectedMethodDisplay.textContent = methodName;
+
+      confirmationModal.classList.add('open');
+
+      contentToBlur.classList.add('blur-background');
+
+    }
+
+
+
+    function closeConfirmationModal() {
+
+      confirmationModal.classList.remove('open');
+
+      contentToBlur.classList.remove('blur-background');
+
+    }
+
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+      if (!currentTagihan || currentTagihan.status === 'Sudah Dibayar') {
+
+        tagihanTitleElement.textContent = 'Tidak Ditemukan / Sudah Dibayar';
+
+        alert('Tagihan tidak ditemukan atau sudah dibayar. Silakan kembali ke halaman pembayaran.');
+
+        window.location.href = 'pembayaran.html';
+
+        return;
+
+      }
+
+
+
+      tagihanTitleElement.textContent = currentTagihan.title;
+
+      summaryTitleEl.textContent = currentTagihan.title;
+
+      summaryDescriptionEl.textContent = currentTagihan.description;
+
+      summaryDueDateEl.textContent = currentTagihan.dueDate;
+
+      summaryAdminFeeEl.textContent = formatRupiah(currentTagihan.adminFee);
+
+      summaryTotalAmountEl.textContent = formatRupiah(currentTagihan.amount + currentTagihan.adminFee);
+
+
+
+      bankOptions.forEach(option => {
+
+        option.addEventListener('click', () => {
+
+          bankOptions.forEach(opt => opt.classList.remove('selected'));
+
+          option.classList.add('selected');
+
+
+
+          const methodType = option.dataset.methodType;
+
+          const selectedBankOrEwallet = (methodType === 'bank' ? option.dataset.bank : option.dataset.ewallet);
+
+          const displayName = (methodType === 'bank' ? selectedBankOrEwallet + ' Virtual Account' : selectedBankOrEwallet);
+
+
+
+          let vaNumber = '';
+
+          let instructions = '';
+
+          let imageUrl = '';
+
+
+
+          if (methodType === 'bank') {
+
+            if (selectedBankOrEwallet === 'BCA') {
+
+              vaNumber = `8277${tagihanId.toString().padStart(8, '0')}`;
+
+              instructions = `<li>Buka aplikasi BCA Mobile / KlikBCA.</li><li>Pilih menu Transfer -> Virtual Account.</li><li>Masukkan nomor Virtual Account ${vaNumber}.</li><li>Konfirmasi nama dan jumlah tagihan.</li><li>Selesaikan pembayaran.</li>`;
+
+            } else if (selectedBankOrEwallet === 'Mandiri') {
+
+              vaNumber = `8899${tagihanId.toString().padStart(8, '0')}`;
+
+              instructions = `<li>Buka Livin' by Mandiri.</li><li>Pilih menu Bayar -> Multipayment.</li><li>Pilih sumber dana, lalu masukkan nomor Virtual Account ${vaNumber}.</li><li>Konfirmasi pembayaran.</li>`;
+
+            } else if (selectedBankOrEwallet === 'BNI') {
+
+              vaNumber = `9888${tagihanId.toString().padStart(8, '0')}`;
+
+              instructions = `<li>Buka BNI Mobile Banking.</li><li>Pilih Transfer -> Virtual Account Billing.</li><li>Masukkan nomor Virtual Account ${vaNumber}.</li><li>Ikuti instruksi selanjutnya untuk konfirmasi.</li>`;
+
+            } else if (selectedBankOrEwallet === 'BRI') {
+
+              vaNumber = `9999${tagihanId.toString().padStart(8, '0')}`;
+
+              instructions = `<li>Buka BRImo / Internet Banking BRI.</li><li>Pilih Pembayaran -> BRIVA.</li><li>Masukkan nomor Virtual Account ${vaNumber}.</li><li>Verifikasi detail pembayaran.</li>`;
+
+            }
+
+          } else if (methodType === 'ewallet') {
+
+            vaNumber = `QRIS SUKAROBOT`;
+
+            instructions = `<li>Buka aplikasi ${selectedBankOrEwallet}.</li><li>Pilih menu Scan/Bayar QR.</li><li>Scan kode QRIS yang akan kami tampilkan di halaman petunjuk.</li><li>Masukkan nominal ${formatRupiah(currentTagihan.amount + currentTagihan.adminFee)}.</li><li>Selesaikan pembayaran.</li>`;
+
+            imageUrl = `https://via.placeholder.com/200x200/D9E9FF/0B4C66?text=QRIS+${selectedBankOrEwallet}`;
+
+          }
+
+
+
+          // Store details for passing to the next page
+
+          selectedMethodDetails = {
+
+            title: displayName,
+
+            vaNumber: vaNumber,
+
+            instructions: instructions,
+
+            methodType: methodType,
+
+            selectedOption: selectedBankOrEwallet,
+
+            imageUrl: imageUrl
+
+          };
+
+
+
+          openConfirmationModal(displayName); // Open the confirmation modal
+
+        });
+
+      });
+
+
+
+      // Event listener for the "Lanjutkan Pembayaran" button INSIDE THE MODAL
+
+      btnLanjutkanPembayaranModal.addEventListener('click', () => {
+
+        if (Object.keys(selectedMethodDetails).length > 0) {
+
+          const params = new URLSearchParams({
+
+            tagihanId: tagihanId,
+
+            title: selectedMethodDetails.title,
+
+            vaNumber: selectedMethodDetails.vaNumber,
+
+            instructions: selectedMethodDetails.instructions,
+
+            methodType: selectedMethodDetails.methodType,
+
+            selectedOption: selectedMethodDetails.selectedOption,
+
+            imageUrl: selectedMethodDetails.imageUrl
+
+          }).toString();
+
+
+
+          closeConfirmationModal(); // Close modal first
+
+          window.location.href = `petunjuk-pembayaran-otomatis.html?${params}`; // Redirect to the actual instructions page
+
+        } else {
+
+          alert('Terjadi kesalahan. Silakan pilih metode pembayaran kembali.');
+
+        }
+
+      });
+
+
+
+      // Close modal when clicking outside
+
+      confirmationModal.addEventListener('click', (e) => {
+
+        if (e.target === confirmationModal) {
+
+          closeConfirmationModal();
+
+        }
+
+      });
+
+    });
+
+  </script>
+
+</body>
+
+</html>

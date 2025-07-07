@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>SubotApp Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet" />
+  <style>
+    /* Custom CSS untuk styling item menu sidebar mobile */
+    .sidebar-mobile-scroll {
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch; /* untuk smooth scrolling di iOS */
+    }
+    .sidebar-mobile-scroll::-webkit-scrollbar {
+      display: none; /* Sembunyikan scrollbar untuk tampilan yang lebih bersih */
+    }
+    .sidebar-mobile-item {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.75rem 1rem; /* px-4 py-2 */
+      gap: 0.5rem; /* gap-2 */
+      width: auto;
+      min-width: 80px; /* Lebar minimum untuk setiap item menu */
+    }
+    .sidebar-mobile-item.active .icon-wrapper {
+      background-color: #0B4C66; /* Warna latar belakang ikon aktif */
+      color: white; /* Warna ikon aktif */
+      border-radius: 9999px; /* Membuat bulat */
+    }
+    .sidebar-mobile-item.active .text-label {
+      color: #0B4C66; /* Sesuaikan dengan warna teks aktif */
+      font-weight: 600; /* font-semibold */
+    }
+    .sidebar-mobile-item:not(.active) .icon-wrapper {
+      background-color: transparent; /* Hapus background untuk ikon tidak aktif */
+      color: #6B7280; /* text-gray-600 */
+      border-radius: 9999px; /* Membuat bulat */
+    }
+    .sidebar-mobile-item:not(.active) .text-label {
+      color: #6B7280; /* text-gray-600 */
+      font-weight: 400; /* font-normal */
+    }
+
+    .icon-box-size {
+      width: 2.5rem; /* Set a fixed width */
+      height: 2.5rem; /* Set a fixed height */
+    }
+    /* Menyesuaikan ukuran dan bentuk ikon wrapper di mobile */
+    .sidebar-mobile-item .icon-wrapper {
+      width: 2.5rem; /* Lebar tetap */
+      height: 2.5rem; /* Tinggi tetap */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+
+    /* Styles for the modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-content {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+    }
+    .modal-overlay.open .modal-content {
+      transform: translateY(0);
+    }
+
+    /* Blur effect for main content (copied from index.html) */
+    .blur-background {
+      filter: blur(5px);
+      transition: filter 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-[#F7F9FC] min-h-screen text-gray-700">
+  <div id="mainLayout" class="flex flex-col md:flex-row min-h-screen">
+    <aside class="w-full md:w-64 bg-white border-b md:border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col md:sticky md:top-0 md:h-screen">
+      <div>
+        <div class="px-6 py-5 border-b border-gray-200">
+        <img src="../asset/logo fix sukarobot.jpg" alt="Sukarobot Academy Logo" class="h-10 w-auto object-contain mx-auto">
+      </div>
+        <a href="pengaturan-profil.html" class="px-6 py-5 flex items-center space-x-4 border-b border-gray-200">
+          <img alt="Profile picture" class="w-10 h-10 rounded-full object-cover" height="40" src="/asset/real.jpg" width="40"/>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-gray-900 truncate">
+              Aripin Sihabudin
+            </p>
+            <p class="text-xs text-gray-400 truncate">
+              Siswa
+            </p>
+          </div>
+          <button aria-label="Logout" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+            </i>
+          </button>
+        </a>
+        <nav class="flex flex-col mt-6 space-y-1 px-2 flex-grow overflow-y-auto">
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg bg-[#D9E9FF] text-[#0B4C66] font-semibold text-sm" href="index.html">
+            <i class="fas fa-home text-base">
+            </i>
+            Dashboard
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="/public/kehadiran.html">
+            <i class="fas fa-calendar-check text-base">
+            </i>
+            Kehadiran
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="laporan.html">
+            <i class="fas fa-file-alt text-base">
+            </i>
+            Laporan
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="pembayaran.html">
+            <i class="fas fa-credit-card text-base">
+            </i>
+            Pembayaran
+          </a>
+        </nav>
+      </div>
+      <button aria-label="Logout" class="w-full flex justify-center py-3 border-t border-gray-200 text-gray-500 hover:text-gray-700">
+        </i>
+      </button>
+    </aside>
+
+    <main class="flex-1 p-6 overflow-y-auto pb-20 md:pb-6">
+      <h2 class="font-extrabold text-black text-lg mb-1">
+        Selamat Datang, Aripin!
+      </h2>
+      <p class="text-gray-500 text-sm mb-6">
+        Berikut adalah ringkasan progres belajarmu!
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white rounded-lg p-4 shadow-sm border border-transparent hover:border-gray-200">
+          <div class="flex justify-between items-start mb-2">
+            <div class="bg-[#B6EBD9] p-2 rounded-md text-[#0B4C66]">
+              <i class="fas fa-user-check">
+              </i>
+            </div>
+            <a class="text-xs text-gray-400 hover:underline cursor-pointer" onclick="openClassModal()">
+              Pilihan Kelas
+            </a>
+          </div>
+          <h3 class="font-extrabold text-black text-lg leading-6 mb-1">
+            3 Pertemuan <span class="text-xs text-gray-500 font-normal">(Robotik)</span>
+          </h3>
+          <p class="text-gray-400 text-xs">
+            Progres Kehadiran
+          </p>
+        </div>
+        <div class="bg-white rounded-lg p-4 shadow-sm border border-transparent hover:border-gray-200">
+          <div class="flex justify-between items-start mb-2">
+            <div class="bg-[#D9E9FF] p-2 rounded-md text-[#0B4C66]">
+              <i class="fas fa-book">
+              </i>
+            </div>
+            <a class="text-xs text-gray-400 hover:underline cursor-pointer" href="/public/sisa-pertemuan.html">
+                Lihat Detail
+            </a>
+          </div>
+          <h3 class="font-extrabold text-black text-lg leading-6 mb-1">
+            21 Pertemuan
+          </h3>
+          <p class="text-gray-400 text-xs">
+            Sisa Pertemuan
+          </p>
+        </div>
+        <div class="bg-white rounded-lg p-4 shadow-sm border border-transparent hover:border-gray-200">
+          <div class="flex justify-between items-start mb-2">
+            <div class="bg-[#FFD6D6] p-2 rounded-md text-[#0B4C66]">
+              <i class="fas fa-clock">
+              </i>
+            </div>
+            <a class="text-xs text-gray-400 hover:underline" href="/public/semua-pertemuan.html">
+                Lihat Detail
+            </a>
+          </div>
+          <h3 class="font-extrabold text-black text-lg leading-6 mb-1">
+            24
+          </h3>
+          <p class="text-gray-400 text-xs">
+            Total Pertemuan
+          </p>
+        </div>
+      </div>
+      <section class="bg-white rounded-lg p-6 mb-6 border border-transparent hover:border-gray-200">
+        <h4 class="font-extrabold text-black text-sm mb-4">
+          Aktivitas Terbaru
+        </h4>
+        <ul class="divide-y divide-gray-200">
+          <li class="flex items-center justify-between py-3">
+            <div class="flex items-center gap-3">
+              <div class="bg-[#B6EBD9] p-2 rounded-md text-[#0B4C66]">
+                <i class="fas fa-calendar-check">
+                </i>
+              </div>
+              <div>
+                <p class="font-semibold text-xs text-black leading-5">
+                  Kelas Robotik
+                </p>
+                <p class="text-gray-400 text-xs leading-4">
+                  Hadir pada 15 Maret 2025
+                </p>
+              </div>
+            </div>
+            <span class="text-xs text-[#0B4C66] bg-[#D9E9FF] rounded-full px-3 py-0.5 select-none">
+              Selesai
+            </span>
+          </li>
+          <li class="flex items-center justify-between py-3">
+            <div class="flex items-center gap-3">
+              <div class="bg-[#B6EBD9]/30 p-2 rounded-md text-[#0B4C66]">
+                <i class="fas fa-credit-card">
+                </i>
+              </div>
+              <div>
+                <p class="font-semibold text-xs text-black leading-5">
+                  Pembayaran Selesai
+                </p>
+                <p class="text-gray-400 text-xs leading-4">
+                  Tagihan Maret 2025
+                </p>
+              </div>
+            </div>
+            <span class="text-xs text-[#0B4C66] bg-[#B6EBD9]/30 rounded-full px-3 py-0.5 select-none">
+              Dibayar
+            </span>
+          </li>
+          <li class="flex items-center justify-between py-3">
+            <div class="flex items-center gap-3">
+              <div class="bg-[#D9E9FF]/30 p-2 rounded-md text-[#0B4C66]">
+                <i class="fas fa-file-alt">
+                </i>
+              </div>
+              <div>
+                <p class="font-semibold text-xs text-black leading-5">
+                  Laporan
+                </p>
+                <p class="text-gray-400 text-xs leading-4">
+                  Laporan Belajar Februari 2025
+                </p>
+              </div>
+            </div>
+            <span class="text-xs text-[#0B4C66] bg-[#B6EBD9]/30 rounded-full px-3 py-0.5 select-none">
+              Lihat
+            </span>
+          </li>
+        </ul>
+      </section>
+      <section class="bg-white rounded-lg p-6 mb-6 border border-transparent hover:border-gray-200">
+        <h4 class="font-extrabold text-black text-sm mb-4">
+          Jadwal Terdekat
+        </h4>
+        <ul class="space-y-3">
+          <li class="flex justify-between items-center bg-[#F7F9FC] rounded-md p-3">
+            <div class="flex items-center gap-3">
+              <div class="bg-[#0B4C66] p-3 rounded-md text-white flex items-center justify-center icon-box-size">
+                <i class="fas fa-building text-sm">
+                </i>
+              </div>
+              <div>
+                <p class="font-semibold text-xs text-black leading-5">
+                  Kelas Robotik
+                </p>
+                <p class="text-gray-400 text-xs leading-4">
+                  Basic 2
+                </p>
+              </div>
+            </div>
+            <div class="text-right text-xs">
+              <p class="font-semibold text-black">
+                Feb 18, 2025
+              </p>
+              <p class="text-gray-400">
+                09:00 - 10:30 AM
+              </p>
+            </div>
+          </li>
+          <li class="flex justify-between items-center bg-[#F7F9FC] rounded-md p-3">
+            <div class="flex items-center gap-3">
+              <div class="bg-[#0B4C66] p-3 rounded-md text-white flex items-center justify-center icon-box-size">
+                <i class="fas fa-cogs text-sm">
+                </i>
+              </div>
+              <div>
+                <p class="font-semibold text-xs text-black leading-5">
+                  Graphic Design
+                </p>
+                <p class="text-gray-400 text-xs leading-4">
+                  Stage 14
+                </p>
+              </div>
+            </div>
+            <div class="text-right text-xs">
+              <p class="font-semibold text-black">
+                Feb 20, 2025
+              </p>
+              <p class="text-gray-400">
+                13:00 - 14:30 PM
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="bg-white rounded-lg p-6 mt-6 border border-transparent hover:border-gray-200">
+        <h4 class="font-extrabold text-black text-sm mb-4">
+          Dokumentasi Aktivitas Siswa
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="relative rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+            <img src="/asset/dok1.JPG" alt="Dokumentasi Pembelajaran Robotik" class="w-full h-40 object-cover">
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+              <p class="text-white text-sm font-semibold">Proyek Robotik Selesai</p>
+              <p class="text-gray-300 text-xs">Maret 2025</p>
+            </div>
+          </div>
+          <div class="relative rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+            <img src="/asset/dok2.JPG" alt="Dokumentasi Lomba Coding" class="w-full h-40 object-cover">
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+              <p class="text-white text-sm font-semibold">Partisipasi Lomba Coding</p>
+              <p class="text-gray-300 text-xs">Februari 2025</p>
+            </div>
+          </div>
+          <div class="relative rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+            <img src="/asset/dok1.JPG" alt="Dokumentasi Lomba" class="w-full h-40 object-cover">
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+              <p class="text-white text-sm font-semibold">Workshop Desain Grafis</p>
+              <p class="text-gray-300 text-xs">Januari 2025</p>
+            </div>
+          </div>
+          <div class="relative rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+            <img src="/asset/dok2.JPG" alt="Dokumentasi Presentasi Proyek" class="w-full h-40 object-cover">
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+              <p class="text-white text-sm font-semibold">Presentasi Akhir Proyek</p>
+              <p class="text-gray-300 text-xs">Desember 2024</p>
+            </div>
+          </div>
+          <div class="relative rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+            <img src="/asset/dok1.JPG" alt="Dokumentasi Kerja Kelompok" class="w-full h-40 object-cover">
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+              <p class="text-white text-sm font-semibold">Diskusi Kelompok Belajar</p>
+              <p class="text-gray-300 text-xs">November 2024</p>
+            </div>
+          </div>
+          <div class="relative rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+            <img src="/asset/dok2.JPG" alt="Dokumentasi Field Trip Edukatif" class="w-full h-40 object-cover">
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+              <p class="text-white text-sm font-semibold">Kunjungan Studi</p>
+              <p class="text-300 text-xs">Oktober 2024</p>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-6">
+          <a href="full-media.html" class="text-[#0B4C66] hover:underline font-semibold text-sm">Lihat Lainnya</a>
+        </div>
+      </section>
+    </main>
+
+    <aside class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 p-2 flex md:hidden">
+      <nav class="flex justify-around items-center w-full sidebar-mobile-scroll">
+        <a class="sidebar-mobile-item active" href="index.html">
+          <div class="icon-wrapper">
+            <i class="fas fa-home text-base"></i>
+          </div>
+          <span class="text-label">Dashboard</span>
+        </a>
+        <a class="sidebar-mobile-item" href="kehadiran.html">
+          <div class="icon-wrapper">
+            <i class="fas fa-calendar-check text-base"></i>
+          </div>
+          <span class="text-label">Kehadiran</span>
+        </a>
+        <a class="sidebar-mobile-item" href="laporan.html">
+          <div class="icon-wrapper">
+            <i class="fas fa-file-alt text-base"></i>
+          </div>
+          <span class="text-label">Laporan</span>
+        </a>
+        <a class="sidebar-mobile-item" href="pembayaran.html">
+          <div class="icon-wrapper">
+            <i class="fas fa-credit-card text-base"></i>
+          </div>
+          <span class="text-label">Pembayaran</span>
+        </a>
+        <a class="sidebar-mobile-item" href="pengaturan-profil.html">
+          <div class="icon-wrapper">
+            <i class="fas fa-user-circle text-base"></i>
+          </div>
+          <span class="text-label">Profil</span>
+        </a>
+      </nav>
+    </aside>
+  </div>
+
+  <div id="classModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-4 pb-2 border-b border-blue-100">
+        <h3 class="text-lg font-extrabold text-[#0B4C66]">Pilih Kelas</h3>
+        <button class="text-gray-500 hover:text-gray-700" onclick="closeClassModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="space-y-2">
+        <li>
+          <a href="#" data-filter="Semua" class="flex items-center gap-3 p-3 rounded-lg bg-[#D9E9FF] hover:bg-[#B6EBD9] text-[#0B4C66] font-semibold text-sm transition duration-150 ease-in-out">
+            <div class="bg-[#0B4C66] text-white p-2 rounded-md flex items-center justify-center w-8 h-8">
+              <i class="fas fa-robot"></i>
+            </div>
+            Robotik
+          </a>
+        </li>
+        <li>
+          <a href="#" data-filter="Coding" class="flex items-center gap-3 p-3 rounded-lg bg-[#D9E9FF] hover:bg-[#B6EBD9] text-[#0B4C66] font-semibold text-sm transition duration-150 ease-in-out">
+            <div class="bg-[#0B4C66] text-white p-2 rounded-md flex items-center justify-center w-8 h-8">
+              <i class="fas fa-code"></i>
+            </div>
+            Coding
+          </a>
+        </li>
+        <li>
+          <a href="#" data-filter="Microsoft Office" class="flex items-center gap-3 p-3 rounded-lg bg-[#D9E9FF] hover:bg-[#B6EBD9] text-[#0B4C66] font-semibold text-sm transition duration-150 ease-in-out">
+            <div class="bg-[#0B4C66] text-white p-2 rounded-md flex items-center justify-center w-8 h-8">
+              <i class="fas fa-laptop-code"></i>
+            </div>
+            Microsoft Office
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const classModal = document.getElementById('classModal');
+    const mainLayout = document.getElementById('mainLayout'); 
+
+    function openClassModal() {
+      classModal.classList.add('open');
+      mainLayout.classList.add('blur-background');
+    }
+
+    function closeClassModal() {
+      classModal.classList.remove('open');
+      mainLayout.classList.remove('blur-background');
+    }
+
+    classModal.addEventListener('click', (e) => {
+      if (e.target === classModal) {
+        closeClassModal();
+      }
+    });
+  </script>
+</body>
+</html>

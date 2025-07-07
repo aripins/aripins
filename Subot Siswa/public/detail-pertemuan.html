@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Detail Pertemuan - SubotApp</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet" />
+  <style>
+    /* Custom CSS (copied for consistency) */
+    .sidebar-mobile-scroll {
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    .sidebar-mobile-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .sidebar-mobile-item {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      gap: 0.5rem;
+      width: auto;
+      min-width: 80px;
+    }
+    .sidebar-mobile-item .icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+    }
+    .sidebar-mobile-item.active .icon-wrapper {
+      background-color: #0B4C66;
+      color: white;
+    }
+    .sidebar-mobile-item.active .text-label {
+      color: #0B4C66;
+      font-weight: 600;
+    }
+    .sidebar-mobile-item:not(.active) .icon-wrapper {
+      background-color: transparent;
+      color: #6B7280;
+    }
+    .sidebar-mobile-item:not(.active) .text-label {
+      color: #6B7280;
+      font-weight: 400;
+    }
+
+    .icon-box-size {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+    /* Specific styles for document links */
+    .document-link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem; /* gap-2 */
+        padding: 0.75rem 1rem; /* p-3 */
+        border-radius: 0.5rem; /* rounded-lg */
+        background-color: #F7F9FC; /* bg-gray-50 from previous, adapting to body bg for light contrast */
+        color: #0B4C66; /* text-blue-800 */
+        font-weight: 500; /* font-medium */
+        transition: background-color 0.15s ease-in-out;
+    }
+    .document-link:hover {
+        background-color: #D9E9FF; /* hover:bg-gray-100 adapting to blue theme */
+    }
+    .document-icon {
+        color: #0B4C66; /* Blue icon */
+    }
+  </style>
+</head>
+<body class="bg-[#F7F9FC] min-h-screen text-gray-700">
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <aside class="w-full md:w-64 bg-white border-b md:border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col md:sticky md:top-0 md:h-screen">
+      <div>
+        <div class="px-6 py-5 border-b border-gray-200">
+          <img src="../asset/logo fix sukarobot.jpg" alt="Sukarobot Academy Logo" class="h-10 w-auto object-contain mx-auto">
+        </div>
+        <a href="pengaturan-profil.html" class="px-6 py-5 flex items-center space-x-4 border-b border-gray-200">
+        <img alt="Profile picture" class="w-10 h-10 rounded-full object-cover" height="40" src="/asset/real.jpg" width="40"/>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-gray-900 truncate">
+            Aripin Sihabudin
+          </p>
+          <p class="text-xs text-gray-400 truncate">
+            Siswa
+          </p>
+        </div>
+        </button>
+      </a>
+        <nav class="flex flex-col mt-6 space-y-1 px-2 flex-grow overflow-y-auto">
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="index.html">
+            <i class="fas fa-home text-base">
+            </i>
+            Dashboard
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg bg-[#D9E9FF] text-[#0B4C66] font-semibold text-sm" href="kehadiran.html">
+            <i class="fas fa-calendar-check text-base">
+            </i>
+            Kehadiran
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="#">
+            <i class="fas fa-file-alt text-base">
+            </i>
+            Laporan
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="#">
+            <i class="fas fa-credit-card text-base">
+            </i>
+            Pembayaran
+          </a>
+        </nav>
+      </div>
+      <button aria-label="Logout" class="w-full flex justify-center py-3 border-t border-gray-200 text-gray-500 hover:text-gray-700">
+        </i>
+      </button>
+    </aside>
+
+    <main class="flex-1 p-6 max-w-7xl mx-auto">
+      <div class="mb-6">
+        <nav class="text-xs text-gray-500 font-normal mb-1 select-none">
+          <a class="hover:underline text-[#0B4C66]" href="index.html">
+            Dashboard
+          </a>
+          <span class="mx-1">
+            &gt;
+          </span>
+          <a class="hover:underline text-[#0B4C66]" href="kehadiran.html">
+            Kehadiran
+          </a>
+          <span class="mx-1">
+            &gt;
+          </span>
+          <span>
+            Detail Pertemuan
+          </span>
+        </nav>
+        <h1 id="pageTitle" class="text-black font-extrabold text-xl leading-6">
+          Detail Pertemuan
+        </h1>
+      </div>
+
+      <div class="bg-white rounded-lg p-6 mb-6 shadow-sm border border-transparent hover:border-gray-200">
+        <h3 class="font-extrabold text-[#0B4C66] text-lg mb-4">Informasi Pertemuan</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm text-gray-600 font-semibold mb-1">Tanggal:</p>
+            <p id="detailDate" class="text-gray-800 text-base mb-3">Loading...</p>
+
+            <p class="text-sm text-gray-600 font-semibold mb-1">Waktu:</p>
+            <p id="detailTime" class="text-gray-800 text-base mb-3">Loading...</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600 font-semibold mb-1">Subjek:</p>
+            <p id="detailSubject" class="text-gray-800 text-base mb-3">Loading...</p>
+
+            <p class="text-sm text-gray-600 font-semibold mb-1">Status Kehadiran:</p>
+            <p id="detailStatus" class="text-gray-800 text-base mb-3">
+              <span id="detailStatusBadge" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">Loading...</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg p-6 mb-6 shadow-sm border border-transparent hover:border-gray-200">
+        <h3 class="font-extrabold text-[#0B4C66] text-lg mb-4">Catatan Trainer</h3>
+        <p id="trainerNotes" class="text-gray-700 text-base leading-relaxed">
+          Catatan dari trainer akan muncul di sini. Jika tidak ada, akan ada pesan 'Tidak ada catatan.'
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg p-6 shadow-sm border border-transparent hover:border-gray-200">
+        <h3 class="font-extrabold text-[#0B4C66] text-lg mb-4">Dokumentasi Pertemuan</h3>
+        <ul id="documentationList" class="space-y-3">
+          <li>
+            <a href="#" target="_blank" class="document-link">
+                <i class="fas fa-file-pdf text-xl document-icon"></i>
+                <span class="flex-1">Materi Pelajaran - Pengenalan Robotik.pdf</span>
+                <i class="fas fa-external-link-alt text-xs"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#" target="_blank" class="document-link">
+                <i class="fas fa-image text-xl document-icon"></i>
+                <span class="flex-1">Foto Sesi Praktik_15 Jan.jpg</span>
+                <i class="fas fa-external-link-alt text-xs"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#" target="_blank" class="document-link">
+                <i class="fas fa-video text-xl document-icon"></i>
+                <span class="flex-1">Video Tutorial - Merakit Dasar.mp4</span>
+                <i class="fas fa-external-link-alt text-xs"></i>
+            </a>
+          </li>
+          <li id="noDocumentationMessage" class="hidden">
+            <p class="text-gray-500 text-sm italic">Tidak ada dokumentasi yang tersedia untuk pertemuan ini.</p>
+          </li>
+        </ul>
+      </div>
+    </main>
+  </div>
+
+  <aside class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 p-2 flex md:hidden">
+    <nav class="flex justify-around items-center w-full sidebar-mobile-scroll">
+      <a class="sidebar-mobile-item" href="index.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-home text-base"></i>
+        </div>
+        <span class="text-label">Dashboard</span>
+      </a>
+      <a class="sidebar-mobile-item active" href="kehadiran.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-calendar-check text-base"></i>
+        </div>
+        <span class="text-label">Kehadiran</span>
+      </a>
+      <a class="sidebar-mobile-item" href="#">
+        <div class="icon-wrapper">
+          <i class="fas fa-file-alt text-base"></i>
+        </div>
+        <span class="text-label">Laporan</span>
+      </a>
+      <a class="sidebar-mobile-item" href="#">
+        <div class="icon-wrapper">
+          <i class="fas fa-credit-card text-base"></i>
+        </div>
+        <span class="text-label">Pembayaran</span>
+      </a>
+      <a class="sidebar-mobile-item" href="pengaturan-profil.html">
+      <div class="icon-wrapper">
+        <i class="fas fa-user-circle text-base"></i>
+      </div>
+      <span class="text-label">Profil</span>
+    </a>
+    </nav>
+  </aside>
+
+  <script>
+    // Sample data for ALL meetings (must include trainerNotes and documentationLink)
+    // This is the SAME attendanceData from kehadiran.html but with more details
+    const allMeetingsData = [
+      { id: 1, date: 'Jan 15, 2025', time: '09:00 WIB', subject: 'Basic Robotik', status: 'Hadir', trainerNotes: 'Siswa aktif dalam diskusi, menyelesaikan tugas dasar robot. Progres sangat memuaskan.', documentation: [{name: 'Materi Robotik Dasar.pdf', link: '#', icon: 'file-pdf'}, {name: 'Video Rakit Robot.mp4', link: '#', icon: 'video'}] },
+      { id: 2, date: 'Jan 14, 2025', time: '09:00 WIB', subject: 'Graphic Design', status: 'Hadir', trainerNotes: 'Memahami konsep dasar desain, perlu latihan lebih lanjut pada pewarnaan. Kreativitas mulai terlihat.', documentation: [{name: 'Panduan Desain Grafis.pdf', link: '#', icon: 'file-pdf'}, {name: 'Contoh Proyek Desain.zip', link: '#', icon: 'file-archive'}] },
+      { id: 3, date: 'Jan 13, 2025', time: '09:00 WIB', subject: 'Basic Robotik', status: 'Alfa', trainerNotes: 'Tidak hadir tanpa keterangan. Materi fundamental terlewat. Mohon segera mengejar materi.', documentation: [] },
+      { id: 4, date: 'Jan 12, 2025', time: '10:00 WIB', subject: 'Basic Robotik', status: 'Hadir', trainerNotes: 'Progres bagus dalam pemrograman blok. Siap untuk level berikutnya. Mampu memecahkan masalah dasar.', documentation: [{name: 'Kode Program Robotik.zip', link: '#', icon: 'file-code'}] },
+      { id: 5, date: 'Jan 11, 2025', time: '11:00 WIB', subject: 'Graphic Design', status: 'Hadir', trainerNotes: 'Kreatif dalam membuat ilustrasi digital. Eksplorasi tool baru. Selalu proaktif.', documentation: [{name: 'Tutorial Ilustrasi.pdf', link: '#', icon: 'file-pdf'}] },
+      { id: 6, date: 'Jan 10, 2025', time: '13:00 WIB', subject: 'Basic Robotik', status: 'Hadir', trainerNotes: 'Mampu merakit robot sederhana dengan panduan minimal. Pemahaman yang cepat.', documentation: [] },
+      { id: 7, date: 'Jan 09, 2025', time: '09:00 WIB', subject: 'Graphic Design', status: 'Hadir', trainerNotes: 'Memahami prinsip tipografi. Perlu perbaikan pada tata letak. Semangat belajar tinggi.', documentation: [] },
+      { id: 8, date: 'Jan 08, 2025', time: '09:00 WIB', subject: 'Basic Robotik', status: 'Alfa', trainerNotes: 'Tidak hadir. Perlu mengikuti kelas pengganti untuk materi sensor. Kontak admin untuk reschedule.', documentation: [] },
+      { id: 9, date: 'Jan 07, 2025', time: '10:00 WIB', subject: 'Graphic Design', status: 'Hadir', trainerNotes: 'Menyelesaikan proyek desain poster dengan baik. Detail rapi. Sangat teliti.', documentation: [{name: 'Desain Poster Final.png', link: '#', icon: 'image'}] },
+      { id: 10, date: 'Jan 06, 2025', time: '11:00 WIB', subject: 'Basic Robotik', status: 'Hadir', trainerNotes: 'Progres signifikan dalam debugging kode robot. Memiliki kemampuan analisis masalah yang baik.', documentation: [] },
+      { id: 11, date: 'Jan 05, 2025', time: '13:00 WIB', subject: 'Graphic Design', status: 'Hadir', trainerNotes: 'Memulai proyek desain logo. Konsep awal menarik. Perlu kembangkan variasi.', documentation: [] },
+      { id: 12, date: 'Jan 04, 2025', time: '09:00 WIB', subject: 'Basic Robotik', status: 'Hadir', trainerNotes: 'Menguasai dasar-dasar sirkuit. Perlu eksplorasi komponen lebih lanjut.', documentation: [] },
+      { id: 13, date: 'Jan 03, 2025', time: '09:00 WIB', subject: 'Graphic Design', status: 'Hadir', trainerNotes: 'Memahami penggunaan software desain (CorelDRAW/Illustrator). Adaptasi cepat.', documentation: [] },
+      { id: 14, date: 'Jan 02, 2025', time: '10:00 WIB', subject: 'Basic Robotik', status: 'Hadir', trainerNotes: 'Aktif dalam memecahkan masalah robotik bersama teman. Mampu berkolaborasi.', documentation: [] },
+      { id: 15, date: 'Jan 01, 2025', time: '11:00 WIB', subject: 'Graphic Design', status: 'Hadir', trainerNotes: 'Mempresentasikan hasil desain dengan percaya diri. Kemampuan komunikasi yang baik.', documentation: [] },
+    ];
+
+    // Function to parse URL parameters
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    };
+
+    // Get the meeting ID from the URL
+    const meetingId = parseInt(getUrlParameter('id'));
+
+    // Find the meeting data based on ID
+    const meeting = allMeetingsData.find(item => item.id === meetingId);
+
+    // Populate the details if meeting found
+    document.addEventListener('DOMContentLoaded', () => {
+        if (meeting) {
+            document.getElementById('pageTitle').textContent = `Detail Pertemuan ${meeting.subject}`;
+            document.getElementById('detailDate').textContent = meeting.date;
+            document.getElementById('detailTime').textContent = meeting.time;
+            document.getElementById('detailSubject').textContent = meeting.subject;
+            
+            const detailStatusBadge = document.getElementById('detailStatusBadge');
+            detailStatusBadge.textContent = meeting.status;
+            if (meeting.status === 'Hadir') {
+                detailStatusBadge.classList.add('bg-[#DFF6E4]', 'text-[#0B4C66]');
+            } else if (meeting.status === 'Alfa') {
+                detailStatusBadge.classList.add('bg-[#FFD6D6]', 'text-[#E03E3E]');
+            }
+
+            document.getElementById('trainerNotes').textContent = meeting.trainerNotes || 'Tidak ada catatan dari trainer untuk pertemuan ini.';
+
+            const documentationList = document.getElementById('documentationList');
+            documentationList.innerHTML = ''; // Clear loading message / default items
+
+            if (meeting.documentation && meeting.documentation.length > 0) {
+                meeting.documentation.forEach(doc => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <a href="${doc.link}" target="_blank" class="document-link">
+                            <i class="fas fa-${doc.icon} text-xl document-icon"></i>
+                            <span class="flex-1">${doc.name}</span>
+                            <i class="fas fa-external-link-alt text-xs"></i>
+                        </a>
+                    `;
+                    documentationList.appendChild(listItem);
+                });
+            } else {
+                document.getElementById('noDocumentationMessage').classList.remove('hidden');
+                // You might also append this message if documentationList was cleared and you prefer to build it dynamically
+                const noDocItem = document.createElement('li');
+                noDocItem.classList.add('text-gray-500', 'text-sm', 'italic');
+                noDocItem.textContent = 'Tidak ada dokumentasi yang tersedia untuk pertemuan ini.';
+                documentationList.appendChild(noDocItem);
+            }
+
+        } else {
+            document.getElementById('pageTitle').textContent = 'Pertemuan Tidak Ditemukan';
+            document.querySelector('main').innerHTML = `
+                <div class="flex items-center mb-6">
+                    <a href="kehadiran.html" class="text-gray-500 hover:text-gray-700 mr-4">
+                        <i class="fas fa-arrow-left text-lg"></i>
+                    </a>
+                    <h2 class="font-extrabold text-black text-lg">Detail Pertemuan</h2>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-transparent">
+                    <p class="text-gray-700">Maaf, detail pertemuan dengan ID ini tidak ditemukan.</p>
+                </div>
+            `;
+        }
+    });
+  </script>
+</body>
+</html>

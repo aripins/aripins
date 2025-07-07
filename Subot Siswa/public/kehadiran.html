@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Riwayat Kehadiran - SubotApp</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    .sidebar-mobile-scroll {
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    .sidebar-mobile-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .sidebar-mobile-item {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      gap: 0.5rem;
+      width: auto;
+      min-width: 80px;
+    }
+    .sidebar-mobile-item.active .icon-wrapper {
+      background-color: #0B4C66;
+      color: white;
+      border-radius: 50%;
+      width: 40px; 
+      height: 40px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sidebar-mobile-item.active .text-label {
+      color: #0B4C66;
+      font-weight: 600;
+    }
+    .sidebar-mobile-item:not(.active) .icon-wrapper {
+      background-color: transparent;
+      color: #6B7280;
+      width: 36px; 
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    .sidebar-mobile-item:not(.active) .text-label {
+      color: #6B7280;
+      font-weight: 400;
+    }
+
+    .icon-box-size {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    @media (max-width: 767px) {
+      .responsive-table table {
+        display: none;
+      }
+      .responsive-table .mobile-table-cards {
+        display: block;
+      }
+      .mobile-table-cards .card-item {
+        background-color: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+      }
+      .mobile-table-cards .card-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+      }
+      .mobile-table-cards .card-row:last-of-type {
+        margin-bottom: 0;
+      }
+      .mobile-table-cards .card-label {
+        font-weight: 600;
+        color: #4b5563;
+        flex-shrink: 0;
+        margin-right: 0.5rem;
+        width: 110px;
+        text-align: left;
+      }
+      .mobile-table-cards .card-value {
+        text-align: right;
+        flex-grow: 1;
+        color: #374151;
+      }
+
+      .mobile-table-cards .card-value.status-badge {
+          background-color: transparent !important;
+          color: #374151 !important;
+          padding: 0 !important;
+          border-radius: 0 !important;
+          display: inline-block !important;
+          width: auto !important;
+          text-align: right !important;
+          flex-grow: 0 !important;
+          flex-shrink: 0 !important;
+          font-size: 0.875rem !important;
+          font-weight: 400 !important;
+      }
+
+      .mobile-table-cards .card-trainer-notes {
+        margin-top: 1rem;
+        padding-top: 0.75rem;
+        border-top: 1px dashed #e5e7eb;
+        font-size: 0.875rem;
+        color: #374151;
+      }
+      .mobile-table-cards .card-trainer-notes-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        width: 100%;
+      }
+      .mobile-table-cards .card-trainer-notes .card-label {
+          margin-bottom: 0.25rem;
+          display: block;
+          text-align: left;
+          width: 110px;
+      }
+      .mobile-table-cards .card-trainer-notes .card-value {
+          text-align: right;
+          flex-grow: 1;
+      }
+
+      #totalMeetingsCard .flex-col,
+      #totalMeetingsCard .flex-col > div {
+        align-items: flex-start;
+      }
+      #totalMeetingsCard .total-classes-icon-wrapper {
+        margin-top: 0.75rem;
+        width: 32px;
+        height: 32px;
+        position: relative;
+        flex-shrink: 0;
+      }
+      #totalMeetingsCard .total-classes-icon-wrapper .fas.fa-chevron-down {
+        display: block;
+      }
+    }
+
+    .status-badge {
+        display: inline-block;
+        font-size: 0.625rem;
+        font-weight: 600;
+        padding: 0.25rem 0.5rem;
+        border-radius: 9999px;
+        user-select: none;
+    }
+    .status-Hadir {
+        background-color: #DFF6E4;
+        color: #0B4C66;
+    }
+    .status-Alfa {
+        background-color: #FFD6D6;
+        color: #E03E3E;
+    }
+    .status-Izin {
+        background-color: #FFF3D1;
+        color: #D97706;
+    }
+
+    .total-classes-icon-wrapper {
+        position: relative;
+        width: 32px;
+        height: 32px;
+        border-radius: 9999px;
+        background-color: #D9E9FF;
+        color: #0B4C66;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: visible;
+        cursor: pointer;
+    }
+
+    .total-classes-icon-wrapper #summarySubjectFilter {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background: transparent;
+        border: none;
+        padding: 0;
+        margin: 0;
+        z-index: 1;
+    }
+
+    .total-classes-icon-wrapper .fas:not(.fa-chevron-down) {
+        display: none;
+    }
+    .total-classes-icon-wrapper .fas.fa-chevron-down {
+      font-size: 0.75rem;
+      color: #0B4C66;
+      display: block;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-content {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+    }
+    .modal-overlay.open .modal-content {
+      transform: translateY(0);
+    }
+
+    .blur-background {
+      filter: blur(5px);
+      transition: filter 0.3s ease;
+    }
+
+    @media (max-width: 767px) {
+      .pagination-container {
+        padding-bottom: 4rem; 
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <aside class="w-full md:w-64 bg-white border-b md:border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col md:sticky md:top-0 md:h-screen">
+      <div>
+        <div class="px-6 py-5 border-b border-gray-200">
+          <img src="../asset/logo fix sukarobot.jpg" alt="Sukarobot Academy Logo" class="h-10 w-auto object-contain mx-auto">
+        </div>
+        <a href="pengaturan-profil.html" class="px-6 py-5 flex items-center space-x-4 border-b border-gray-200">
+        <img alt="Profile picture" class="w-10 h-10 rounded-full object-cover" height="40" src="/asset/real.jpg" width="40"/>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-gray-900 truncate">
+            Aripin Sihabudin
+          </p>
+          <p class="text-xs text-gray-400 truncate">
+            Siswa
+          </p>
+        </div>
+        <button aria-label="Logout" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+        </button>
+      </a>
+        <nav class="flex flex-col mt-6 space-y-1 px-2 flex-grow overflow-y-auto">
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="../index.html">
+            <i class="fas fa-home text-base"></i>
+            Dashboard
+          </a>
+          <a aria-current="page" class="flex items-center gap-3 px-4 py-2 rounded-lg bg-[#D9E9FF] text-[#0B4C66] font-semibold text-sm" href="kehadiran.html">
+            <i class="fas fa-calendar-check text-base"></i>
+            Kehadiran
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="laporan.html">
+            <i class="fas fa-file-alt text-base"></i>
+            Laporan
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="/pembayaran/pembayaran.html">
+            <i class="fas fa-credit-card text-base"></i>
+            Pembayaran
+          </a>
+        </nav>
+      </div>
+      <button aria-label="Logout" class="w-full flex justify-center py-3 border-t border-gray-200 text-gray-500 hover:text-gray-700">
+      </button>
+    </aside>
+
+    <main id="mainContentWrapper" class="flex-1 p-6 max-w-7xl mx-auto">
+      <div class="mb-6">
+        <nav class="text-xs text-gray-500 font-normal mb-1 select-none">
+          <a class="hover:underline text-[#0B4C66]" href="../index.html">
+            Dashboard
+          </a>
+          <span class="mx-1">&gt;</span>
+          <span>Kehadiran</span>
+        </nav>
+        <h1 class="text-black font-extrabold text-xl leading-6">
+          Riwayat Kehadiran
+        </h1>
+      </div>
+
+      <section class="flex flex-col sm:flex-row flex-wrap gap-4 mb-6" id="summaryCardsContainer">
+        <div id="totalMeetingsCard" class="flex-1 min-w-[200px] bg-white rounded-lg p-4 shadow-sm border border-transparent hover:border-gray-200 flex flex-col justify-between">
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <p class="text-xs text-gray-600 mb-1">Total Kelas Pertemuan</p>
+              <p class="font-extrabold text-lg text-black leading-6" id="totalMeetings">0</p>
+              <p id="selectedSubjectLabel" class="text-xs text-gray-500 font-normal"></p>
+            </div>
+            <div class="total-classes-icon-wrapper" onclick="openSubjectFilterModal()">
+              <i class="fas fa-chevron-down text-sm"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-1 min-w-[200px] bg-white rounded-lg p-4 shadow-sm border border-transparent hover:border-gray-200">
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <p class="text-xs text-gray-600 mb-1">Pertemuan Selesai</p>
+              <p class="font-extrabold text-lg text-black leading-6" id="completedMeetings">0</p>
+            </div>
+            <div class="flex items-center justify-center w-8 h-8 rounded-full bg-[#B6EBD9] text-[#0B4C66]" title="Completed meetings icon">
+              <i class="fas fa-check-circle text-sm"></i>
+            </div>
+          </div>
+        </div>
+        <div class="flex-1 min-w-[200px] bg-white rounded-lg p-4 shadow-sm border border-transparent hover:border-gray-200">
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <p class="text-xs text-gray-600 mb-1">Kehadiran</p>
+              <p class="font-extrabold text-lg text-black leading-6" id="attendedMeetings">0</p>
+            </div>
+            <div class="flex items-center justify-center w-8 h-8 rounded-full bg-[#B6EBD9] text-[#0B4C66]" title="Attendance check icon">
+              <i class="fas fa-check text-sm"></i>
+            </div>
+          </div>
+        </div>
+        <div class="flex-1 min-w-[200px] bg-white rounded-lg p-4 shadow-sm border border-transparent hover:border-gray-200">
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <p class="text-xs text-gray-600 mb-1">Absen</p>
+              <p class="font-extrabold text-lg text-black leading-6" id="absentMeetings">0</p>
+            </div>
+            <div class="flex items-center justify-center w-8 h-8 rounded-full bg-[#FFD6D6] text-[#E03E3E]" title="Absent cross icon">
+              <i class="fas fa-times text-sm"></i>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white rounded-lg shadow-sm p-4 responsive-table mb-20 md:mb-0">
+        <div class="flex justify-between items-center mb-3 flex-wrap gap-2">
+          <h2 class="font-semibold text-black">Riwayat Kehadiran</h2>
+          <div class="flex gap-2 items-center">
+            <button id="openFilterModalBtn" class="flex items-center gap-1 text-gray-600 text-xs font-semibold bg-gray-100 rounded-md px-3 py-1 hover:bg-gray-200 focus:outline-none" type="button">
+              <i class="fas fa-filter text-xs"></i>
+              Filter <i class="fas fa-chevron-down text-[8px] ml-1"></i>
+            </button>
+            <button id="exportButton" class="flex items-center gap-1 text-[#0B4C66] text-xs font-semibold bg-[#D9E9FF] rounded-md px-3 py-1 hover:bg-[#B6EBD9]" type="button">
+              <i class="fas fa-download text-xs"></i>
+              Export
+            </button>
+          </div>
+        </div>
+        <div class="overflow-x-auto hidden md:block">
+          <table class="w-full text-left text-gray-600 text-xs border-separate border-spacing-y-1">
+          <thead>
+            <tr class="border-b border-gray-200">
+              <th class="pb-2 font-normal pl-6">Tanggal</th>
+              <th class="pb-2 font-normal pl-6">Waktu</th>
+              <th class="pb-2 font-normal pl-6">Subjek</th>
+              <th class="pb-2 font-normal pl-6">Status</th>
+              <th class="pb-2 font-normal pl-6">Catatan Trainer</th>
+            </tr>
+          </thead>
+          <tbody id="attendanceTableBody" class="text-sm text-black font-normal">
+          </tbody>
+        </table>
+        </div>
+
+        <div id="mobileAttendanceCards" class="mobile-table-cards md:hidden">
+        </div>
+
+        <div class="text-xs text-gray-400 mt-2 mb-3 select-none">
+          Menampilkan <span id="paginationInfoStart"></span> dari <span id="paginationInfoTotal"></span> riwayat
+        </div>
+        <nav aria-label="Pagination" class="flex justify-end gap-1 text-xs text-gray-400 font-normal select-none">
+          <button id="prevPageBtn" class="rounded px-2 py-1 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" type="button">
+            Sebelumnya
+          </button>
+          <div id="pageNumbers" class="flex gap-1"></div>
+          <button id="nextPageBtn" class="rounded px-2 py-1 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" type="button">
+            Selanjutnya
+          </button>
+        </nav>
+      </section>
+    </main>
+  </div>
+
+  <aside class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 p-2 flex md:hidden">
+    <nav class="flex justify-around items-center w-full sidebar-mobile-scroll">
+      <a class="sidebar-mobile-item" href="/index.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-home text-base"></i>
+        </div>
+        <span class="text-label">Dashboard</span>
+      </a>
+      <a class="sidebar-mobile-item active" href="kehadiran.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-calendar-check text-base"></i>
+        </div>
+        <span class="text-label">Kehadiran</span>
+      </a>
+      <a class="sidebar-mobile-item" href="laporan.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-file-alt text-base"></i>
+        </div>
+        <span class="text-label">Laporan</span>
+      </a>
+      <a class="sidebar-mobile-item" href="/pembayaran/pembayaran.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-credit-card text-base"></i>
+        </div>
+        <span class="text-label">Pembayaran</span>
+      </a>
+      <a class="sidebar-mobile-item" href="pengaturan-profil.html">
+      <div class="icon-wrapper">
+        <i class="fas fa-user-circle text-base"></i>
+      </div>
+      <span class="text-label">Profil</span>
+    </a>
+    </nav>
+  </aside>
+
+  <div id="filterSelectionModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-4 pb-2 border-b border-blue-100">
+        <h3 class="text-lg font-extrabold text-[#0B4C66]">Pilih Program</h3>
+        <button class="text-gray-500 hover:text-gray-700" onclick="closeFilterModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="space-y-2">
+        <li>
+          <a href="#" data-filter="Semua" class="flex items-center gap-3 p-3 rounded-lg bg-[#D9E9FF] hover:bg-[#B6EBD9] text-[#0B4C66] font-semibold text-sm transition duration-150 ease-in-out">
+            <div class="bg-[#0B4C66] text-white p-2 rounded-md flex items-center justify-center w-8 h-8">
+              <i class="fas fa-asterisk"></i>
+            </div>
+            Semua Program
+          </a>
+        </li>
+        <li>
+          <a href="#" data-filter="Robotik" class="flex items-center gap-3 p-3 rounded-lg bg-[#D9E9FF] hover:bg-[#B6EBD9] text-[#0B4C66] font-semibold text-sm transition duration-150 ease-in-out">
+            <div class="bg-[#0B4C66] text-white p-2 rounded-md flex items-center justify-center w-8 h-8">
+              <i class="fas fa-robot"></i>
+            </div>
+            Robotik
+          </a>
+        </li>
+        <li>
+          <a href="#" data-filter="Coding" class="flex items-center gap-3 p-3 rounded-lg bg-[#D9E9FF] hover:bg-[#B6EBD9] text-[#0B4C66] font-semibold text-sm transition duration-150 ease-in-out">
+            <div class="bg-[#0B4C66] text-white p-2 rounded-md flex items-center justify-center w-8 h-8">
+              <i class="fas fa-code"></i>
+            </div>
+            Coding
+          </a>
+        </li>
+        <li>
+          <a href="#" data-filter="Microsoft Office" class="flex items-center gap-3 p-3 rounded-lg bg-[#D9E9FF] hover:bg-[#B6EBD9] text-[#0B4C66] font-semibold text-sm transition duration-150 ease-in-out">
+            <div class="bg-[#0B4C66] text-white p-2 rounded-md flex items-center justify-center w-8 h-8">
+              <i class="fas fa-laptop-code"></i>
+            </div>
+            Microsoft Office
+          </a>
+        </li>
+        <li>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = monthNames[date.getMonth()];
+      const year = date.getFullYear();
+      return `${day} ${month} ${year}`;
+    }
+
+    function truncateNotes(notes) {
+      if (!notes) return 'Tidak ada catatan';
+      const words = notes.split(' ');
+      if (words.length > 4) {
+        return words.slice(0, 4).join(' ') + '...';
+      }
+      return notes;
+    }
+
+    const attendanceData = [
+      { id: 1, date: '2025-01-15', time: '09:00 WIB', subject: 'Robotik', status: 'Hadir', trainerNotes: 'Siswa sangat aktif diskusi.', documentationLink: '#' },
+      { id: 2, date: '2025-01-14', time: '09:00 WIB', subject: 'Ms Excel', status: 'Hadir', trainerNotes: 'Memahami konsep dasar desain.', documentationLink: '#' },
+      { id: 3, date: '2025-01-13', time: '09:00 WIB', subject: 'Robotik', status: 'Alfa', trainerNotes: 'Tidak hadir tanpa keterangan.', documentationLink: '#' },
+      { id: 4, date: '2025-01-12', time: '10:00 WIB', subject: 'Coding', status: 'Hadir', trainerNotes: 'Progres bagus pemrograman blok.', documentationLink: '#' },
+      { id: 5, date: '2025-01-11', time: '11:00 WIB', subject: 'Microsoft Office', status: 'Hadir', trainerNotes: 'Kreatif membuat presentasi digital.', documentationLink: '#' },
+      { id: 6, date: '2025-01-10', time: '13:00 WIB', subject: 'Robotik', status: 'Hadir', trainerNotes: 'Mampu merakit robot sederhana.', documentationLink: '#' },
+      { id: 7, date: '2025-01-09', time: '09:00 WIB', subject: 'Ms Excel', status: 'Hadir', trainerNotes: 'Memahami prinsip tipografi baik.', documentationLink: '#' },
+      { id: 8, date: '2025-01-08', time: '09:00 WIB', subject: 'Coding', status: 'Alfa', trainerNotes: 'Tidak hadir. Perlu kelas.', documentationLink: '#' },
+      { id: 9, date: '2025-01-07', time: '10:00 WIB', subject: 'Microsoft Office', status: 'Hadir', trainerNotes: 'Proyek laporan Word selesai.', documentationLink: '#' },
+      { id: 10, date: '2025-01-06', time: '11:00 WIB', subject: 'Robotik', status: 'Hadir', trainerNotes: 'Progres signifikan debugging kode.', documentationLink: '#' },
+      { id: 11, date: '2025-01-05', time: '13:00 WIB', subject: 'Ms Excel', status: 'Hadir', trainerNotes: 'Memulai proyek desain logo.', documentationLink: '#' },
+      { id: 12, date: '2025-01-04', time: '09:00 WIB', subject: 'Coding', status: 'Hadir', trainerNotes: 'Menguasai dasar-dasar sirkuit.', documentationLink: '#' },
+      { id: 13, date: '2025-01-03', time: '09:00 WIB', subject: 'Microsoft Office', status: 'Izin', trainerNotes: 'Siswa izin tidak masuk.', documentationLink: '#' },
+      { id: 14, date: '2025-01-02', time: '10:00 WIB', subject: 'Robotik', status: 'Hadir', trainerNotes: 'Aktif memecahkan masalah tim.', documentationLink: '#' },
+      { id: 15, date: '2025-01-01', time: '11:00 WIB', subject: 'Ms Excel', status: 'Hadir', trainerNotes: 'Mempresentasikan hasil desain.', documentationLink: '#' },
+    ];
+
+    let filteredAttendanceData = [...attendanceData];
+    
+    const rowsPerPage = 5;
+    let currentPage = 1;
+
+    const summarySubjectFilterTrigger = document.getElementById('totalMeetingsCard');
+    const selectedSubjectLabel = document.getElementById('selectedSubjectLabel');
+    const totalMeetingsEl = document.getElementById('totalMeetings');
+    const completedMeetingsEl = document.getElementById('completedMeetings');
+    const attendedMeetingsEl = document.getElementById('attendedMeetings');
+    const absentMeetingsEl = document.getElementById('absentMeetings');
+
+    const attendanceTableBody = document.getElementById('attendanceTableBody');
+    const mobileAttendanceCards = document.getElementById('mobileAttendanceCards');
+    const prevPageBtn = document.getElementById('prevPageBtn');
+    const nextPageBtn = document.getElementById('nextPageBtn');
+    const paginationInfoStart = document.getElementById('paginationInfoStart');
+    const paginationInfoTotal = document.getElementById('paginationInfoTotal');
+    const pageNumbersContainer = document.getElementById('pageNumbers');
+
+    const openFilterModalBtn = document.getElementById('openFilterModalBtn');
+    const filterSelectionModal = document.getElementById('filterSelectionModal');
+    const mainContentWrapper = document.getElementById('mainContentWrapper');
+
+    const exportButton = document.getElementById('exportButton');
+
+    function updateSummaryCards(subjectFilterValue) {
+        let dataToSummarize = attendanceData;
+
+        if (subjectFilterValue !== "Semua") {
+            dataToSummarize = attendanceData.filter(item => item.subject === subjectFilterValue);
+        }
+
+        const total = dataToSummarize.length;
+        const attended = dataToSummarize.filter(item => item.status === 'Hadir').length;
+        const absent = dataToSummarize.filter(item => item.status === 'Alfa' || item.status === 'Izin').length;
+        
+        const completed = total;
+
+        totalMeetingsEl.textContent = total;
+        completedMeetingsEl.textContent = completed;
+        attendedMeetingsEl.textContent = attended;
+        absentMeetingsEl.textContent = absent;
+        selectedSubjectLabel.textContent = `(${subjectFilterValue === 'Semua' ? 'Semua Subjek' : subjectFilterValue})`;
+    }
+
+    function displayAttendanceTablePage(page) {
+      currentPage = page;
+      const startIndex = (currentPage - 1) * rowsPerPage;
+      const endIndex = Math.min(startIndex + rowsPerPage, filteredAttendanceData.length);
+      const paginatedItems = filteredAttendanceData.slice(startIndex, endIndex);
+
+      attendanceTableBody.innerHTML = '';
+      mobileAttendanceCards.innerHTML = '';
+
+      if (paginatedItems.length === 0) {
+        attendanceTableBody.innerHTML = `
+          <tr>
+            <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+              Tidak ada riwayat kehadiran untuk filter ini.
+            </td>
+          </tr>
+        `;
+        mobileAttendanceCards.innerHTML = `
+            <div class="card-item text-center text-gray-500">
+              Tidak ada riwayat kehadiran untuk filter ini.
+            </div>
+        `;
+      } else {
+        paginatedItems.forEach(item => {
+          let statusClass = '';
+          if (item.status === 'Hadir') {
+            statusClass = 'status-Hadir';
+          } else if (item.status === 'Alfa') {
+            statusClass = 'status-Alfa';
+          } else if (item.status === 'Izin') {
+            statusClass = 'status-Izin';
+          }
+
+          const row = document.createElement('tr');
+          row.dataset.id = item.id;
+          row.classList.add('cursor-pointer', 'hover:bg-gray-50');
+          row.innerHTML = `
+            <td class="py-2 px-6">${formatDate(item.date)}</td>
+            <td class="py-2 px-6">${item.time}</td>
+            <td class="py-2 px-6">${item.subject}</td>
+            <td class="py-2 px-6">
+              <span class="status-badge ${statusClass}">${item.status}</span>
+            </td>
+            <td class="py-2 px-6 text-gray-700">
+              ${truncateNotes(item.trainerNotes)}
+            </td>
+          `;
+          attendanceTableBody.appendChild(row);
+          row.addEventListener('click', () => {
+              window.location.href = `detail-kehadiran.html?id=${item.id}`;
+          });
+
+          const card = document.createElement('div');
+          card.dataset.id = item.id;
+          card.classList.add('card-item', 'cursor-pointer', 'hover:bg-gray-100');
+          card.innerHTML = `
+            <div class="card-row">
+              <span class="card-label">Tanggal:</span>
+              <span class="card-value">${formatDate(item.date)}</span>
+            </div>
+            <div class="card-row">
+              <span class="card-label">Waktu:</span>
+              <span class="card-value">${item.time}</span>
+            </div>
+            <div class="card-row">
+              <span class="card-label">Subjek:</span>
+              <span class="card-value">${item.subject}</span>
+            </div>
+            <div class="card-row">
+              <span class="card-label">Status:</span>
+              <span class="card-value status-badge">${item.status}</span>
+            </div>
+            <div class="card-trainer-notes">
+              <div class="card-trainer-notes-wrapper">
+                <span class="card-label">Catatan Trainer:</span>
+                <span class="card-value text-gray-700">${item.trainerNotes || 'Tidak ada catatan'}</span>
+              </div>
+            </div>
+          `;
+          mobileAttendanceCards.appendChild(card);
+          card.addEventListener('click', () => {
+              window.location.href = `detail-kehadiran.html?id=${item.id}`;
+          });
+        });
+      }
+
+      prevPageBtn.disabled = currentPage === 1;
+      nextPageBtn.disabled = endIndex >= filteredAttendanceData.length;
+
+      paginationInfoStart.textContent = startIndex + 1;
+      paginationInfoTotal.textContent = filteredAttendanceData.length;
+
+      renderPageNumbers();
+    }
+
+    function renderPageNumbers() {
+        pageNumbersContainer.innerHTML = '';
+        const totalPages = Math.ceil(filteredAttendanceData.length / rowsPerPage);
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.type = 'button';
+            pageButton.textContent = i;
+            pageButton.classList.add('rounded', 'px-2', 'py-1', 'hover:bg-gray-100', 'hover:text-gray-700');
+            if (i === currentPage) {
+                pageButton.classList.add('bg-[#0B4C66]', 'text-white', 'hover:bg-[#0B4C66]', 'hover:text-white');
+            }
+            pageButton.addEventListener('click', () => displayAttendanceTablePage(i));
+            pageNumbersContainer.appendChild(pageButton);
+        }
+        if (totalPages === 0 && filteredAttendanceData.length === 0) {
+            paginationInfoStart.textContent = 0;
+            paginationInfoTotal.textContent = 0;
+            prevPageBtn.disabled = true;
+            nextPageBtn.disabled = true;
+        } else if (totalPages === 0) {
+            paginationInfoStart.textContent = 1;
+            paginationInfoTotal.textContent = filteredAttendanceData.length;
+            prevPageBtn.disabled = true;
+            nextPageBtn.disabled = true;
+        }
+    }
+
+    openFilterModalBtn.addEventListener('click', function() {
+        filterSelectionModal.classList.add('open');
+        mainContentWrapper.classList.add('blur-background');
+    });
+
+    function closeFilterModal() {
+        filterSelectionModal.classList.remove('open');
+        mainContentWrapper.classList.remove('blur-background');
+    }
+
+    filterSelectionModal.addEventListener('click', (event) => {
+      if (event.target === filterSelectionModal) {
+        closeFilterModal();
+      } else if (event.target.tagName === 'A' || event.target.closest('a')) {
+        const targetLink = event.target.tagName === 'A' ? event.target : event.target.closest('a');
+        const selectedFilterValue = targetLink.dataset.filter;
+
+        if (selectedFilterValue === 'Semua') {
+            filteredAttendanceData = [...attendanceData];
+        } else {
+            filteredAttendanceData = attendanceData.filter(item => item.subject === selectedFilterValue);
+        }
+
+        currentPage = 1;
+        displayAttendanceTablePage(currentPage);
+        closeFilterModal();
+      }
+    });
+
+    summarySubjectFilterTrigger.addEventListener('click', function() {
+        filterSelectionModal.classList.add('open');
+        mainContentWrapper.classList.add('blur-background');
+    });
+
+    filterSelectionModal.addEventListener('click', (event) => {
+        if (event.target === filterSelectionModal) {
+            closeFilterModal();
+        } else if (event.target.tagName === 'A' || event.target.closest('a')) {
+            const targetLink = event.target.tagName === 'A' ? event.target : event.target.closest('a');
+            const selectedFilterValue = targetLink.dataset.filter;
+
+            updateSummaryCards(selectedFilterValue);
+
+            if (selectedFilterValue === 'Semua') {
+                filteredAttendanceData = [...attendanceData];
+            } else {
+                filteredAttendanceData = attendanceData.filter(item => item.subject === selectedFilterValue);
+            }
+
+            currentPage = 1;
+            displayAttendanceTablePage(currentPage);
+            closeFilterModal();
+        }
+    });
+
+    exportButton.addEventListener('click', () => {
+        window.location.href = 'export-template.html';
+    });
+
+    prevPageBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        displayAttendanceTablePage(currentPage - 1);
+      }
+    });
+
+    nextPageBtn.addEventListener('click', () => {
+      if (currentPage * rowsPerPage < filteredAttendanceData.length) {
+        displayAttendanceTablePage(currentPage + 1);
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateSummaryCards('Semua');
+      displayAttendanceTablePage(1);
+    });
+  </script>
+</body>
+</html>

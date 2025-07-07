@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Pembayaran - SubotApp</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    .sidebar-mobile-scroll {
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    .sidebar-mobile-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .sidebar-mobile-item {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      gap: 0.5rem;
+      width: auto;
+      min-width: 80px;
+    }
+    .sidebar-mobile-item .icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+    }
+    .sidebar-mobile-item.active .icon-wrapper {
+      background-color: #0B4C66;
+      color: white;
+    }
+    .sidebar-mobile-item.active .text-label {
+      color: #0B4C66;
+      font-weight: 600;
+    }
+    .sidebar-mobile-item:not(.active) .icon-wrapper {
+      background-color: transparent;
+      color: #6B7280;
+    }
+    .sidebar-mobile-item:not(.active) .text-label {
+      color: #6B7280;
+      font-weight: 400;
+    }
+
+    .icon-box-size {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  </style>
+</head>
+<body class="bg-[#F7F9FC] min-h-screen text-gray-700">
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <aside class="w-full md:w-64 bg-white border-b md:border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col md:sticky md:top-0 md:h-screen">
+      <div>
+        <div class="px-6 py-5 border-b border-gray-200">
+            <img src="../asset/logo fix sukarobot.jpg" alt="Sukarobot Academy Logo" class="h-10 w-auto object-contain mx-auto">
+          </div>
+        <a href="pengaturan-profil.html" class="px-6 py-5 flex items-center space-x-4 border-b border-gray-200">
+        <img alt="Profile picture" class="w-10 h-10 rounded-full object-cover" height="40" src="/asset/real.jpg" width="40"/>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-gray-900 truncate">
+            Aripin Sihabudin
+          </p>
+          <p class="text-xs text-gray-400 truncate">
+            Siswa
+          </p>
+        </div>
+        <button aria-label="Logout" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+        </button>
+      </a>
+        <nav class="flex flex-col mt-6 space-y-1 px-2 flex-grow overflow-y-auto">
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="/index.html">
+            <i class="fas fa-home text-base"></i>
+            Dashboard
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="../public/kehadiran.html">
+            <i class="fas fa-calendar-check text-base"></i>
+            Kehadiran
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="../public/laporan.html">
+            <i class="fas fa-file-alt text-base"></i>
+            Laporan
+          </a>
+          <a aria-current="page" class="flex items-center gap-3 px-4 py-2 rounded-lg bg-[#D9E9FF] text-[#0B4C66] font-semibold text-sm" href="pembayaran.html">
+            <i class="fas fa-credit-card text-base"></i>
+            Pembayaran
+          </a>
+        </nav>
+      </div>
+      <button aria-label="Logout" class="w-full flex justify-center py-3 border-t border-gray-200 text-gray-500 hover:text-gray-700">
+      </button>
+    </aside>
+
+    <main class="flex-1 p-6 max-w-7xl xl:max-w-full mx-auto"> 
+      <div class="mb-4 text-xs text-gray-500 font-normal select-none">
+        <a class="hover:underline text-[#0B4C66]" href="index.html">
+          Dashboard
+        </a>
+        <span class="mx-1 text-gray-400">></span>
+        <span>Pembayaran</span>
+      </div>
+      <h2 class="text-xl font-extrabold mb-4 select-none">
+        Pembayaran
+      </h2>
+      <div class="flex gap-2 mb-6 bg-gray-100 rounded-lg p-2 flex-wrap justify-center sm:justify-start"> 
+        <button id="filterAll" class="bg-[#0B4C66] text-white rounded-md px-4 py-2 text-sm font-semibold select-none flex-1 sm:flex-initial" type="button">
+          Semua
+        </button>
+        <button id="filterUnpaid" class="bg-white border border-gray-200 rounded-md px-4 py-2 text-sm select-none flex-1 sm:flex-initial" type="button">
+          Belum Dibayar
+        </button>
+        <button id="filterPaid" class="bg-white border border-gray-200 rounded-md px-4 py-2 text-sm select-none flex-1 sm:flex-initial" type="button">
+          Sudah Dibayar
+        </button>
+      </div>
+      <div id="paymentCardsContainer" class="flex flex-col gap-6"> 
+        </div>
+    </main>
+  </div>
+
+  <aside class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 p-2 flex md:hidden">
+    <nav class="flex justify-around items-center w-full sidebar-mobile-scroll">
+      <a class="sidebar-mobile-item" href="/index.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-home text-base"></i>
+        </div>
+        <span class="text-label">Dashboard</span>
+      </a>
+      <a class="sidebar-mobile-item" href="../public/kehadiran.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-calendar-check text-base"></i>
+        </div>
+        <span class="text-label">Kehadiran</span>
+      </a>
+      <a class="sidebar-mobile-item" href="../public/laporan.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-file-alt text-base"></i>
+        </div>
+        <span class="text-label">Laporan</span>
+      </a>
+      <a aria-current="page" class="sidebar-mobile-item active" href="pembayaran.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-credit-card text-base"></i>
+        </div>
+        <span class="text-label">Pembayaran</span>
+      </a>
+      <a class="sidebar-mobile-item" href="pengaturan-profil.html">
+      <div class="icon-wrapper">
+        <i class="fas fa-user-circle text-base"></i>
+      </div>
+      <span class="text-label">Profil</span>
+    </a>
+    </nav>
+  </aside>
+
+  <script>
+    // Data dummy pembayaran. Tambahkan `methodType` properti untuk simulasi manual/otomatis
+    // Tambahkan juga `transactionId` dan `paidDate` untuk item yang disimulasikan dibayar manual
+    const paymentData = [
+      { id: 1, title: 'Biaya Kelas Robotik', description: 'Level Beginner - Batch 23', status: 'Belum Dibayar', dueDate: '28 Feb 2025', amount: 1500000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null, methodType: 'otomatis' },
+      { id: 2, title: 'Biaya Pendaftaran', description: 'Registrasi Awal', status: 'Sudah Dibayar', paidDate: '15 Jan 2025', amount: 500000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2025010002', deadlineTime: null, methodType: 'otomatis' },
+      { id: 3, title: 'SPP Bulan Januari 2025', description: 'Kelas Robotik - Level 2', status: 'Belum Dibayar', dueDate: '10 Jan 2025', amount: 550000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null, methodType: 'manual' },
+      { id: 4, title: 'Biaya Praktikum', description: 'Kelas Robotik - Level 2', status: 'Belum Dibayar', dueDate: '15 Jan 2025', amount: 250000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null, methodType: 'otomatis' },
+      { id: 5, title: 'SPP Bulan Juni 2024', description: 'Kelas Robotik - Level 1', status: 'Sudah Dibayar', paidDate: '10 Jun 2024', amount: 550000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2024060005', deadlineTime: null, methodType: 'otomatis' },
+      { id: 6, title: 'Pembelian Alat', description: 'Robot Sumo', status: 'Sudah Dibayar', paidDate: '10 Jun 2024', amount: 1000000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2024060006', deadlineTime: null, methodType: 'manual' },
+      { id: 7, title: 'Biaya Kelas Graphic Design', description: 'Level Basic - Batch 1', status: 'Belum Dibayar', dueDate: '15 Mar 2025', amount: 1200000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null, methodType: 'otomatis' },
+      { id: 8, title: 'SPP Bulan Februari 2025', description: 'Kelas Graphic Design - Level 1', status: 'Sudah Dibayar', paidDate: '05 Feb 2025', amount: 550000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2025020008', deadlineTime: null, methodType: 'otomatis' },
+      { id: 9, title: 'Biaya Ujian Sertifikasi', description: 'Ujian Nasional Robotik', status: 'Belum Dibayar', dueDate: '30 Apr 2025', amount: 300000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null, methodType: 'manual' },
+    ];
+
+    let filteredPaymentData = [...paymentData];
+    const paymentCardsContainer = document.getElementById('paymentCardsContainer');
+    
+    const filterAllBtn = document.getElementById('filterAll');
+    const filterUnpaidBtn = document.getElementById('filterUnpaid');
+    const filterPaidBtn = document.getElementById('filterPaid');
+
+    function formatRupiah(amount) {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(amount);
+    }
+
+    // Function to simulate admin confirmation (for manual payments)
+    function simulateAdminConfirmation(itemId) {
+        const itemIndex = paymentData.findIndex(item => item.id === itemId);
+        if (itemIndex > -1 && paymentData[itemIndex].status === 'Menunggu Konfirmasi') {
+            paymentData[itemIndex].status = 'Sudah Dibayar';
+            paymentData[itemIndex].paidDate = new Date().toLocaleDateString('en-CA'); // Set current date as paid date
+            paymentData[itemIndex].transactionId = `#INV${itemId.toString().padStart(5, '0')}_MANUAL_${Date.now().toString().slice(-6)}`; // Generate a dummy transaction ID
+            alert(`Simulasi: Pembayaran untuk ${paymentData[itemIndex].title} (ID: ${itemId}) telah dikonfirmasi admin!`);
+            applyFilter('Semua'); // Re-render to show updated status
+        }
+    }
+
+
+    function renderPaymentCards(data) {
+        paymentCardsContainer.innerHTML = '';
+
+        if (data.length === 0) {
+            paymentCardsContainer.innerHTML = `<p class="w-full text-center text-gray-500 italic py-6">Tidak ada riwayat pembayaran untuk kategori ini.</p>`;
+            return;
+        }
+
+        data.forEach(item => {
+            const card = document.createElement('section');
+            card.classList.add('bg-white', 'rounded-lg', 'p-4', 'shadow-sm', 'border', 'border-gray-200', 'select-none', 'w-full'); 
+
+            let statusBadgeClass = '';
+            let statusBadgeText = item.status;
+            let dateLabel = '';
+            let dateValue = '';
+            let totalLabel = 'Total Pembayaran';
+            let buttonText = '';
+            let buttonClass = '';
+            let buttonOnClick = '';
+            let isManualPending = false; // Flag for special manual pending state
+
+            if (item.status === 'Belum Dibayar') {
+                statusBadgeClass = 'bg-[#FFD6D6] text-[#E03E3E]'; // Red for unpaid
+                dateLabel = 'Jatuh Tempo';
+                dateValue = item.dueDate;
+                totalLabel = 'Total Tagihan';
+                buttonText = 'Bayar Sekarang';
+                buttonClass = 'bg-[#0B4C66] text-white';
+                
+                // Direct to specific payment flow based on methodType
+                if (item.methodType === 'manual') {
+                    buttonOnClick = `window.location.href='konfirmasi-manual.html?tagihanId=${item.id}'`;
+                } else { // 'otomatis'
+                    buttonOnClick = `window.location.href='pilih-metode-bayar.html?tagihanId=${item.id}'`;
+                }
+
+            } else if (item.status === 'Sudah Dibayar') {
+                statusBadgeClass = 'bg-[#B6EBD9] text-[#0B4C66]'; // Green for paid
+                dateLabel = 'Tanggal Pembayaran';
+                dateValue = item.paidDate;
+                buttonText = 'Lihat Detail';
+                buttonClass = 'bg-gray-200 text-gray-500'; // Gray button for already paid
+                buttonOnClick = `window.location.href='invoice.html?id=${item.id}'`;
+
+            } else if (item.status === 'Menunggu Konfirmasi') { // New state for manual payments
+                statusBadgeClass = 'bg-[#FFF3D1] text-[#D97706]'; // Yellow for pending confirmation
+                dateLabel = 'Diajukan Pada'; // Or 'Tanggal Pembayaran'
+                dateValue = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/ /g, ' '); // Current date for demo
+                totalLabel = 'Total Tagihan';
+                buttonText = 'Menunggu Konfirmasi';
+                buttonClass = 'bg-gray-200 text-gray-500';
+                isManualPending = true; // Mark as manual pending
+                buttonOnClick = `alert('Pembayaran Anda sedang menunggu konfirmasi admin. Harap bersabar.')`; 
+            }
+
+            card.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <h3 class="font-semibold text-sm text-black">
+                            ${item.title}
+                        </h3>
+                        <p class="text-xs text-gray-500">
+                            ${item.description}
+                        </p>
+                    </div>
+                    <span class="text-xs ${statusBadgeClass} rounded-full px-2 py-[2px]">
+                        ${statusBadgeText}
+                    </span>
+                </div>
+                <div class="flex justify-between mb-3 text-xs text-gray-600">
+                    <div>
+                        <p>
+                            ${dateLabel}
+                        </p>
+                        <p class="font-semibold text-black">
+                            ${dateValue}
+                        </p>
+                    </div>
+                    <div class="text-right">
+                        <p>
+                            ${totalLabel}
+                        </p>
+                        <p class="font-semibold text-[#0B4C66]">
+                            ${formatRupiah(item.amount)}
+                        </p>
+                    </div>
+                </div>
+                <button class="w-full ${buttonClass} font-semibold rounded-md py-2 text-sm" 
+                        type="button" 
+                        onclick="${buttonOnClick}">
+                    ${buttonText}
+                </button>
+            `;
+            paymentCardsContainer.appendChild(card);
+
+            // Add a simulation button for manual pending items (for demo purposes only)
+            if (isManualPending) {
+                const simulateConfirmBtn = document.createElement('button');
+                simulateConfirmBtn.classList.add('mt-2', 'w-full', 'bg-blue-500', 'hover:bg-blue-600', 'text-white', 'text-xs', 'py-1', 'rounded-md');
+                simulateConfirmBtn.textContent = 'Simulasi Konfirmasi Admin';
+                simulateConfirmBtn.onclick = () => simulateAdminConfirmation(item.id);
+                card.appendChild(simulateConfirmBtn);
+            }
+        });
+    }
+
+    function applyFilter(status) {
+        if (status === 'Semua') {
+            filteredPaymentData = [...paymentData];
+        } else {
+            filteredPaymentData = paymentData.filter(item => item.status === status);
+        }
+        renderPaymentCards(filteredPaymentData);
+        updateFilterButtonStates(status);
+    }
+
+    function updateFilterButtonStates(activeStatus) {
+        filterAllBtn.classList.remove('bg-[#0B4C66]', 'text-white');
+        filterUnpaidBtn.classList.remove('bg-[#0B4C66]', 'text-white');
+        filterPaidBtn.classList.remove('bg-[#0B4C66]', 'text-white');
+
+        filterAllBtn.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-200');
+        filterUnpaidBtn.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-200');
+        filterPaidBtn.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-200');
+
+        if (activeStatus === 'Semua') {
+            filterAllBtn.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-200');
+            filterAllBtn.classList.add('bg-[#0B4C66]', 'text-white');
+        } else if (activeStatus === 'Belum Dibayar') {
+            filterUnpaidBtn.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-200');
+            filterUnpaidBtn.classList.add('bg-[#0B4C66]', 'text-white');
+        } else if (activeStatus === 'Sudah Dibayar') {
+            filterPaidBtn.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-200');
+            filterPaidBtn.classList.add('bg-[#0B4C66]', 'text-white');
+        }
+    }
+
+    filterAllBtn.addEventListener('click', () => applyFilter('Semua'));
+    filterUnpaidBtn.addEventListener('click', () => applyFilter('Belum Dibayar'));
+    filterPaidBtn.addEventListener('click', () => applyFilter('Sudah Dibayar'));
+
+    document.addEventListener('DOMContentLoaded', () => {
+        applyFilter('Semua');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Konfirmasi Pembayaran Manual - SubotApp</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    .sidebar-mobile-scroll {
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    .sidebar-mobile-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .sidebar-mobile-item {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      gap: 0.5rem;
+      width: auto;
+      min-width: 80px;
+    }
+    .sidebar-mobile-item .icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+    }
+    .sidebar-mobile-item.active .icon-wrapper {
+      background-color: #0B4C66;
+      color: white;
+    }
+    .sidebar-mobile-item.active .text-label {
+      color: #0B4C66;
+      font-weight: 600;
+    }
+    .sidebar-mobile-item:not(.active) .icon-wrapper {
+      background-color: transparent;
+      color: #6B7280;
+    }
+    .sidebar-mobile-item:not(.active) .text-label {
+      color: #6B7280;
+      font-weight: 400;
+    }
+    .icon-box-size {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .manual-payment-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e5e7eb;
+        padding: 2rem;
+        margin-top: 1.5rem;
+    }
+    .manual-payment-card .status-icon {
+        background-color: #FFF3D1;
+        color: #D97706;
+        width: 64px;
+        height: 64px;
+        border-radius: 9999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        margin: 0 auto 1.5rem auto;
+    }
+    .manual-payment-card h3 {
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: #1a202c;
+        text-align: center;
+        margin-bottom: 0.75rem;
+    }
+    .manual-payment-card p {
+        font-size: 0.9375rem;
+        color: #4a5568;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    .manual-payment-card .instructions-list {
+        list-style-type: decimal;
+        list-style-position: inside;
+        padding-left: 0.5rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.9375rem;
+        color: #374151;
+    }
+    .manual-payment-card .instructions-list li {
+        margin-bottom: 0.5rem;
+    }
+    .manual-payment-card .admin-contact-info {
+        font-size: 0.9375rem;
+        color: #374151;
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px dashed #e5e7eb;
+    }
+    .manual-payment-card .admin-contact-info a {
+        color: #0B4C66;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    @media (max-width: 767px) {
+        main {
+            padding-bottom: 5rem;
+        }
+    }
+  </style>
+</head>
+<body class="bg-[#F7F9FC] min-h-screen text-gray-700">
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <aside class="w-full md:w-64 bg-white border-b md:border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col md:sticky md:top-0 md:h-screen">
+      <div>
+            <div class="px-6 py-5 border-b border-gray-200">
+                <img src="../asset/logo fix sukarobot.jpg" alt="Sukarobot Academy Logo" class="h-10 w-auto object-contain mx-auto">
+            </div>
+            <a href="pengaturan-profil.html" class="px-6 py-5 flex items-center space-x-4 border-b border-gray-200">
+            <img alt="Profile picture" class="w-10 h-10 rounded-full object-cover" height="40" src="/asset/real.jpg" width="40"/>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-gray-900 truncate">
+                Aripin Sihabudin
+                </p>
+                <p class="text-xs text-gray-400 truncate">
+                Siswa
+                </p>
+            </div>
+            <button aria-label="Logout" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+            </button>
+            </a>
+        <nav class="flex flex-col mt-6 space-y-1 px-2 flex-grow overflow-y-auto">
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="/index.html">
+            <i class="fas fa-home text-base"></i>
+            Dashboard
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="../public/kehadiran.html">
+            <i class="fas fa-calendar-check text-base"></i>
+            Kehadiran
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="../public/laporan.html">
+            <i class="fas fa-file-alt text-base"></i>
+            Laporan
+          </a>
+          <a aria-current="page" class="flex items-center gap-3 px-4 py-2 rounded-lg bg-[#D9E9FF] text-[#0B4C66] font-semibold text-sm" href="pembayaran.html">
+            <i class="fas fa-credit-card text-base"></i>
+            Pembayaran
+          </a>
+        </nav>
+      </div>
+      <button aria-label="Logout" class="w-full flex justify-center py-3 border-t border-gray-200 text-gray-500 hover:text-gray-700">
+      </button>
+    </aside>
+
+    <main class="flex-1 p-6 max-w-7xl mx-auto"> 
+      <div class="flex items-center mb-4">
+          <a href="javascript:history.back()" class="text-gray-500 hover:text-gray-700 mr-4">
+              <i class="fas fa-arrow-left text-lg"></i>
+          </a>
+          <h2 class="text-xl font-extrabold select-none">
+              Pembayaran Manual
+          </h2>
+      </div>
+      <p class="text-gray-600 mb-6">
+        Konfirmasi pembayaran untuk tagihan <span id="tagihanTitle" class="font-semibold text-black"></span>.
+      </p>
+
+      <section class="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-6">
+        <h3 class="font-semibold text-black text-lg mb-4">Rincian Tagihan</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mb-4">
+            <div>
+                <p class="text-gray-600">Nama Tagihan:</p>
+                <p class="font-semibold text-black" id="summaryTitle"></p>
+            </div>
+            <div>
+                <p class="text-gray-600">Deskripsi:</p>
+                <p class="font-semibold text-black" id="summaryDescription"></p>
+            </div>
+            <div>
+                <p class="text-gray-600">Jatuh Tempo:</p>
+                <p class="font-semibold text-black" id="summaryDueDate"></p>
+            </div>
+            <div>
+                <p class="text-gray-600">Biaya Admin:</p>
+                <p class="font-semibold text-black" id="summaryAdminFee"></p>
+            </div>
+        </div>
+        <div class="border-t border-gray-200 pt-4 flex justify-between items-center">
+            <p class="font-bold text-lg text-black">Total Bayar:</p>
+            <p class="font-extrabold text-2xl text-[#0B4C66]" id="summaryTotalAmount"></p>
+        </div>
+      </section>
+
+      <section class="manual-payment-card">
+          <div class="status-icon">
+              <i class="fas fa-hourglass-half"></i>
+          </div>
+          <h3>Menunggu Konfirmasi Admin</h3>
+          <p>Pembayaran Anda untuk tagihan <span id="manualTagihanTitle" class="font-semibold text-black"></span> telah kami terima dan sedang menunggu konfirmasi dari admin. Status tagihan akan diperbarui setelah verifikasi.</p>
+          
+          <h4 class="font-semibold text-base text-black text-center mb-3">Langkah Selanjutnya:</h4>
+          <ol class="instructions-list">
+              <li>Lakukan pembayaran tunai langsung kepada admin Sukarobot Academy di lokasi.</li>
+              <li>Atau, lakukan transfer bank ke rekening admin yang akan diberikan secara personal.</li>
+              <li>Mohon hubungi admin setelah pembayaran berhasil untuk mempercepat proses verifikasi.</li>
+          </ol>
+
+          <div class="admin-contact-info">
+              <p>Untuk konfirmasi atau informasi rekening transfer, silakan hubungi admin kami:</p>
+              <a href="https://wa.me/6281234567890" target="_blank" class="text-lg flex items-center justify-center gap-2 mt-2">
+                  <i class="fab fa-whatsapp text-green-500"></i> <span class="font-bold">Admin Pembayaran (0800-0000-0000)</span>
+              </a>
+              <p class="text-sm text-gray-500 mt-2">Jam kerja admin: Senin - Jumat 08:00 - 17:00 WIB, Sabtu 08 - 14:00 WIB.</p>
+          </div>
+      </section>
+
+      <div class="mt-8 text-center">
+      </div>
+
+    </main>
+  </div>
+
+  <aside class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 p-2 flex md:hidden">
+    <nav class="flex justify-around items-center w-full sidebar-mobile-scroll">
+      <a class="sidebar-mobile-item" href="/index.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-home text-base"></i>
+        </div>
+        <span class="text-label">Dashboard</span>
+      </a>
+      <a class="sidebar-mobile-item" href="../public/kehadiran.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-calendar-check text-base"></i>
+        </div>
+        <span class="text-label">Kehadiran</span>
+      </a>
+      <a class="sidebar-mobile-item" href="../public/laporan.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-file-alt text-base"></i>
+        </div>
+        <span class="text-label">Laporan</span>
+      </a>
+      <a aria-current="page" class="sidebar-mobile-item active" href="pembayaran.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-credit-card text-base"></i>
+        </div>
+        <span class="text-label">Pembayaran</span>
+      </a>
+      <a class="sidebar-mobile-item" href="pengaturan-profil.html">
+      <div class="icon-wrapper">
+        <i class="fas fa-user-circle text-base"></i>
+      </div>
+      <span class="text-label">Profil</span>
+    </a>
+    </nav>
+  </aside>
+
+  <script>
+    const paymentData = [
+      { id: 1, title: 'Biaya Kelas Robotik', description: 'Level Beginner - Batch 23', status: 'Belum Dibayar', dueDate: '28 Feb 2025', amount: 1500000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null },
+      { id: 2, title: 'Biaya Pendaftaran', description: 'Registrasi Awal', status: 'Sudah Dibayar', paidDate: '15 Jan 2025', amount: 500000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2025010002', deadlineTime: null },
+      { id: 3, title: 'SPP Bulan Januari 2025', description: 'Kelas Robotik - Level 2', status: 'Belum Dibayar', dueDate: '10 Jan 2025', amount: 550000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null },
+      { id: 4, title: 'Biaya Praktikum', description: 'Kelas Robotik - Level 2', status: 'Belum Dibayar', dueDate: '15 Jan 2025', amount: 250000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null },
+      { id: 5, title: 'SPP Bulan Juni 2024', description: 'Kelas Robotik - Level 1', status: 'Sudah Dibayar', paidDate: '10 Jun 2024', amount: 550000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2024060005', deadlineTime: null },
+      { id: 6, title: 'Pembelian Alat', description: 'Robot Sumo', status: 'Sudah Dibayar', paidDate: '10 Jun 2024', amount: 1000000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2024060006', deadlineTime: null },
+      { id: 7, title: 'Biaya Kelas Graphic Design', description: 'Level Basic - Batch 1', status: 'Belum Dibayar', dueDate: '15 Mar 2025', amount: 1200000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null },
+      { id: 8, title: 'SPP Bulan Februari 2025', description: 'Kelas Graphic Design - Level 1', status: 'Sudah Dibayar', paidDate: '05 Feb 2025', amount: 550000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2025020008', deadlineTime: null },
+      { id: 9, title: 'Biaya Ujian Sertifikasi', description: 'Ujian Nasional Robotik', status: 'Belum Dibayar', dueDate: '30 Apr 2025', amount: 300000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null },
+    ];
+
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        const results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    function formatRupiah(amount) {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(amount);
+    }
+
+    const tagihanId = parseInt(getUrlParameter('tagihanId'));
+    const currentTagihan = paymentData.find(item => item.id === tagihanId);
+
+    const tagihanTitleElement = document.getElementById('tagihanTitle');
+    const summaryTitleEl = document.getElementById('summaryTitle');
+    const summaryDescriptionEl = document.getElementById('summaryDescription');
+    const summaryDueDateEl = document.getElementById('summaryDueDate');
+    const summaryAdminFeeEl = document.getElementById('summaryAdminFee');
+    const summaryTotalAmountEl = document.getElementById('summaryTotalAmount');
+    const manualTagihanTitleEl = document.getElementById('manualTagihanTitle');
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!currentTagihan || currentTagihan.status === 'Sudah Dibayar') {
+            tagihanTitleElement.textContent = 'Tidak Ditemukan / Sudah Dibayar';
+            alert('Tagihan tidak ditemukan atau sudah dibayar. Silakan kembali ke halaman pembayaran.');
+            window.location.href = 'pembayaran.html';
+            return;
+        }
+
+        tagihanTitleElement.textContent = currentTagihan.title;
+        summaryTitleEl.textContent = currentTagihan.title;
+        summaryDescriptionEl.textContent = currentTagihan.description;
+        summaryDueDateEl.textContent = currentTagihan.dueDate;
+        summaryAdminFeeEl.textContent = formatRupiah(currentTagihan.adminFee);
+        summaryTotalAmountEl.textContent = formatRupiah(currentTagihan.amount + currentTagihan.adminFee);
+        manualTagihanTitleEl.textContent = currentTagihan.title;
+    });
+  </script>
+</body>
+</html>

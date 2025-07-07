@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Laporan Kehadiran - Sukarobot Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F7F9FC;
+            color: #374151;
+        }
+        .report-container {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2.5rem;
+            max-width: 1000px;
+            width: 100%;
+        }
+        .report-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .report-header .logo-placeholder {
+            margin-bottom: 1rem;
+        }
+        .report-header .logo-placeholder img {
+            max-height: 80px;
+            width: auto;
+        }
+        .report-header h1 {
+            font-size: 1.875rem;
+            font-weight: 800;
+            color: #0B4C66;
+            line-height: 1.25;
+        }
+        .report-header h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-top: 0.5rem;
+        }
+        .report-header p {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .excel-preview-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border-radius: 0.375rem;
+            overflow: hidden;
+        }
+        .excel-preview-table thead th {
+            background-color: #f3f4f6;
+            border-bottom: 2px solid #e5e7eb;
+            font-weight: 700;
+            color: #4b5563;
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 0.875rem;
+        }
+        .excel-preview-table tbody td {
+            border: 1px solid #e5e7eb;
+            padding: 10px 16px;
+            text-align: left;
+            font-size: 0.875rem;
+            color: #374151;
+        }
+        .excel-preview-table tbody tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        .excel-preview-table tbody tr:hover {
+            background-color: #eff6ff;
+        }
+        
+        .status-badge-report {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.625rem;
+            border-radius: 9999px;
+            white-space: nowrap;
+        }
+        .status-Hadir {
+            background-color: #DFF6E4;
+            color: #0B4C66;
+        }
+        .status-Alfa {
+            background-color: #FFD6D6;
+            color: #E03E3E;
+        }
+        .status-Izin {
+            background-color: #FFF3D1;
+            color: #D97706;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+            }
+            .report-container {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+                margin: 0;
+            }
+            .mt-8, .mb-6, .px-6, .py-3 {
+                display: none;
+            }
+            .report-header, .report-header h1, .report-header h2, .report-header p {
+                color: black !important;
+            }
+            .excel-preview-table, .excel-preview-table th, .excel-preview-table td {
+                border-color: black !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#F7F9FC] min-h-screen flex flex-col items-center p-6 print:p-0">
+
+    <div class="report-container">
+        <div class="report-header">
+            <div class="logo-placeholder">
+                <img src="/asset/logo fix sukarobot.jpg" alt="Logo Sukarobot Academy">
+            </div>
+            <h1>Laporan Kehadiran Siswa</h1>
+            <h2 id="reportSubject"></h2>
+            <p id="reportPeriod"></p>
+        </div>
+        
+        <div class="overflow-x-auto w-full rounded-md">
+            <table class="excel-preview-table">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Waktu</th>
+                        <th>Subjek</th>
+                        <th>Status</th>
+                        <th>Catatan Trainer</th>
+                    </tr>
+                </thead>
+                <tbody id="exportTableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-8 flex justify-center gap-4">
+            <button onclick="window.print()" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                <i class="fas fa-print mr-2"></i> Cetak Laporan
+            </button>
+            <a href="kehadiran.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-[#0B4C66] hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0B4C66]">
+                <i class="fas fa-arrow-left mr-2"></i> Kembali ke Riwayat Kehadiran
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+        function formatDate(dateString) {
+          const date = new Date(dateString);
+          const day = date.getDate().toString().padStart(2, '0');
+          const month = monthNames[date.getMonth()];
+          const year = date.getFullYear();
+          return `${day} ${month} ${year}`;
+        }
+
+        const attendanceData = [
+            { id: 1, date: '2025-01-15', time: '09:00 WIB', subject: 'Robotik', status: 'Hadir', trainerNotes: 'Siswa sangat aktif dalam diskusi, menunjukkan pemahaman yang baik tentang sensor dasar. Menyelesaikan latihan dengan cepat dan akurat. Progres luar biasa!', documentationLink: '#' },
+            { id: 2, date: '2025-01-14', time: '09:00 WIB', subject: 'Desain Grafis', status: 'Hadir', trainerNotes: 'Memahami konsep dasar desain seperti komposisi dan warna. Perlu lebih banyak latihan dalam penggunaan tools digital untuk meningkatkan efisiensi.', documentationLink: '#' },
+            { id: 3, date: '2025-01-13', time: '09:00 WIB', subject: 'Robotik', status: 'Alfa', trainerNotes: 'Tidak hadir tanpa keterangan. Materi fundamental tentang aktuator terlewat. Sangat disarankan untuk mengikuti kelas pengganti.', documentationLink: '#' },
+            { id: 4, date: '2025-01-12', time: '10:00 WIB', subject: 'Coding', status: 'Hadir', trainerNotes: 'Progres bagus dalam pemrograman blok. Mampu membuat logika sederhana untuk game. Siap untuk tantangan coding berikutnya.', documentationLink: '#' },
+            { id: 5, date: '2025-01-11', time: '11:00 WIB', subject: 'Microsoft Office', status: 'Hadir', trainerNotes: 'Kreatif dalam membuat presentasi digital dengan PowerPoint. Eksplorasi fitur animasi dan transisi baru.', documentationLink: '#' },
+            { id: 6, date: '2025-01-10', time: '13:00 WIB', subject: 'Robotik', status: 'Hadir', trainerNotes: 'Mampu merakit robot sederhana dengan panduan minimal. Fokus dan teliti dalam mengikuti instruksi perakitan.', documentationLink: '#' },
+            { id: 7, date: '2025-01-09', time: '09:00 WIB', subject: 'Desain Grafis', status: 'Hadir', trainerNotes: 'Memahami prinsip tipografi dengan baik. Perlu perbaikan pada tata letak teks agar lebih proporsional dan mudah dibaca.', documentationLink: '#' },
+            { id: 8, date: '2025-01-08', time: '09:00 WIB', subject: 'Coding', status: 'Alfa', trainerNotes: 'Tidak hadir. Perlu mengikuti kelas pengganti untuk materi struktur data karena ini adalah dasar penting.', documentationLink: '#' },
+            { id: 9, date: '2025-01-07', time: '10:00 WIB', subject: 'Microsoft Office', status: 'Hadir', trainerNotes: 'Menyelesaikan proyek laporan menggunakan Microsoft Word dengan baik. Detail rapi dan sesuai format yang ditentukan.', documentationLink: '#' },
+            { id: 10, date: '2025-01-06', time: '11:00 WIB', subject: 'Robotik', status: 'Hadir', trainerNotes: 'Progres signifikan dalam debugging kode robot. Mampu mengidentifikasi dan memperbaiki kesalahan sederhana.', documentationLink: '#' },
+            { id: 11, date: '2025-01-05', time: '13:00 WIB', subject: 'Desain Grafis', status: 'Hadir', trainerNotes: 'Memulai proyek desain logo. Konsep awal sangat menarik dan orisinal. Perlu mengembangkan beberapa variasi lagi.', documentationLink: '#' },
+            { id: 12, date: '2025-01-04', time: '09:00 WIB', subject: 'Coding', status: 'Hadir', trainerNotes: 'Menguasai dasar-dasar sirkuit. Perlu eksplorasi komponen elektronik lebih lanjut untuk proyek yang lebih kompleks.', documentationLink: '#' },
+            { id: 13, date: '2025-01-03', time: '09:00 WIB', subject: 'Microsoft Office', status: 'Izin', trainerNotes: 'Siswa mengajukan izin tidak masuk karena sakit. Materi akan diulang di sesi berikutnya agar tidak tertinggal.', documentationLink: '#' },
+            { id: 14, date: '2025-01-02', time: '10:00 WIB', subject: 'Robotik', status: 'Hadir', trainerNotes: 'Aktif dalam memecahkan masalah robotik bersama teman. Mampu berkolaborasi dengan baik dalam tim.', documentationLink: '#' },
+            { id: 15, date: '2025-01-01', time: '11:00 WIB', subject: 'Desain Grafis', status: 'Hadir', trainerNotes: 'Mempresentasikan hasil desain dengan percaya diri. Kemampuan komunikasi yang baik saat menjelaskan konsepnya.', documentationLink: '#' },
+        ];
+
+
+        const exportTableBody = document.getElementById('exportTableBody');
+        const reportSubject = document.getElementById('reportSubject');
+        const reportPeriod = document.getElementById('reportPeriod');
+
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        };
+
+        function populateExportTable() {
+            const subjectParam = getUrlParameter('subject');
+            const periodParam = getUrlParameter('period');
+
+            let filteredForExport = [...attendanceData];
+            let subjectText = 'Semua Program';
+            let periodText = 'Semua Periode';
+
+            if (subjectParam && subjectParam !== 'Semua') {
+                filteredForExport = attendanceData.filter(item => item.subject === subjectParam);
+                subjectText = `Program ${subjectParam}`;
+            }
+
+            if (periodParam) {
+                periodText = `Periode: ${periodParam}`;
+            }
+
+            reportSubject.textContent = subjectText;
+            reportPeriod.textContent = periodText;
+
+            exportTableBody.innerHTML = '';
+
+            if (filteredForExport.length === 0) {
+                exportTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="py-4 text-center text-gray-500">Tidak ada data untuk laporan ini.</td>
+                    </tr>
+                `;
+            } else {
+                filteredForExport.forEach(item => {
+                    const row = document.createElement('tr');
+                    let statusClass = '';
+                    if (item.status === 'Hadir') {
+                        statusClass = 'status-Hadir';
+                    } else if (item.status === 'Alfa') {
+                        statusClass = 'status-Alfa';
+                    } else if (item.status === 'Izin') {
+                        statusClass = 'status-Izin';
+                    }
+
+                    row.innerHTML = `
+                        <td>${formatDate(item.date)}</td>
+                        <td>${item.time}</td>
+                        <td>${item.subject}</td>
+                        <td><span class="status-badge-report ${statusClass}">${item.status}</span></td>
+                        <td>${item.trainerNotes || '-'}</td>
+                    `;
+                    exportTableBody.appendChild(row);
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', populateExportTable);
+    </script>
+</body>
+</html>

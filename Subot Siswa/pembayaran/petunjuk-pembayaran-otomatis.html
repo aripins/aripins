@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Petunjuk Pembayaran - SubotApp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+        /* --- Sidebar Mobile Styles --- */
+        .sidebar-mobile-scroll {
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .sidebar-mobile-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .sidebar-mobile-item {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            gap: 0.5rem;
+            width: auto;
+            min-width: 80px;
+        }
+        .sidebar-mobile-item .icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 9999px;
+        }
+        .sidebar-mobile-item.active .icon-wrapper {
+            background-color: #0B4C66;
+            color: white;
+        }
+        .sidebar-mobile-item.active .text-label {
+            color: #0B4C66;
+            font-weight: 600;
+        }
+        .sidebar-mobile-item:not(.active) .icon-wrapper {
+            background-color: transparent;
+            color: #6B7280;
+        }
+        .sidebar-mobile-item:not(.active) .text-label {
+            color: #6B7280;
+            font-weight: 400;
+        }
+        .icon-box-size {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+
+        /* --- Instructions Page Specific Styles --- */
+        .instructions-container {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            max-width: 700px;
+            width: 100%;
+            margin: 2rem auto;
+        }
+        .instructions-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .instructions-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a202c;
+            line-height: 1.25;
+            flex-grow: 1;
+        }
+        .instructions-header .btn-back {
+            background-color: #e2e8f0;
+            color: #4a5568;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: background-color 0.2s ease;
+        }
+        .instructions-header .btn-back:hover {
+            background-color: #cbd5e0;
+        }
+
+        .payment-details-card {
+            background-color: #f7fafc;
+            border: 1px dashed #D9E9FF;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .payment-details-card h4 {
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: #0B4C66;
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+        .payment-details-card .va-qris-display {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #1a202c;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            word-break: break-all;
+        }
+        .payment-details-card .va-qris-display button {
+            background-color: #0B4C66;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            margin-left: 0.75rem;
+            transition: background-color 0.2s ease;
+        }
+        .payment-details-card .va-qris-display button:hover {
+            background-color: #0A3C52;
+        }
+        .payment-details-card .disclaimer {
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .payment-details-card .qris-image {
+            max-width: 180px;
+            height: auto;
+            display: block;
+            margin: 0.5rem auto 1rem auto;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .instructions-steps ol {
+            list-style-type: decimal;
+            list-style-position: inside;
+            margin-top: 1rem;
+            font-size: 0.9375rem;
+            color: #4a5568;
+            padding-left: 0.5rem;
+        }
+        .instructions-steps ol li {
+            margin-bottom: 0.75rem;
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin-top: 2rem;
+            padding-bottom: 5rem; /* Added padding for mobile footer */
+        }
+        .action-buttons button {
+            background-color: #28a745;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .action-buttons button:hover {
+            background-color: #218838;
+        }
+        .action-buttons .btn-print {
+            background-color: #6b7280;
+            margin-left: 1rem;
+        }
+        .action-buttons .btn-print:hover {
+            background-color: #4b5563;
+        }
+        
+        /* General Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 450px;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.open .modal-content {
+            transform: translateY(0);
+        }
+        .blur-background { /* Apply this to the main content wrapper when modal is open */
+            filter: blur(5px);
+            transition: filter 0.3s ease;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background-color: white !important;
+                margin: 0;
+                padding: 0;
+            }
+            .instructions-container {
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .action-buttons, .instructions-header .btn-back, .modal-overlay, .sidebar-mobile { /* Hide modal too if open, and mobile sidebar */
+                display: none !important;
+            }
+            .instructions-header {
+                border-bottom: 1px solid #ccc !important;
+            }
+            .payment-details-card {
+                border: none !important;
+                background-color: white !important;
+            }
+            .payment-details-card h4, .va-qris-display, .disclaimer, .instructions-steps ol li {
+                color: black !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#F7F9FC] min-h-screen text-gray-700 flex flex-col md:flex-row">
+    <aside class="w-full md:w-64 bg-white border-b md:border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col md:sticky md:top-0 md:h-screen">
+        <div>
+            <div class="px-6 py-5 border-b border-gray-200">
+                <img src="../asset/logo fix sukarobot.jpg" alt="Sukarobot Academy Logo" class="h-10 w-auto object-contain mx-auto">
+            </div>
+            <a href="pengaturan-profil.html" class="px-6 py-5 flex items-center space-x-4 border-b border-gray-200">
+            <img alt="Profile picture" class="w-10 h-10 rounded-full object-cover" height="40" src="/asset/real.jpg" width="40"/>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-gray-900 truncate">
+                Aripin Sihabudin
+                </p>
+                <p class="text-xs text-gray-400 truncate">
+                Siswa
+                </p>
+            </div>
+            <button aria-label="Logout" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+            </button>
+            </a>
+            <nav class="flex flex-col mt-6 space-y-1 px-2 flex-grow overflow-y-auto">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="/index.html">
+                    <i class="fas fa-home text-base"></i>
+                    Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="../public/kehadiran.html">
+                    <i class="fas fa-calendar-check text-base"></i>
+                    Kehadiran
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="../public/laporan.html">
+                    <i class="fas fa-file-alt text-base"></i>
+                    Laporan
+                </a>
+                <a aria-current="page" class="flex items-center gap-3 px-4 py-2 rounded-lg bg-[#D9E9FF] text-[#0B4C66] font-semibold text-sm" href="pembayaran.html">
+                    <i class="fas fa-credit-card text-base"></i>
+                    Pembayaran
+                </a>
+            </nav>
+        </div>
+        <button aria-label="Logout" class="w-full flex justify-center py-3 border-t border-gray-200 text-gray-500 hover:text-gray-700">
+        </button>
+    </aside>
+
+    <div id="mainContentWrapper" class="flex-1 p-6">
+        <div class="flex items-center mb-4">
+            <a href="javascript:history.back()" class="text-gray-500 hover:text-gray-700 mr-4">
+                <i class="fas fa-arrow-left text-lg"></i>
+            </a>
+            <h2 id="instructionsMainTitle" class="text-xl font-extrabold select-none flex-grow"></h2>
+        </div>
+
+        <div class="instructions-container">
+            <div class="payment-details-card">
+                <h4 id="instructionsBankSelectedTitle"></h4>
+                <div class="va-qris-display">
+                    <span id="instructionsVirtualAccountNumber"></span>
+                    <button id="instructionsCopyVaBtn">Salin</button>
+                </div>
+                <img src="/asset/qris.png" class="qris-image hidden" alt="QRIS Code">
+                <p class="disclaimer">Pastikan nama pemilik rekening tujuan adalah "Sukarobot Academy"</p>
+            </div>
+
+            <div class="instructions-steps">
+                <h4 class="font-semibold text-base text-black mb-2">Langkah-langkah Pembayaran:</h4>
+                <ol id="instructionsList"></ol>
+            </div>
+
+            <div class="action-buttons">
+                <button id="instructionsActionButton" class="btn-action">
+
+                
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <aside class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 p-2 flex md:hidden sidebar-mobile">
+        <nav class="flex justify-around items-center w-full sidebar-mobile-scroll">
+            <a class="sidebar-mobile-item" href="/index.html">
+                <div class="icon-wrapper">
+                    <i class="fas fa-home text-base"></i>
+                </div>
+                <span class="text-label">Dashboard</span>
+            </a>
+            <a class="sidebar-mobile-item" href="../public/kehadiran.html">
+                <div class="icon-wrapper">
+                    <i class="fas fa-calendar-check text-base"></i>
+                </div>
+                <span class="text-label">Kehadiran</span>
+            </a>
+            <a class="sidebar-mobile-item" href="../public/laporan.html">
+                <div class="icon-wrapper">
+                    <i class="fas fa-file-alt text-base"></i>
+                </div>
+                <span class="text-label">Laporan</span>
+            </a>
+            <a aria-current="page" class="sidebar-mobile-item active" href="pembayaran.html">
+                <div class="icon-wrapper">
+                    <i class="fas fa-credit-card text-base"></i>
+                </div>
+                <span class="text-label">Pembayaran</span>
+            </a>
+            <a class="sidebar-mobile-item" href="pengaturan-profil.html">
+            <div class="icon-wrapper">
+                <i class="fas fa-user-circle text-base"></i>
+            </div>
+            <span class="text-label">Profil</span>
+            </a>
+        </nav>
+    </aside>
+
+    <div id="successModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="text-center p-4">
+                <div class="icon-circle mb-4 mx-auto w-16 h-16 bg-[#B6EBD9] text-[#0B4C66] rounded-full flex items-center justify-center text-3xl">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="font-extrabold text-black text-xl mb-2">Pembayaran Berhasil!</h3>
+                <p class="text-gray-700 text-sm mb-6">Konfirmasi pembayaran Anda telah diterima. Detail invoice akan segera tersedia.</p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-3">
+                    <button id="modalBackToPaymentsBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-md text-sm focus:outline-none">
+                        Kembali ke Pembayaran
+                    </button>
+                    <button id="modalViewInvoiceBtn" class="bg-[#0B4C66] hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-md text-sm focus:outline-none">
+                        Lihat Invoice
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Extracts a URL parameter by name.
+         * @param {string} name - The name of the parameter to extract.
+         * @returns {string} The decoded parameter value or an empty string if not found.
+         */
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            const results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // --- DOM Element References ---
+        const instructionsMainTitleEl = document.getElementById('instructionsMainTitle');
+        const instructionsBankSelectedTitleEl = document.getElementById('instructionsBankSelectedTitle');
+        const instructionsVirtualAccountNumberEl = document.getElementById('instructionsVirtualAccountNumber');
+        const instructionsCopyVaBtn = document.getElementById('instructionsCopyVaBtn');
+        const instructionsQrisImageEl = document.querySelector('.qris-image'); // More specific selector
+        const instructionsListEl = document.getElementById('instructionsList');
+        const instructionsActionButton = document.getElementById('instructionsActionButton'); // Renamed for dynamic text
+
+        // Modal elements
+        const successModal = document.getElementById('successModal');
+        const modalBackToPaymentsBtn = document.getElementById('modalBackToPaymentsBtn');
+        const modalViewInvoiceBtn = document.getElementById('modalViewInvoiceBtn');
+        const mainContentWrapper = document.getElementById('mainContentWrapper');
+
+        // --- URL Parameters ---
+        const tagihanIdParam = parseInt(getUrlParameter('tagihanId'));
+        const titleParam = getUrlParameter('title');
+        const vaNumberParam = getUrlParameter('vaNumber');
+        const instructionsParam = getUrlParameter('instructions');
+        const methodTypeParam = getUrlParameter('methodType'); // 'bank' or 'ewallet'
+        const selectedOptionParam = getUrlParameter('selectedOption'); // e.g., 'BCA', 'Gopay'
+        const imageUrlParam = getUrlParameter('imageUrl'); // For QRIS or e-wallet logo if needed
+
+        // --- Modal Functions ---
+        function openSuccessModal() {
+            successModal.classList.add('open');
+            mainContentWrapper.classList.add('blur-background');
+        }
+
+        function closeSuccessModal() {
+            successModal.classList.remove('open');
+            mainContentWrapper.classList.remove('blur-background');
+        }
+
+        /**
+         * Copies text to clipboard and provides visual feedback.
+         * @param {HTMLElement} buttonElement - The button element that triggered the copy.
+         * @param {string} textToCopy - The text to be copied.
+         */
+        function copyToClipboard(buttonElement, textToCopy) {
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = buttonElement.textContent;
+                buttonElement.textContent = 'Disalin!';
+                setTimeout(() => { buttonElement.textContent = originalText; }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                alert('Gagal menyalin. Silakan salin manual.');
+            });
+        }
+
+        // --- Event Handlers ---
+        function handleConfirmPayment() {
+            // For bank transfers, show success modal and redirect to invoice
+            openSuccessModal();
+        }
+
+        function handlePayNow() {
+            // For e-wallets, simulate opening the app
+            let appScheme = '';
+            switch (selectedOptionParam.toLowerCase()) {
+                case 'gopay':
+                    appScheme = 'gojek://app/gopay/pay?url='; // Example GoPay scheme
+                    break;
+                case 'ovo':
+                    appScheme = 'ovo://app/payment?url='; // Example OVO scheme
+                    break;
+                case 'dana':
+                    appScheme = 'dana://app/payment?url='; // Example DANA scheme
+                    break;
+                // Add more e-wallet schemes as needed
+                default:
+                    alert(`Tidak ada tautan langsung untuk ${selectedOptionParam}. Silakan buka aplikasi ${selectedOptionParam} secara manual.`);
+                    return;
+            }
+
+            const paymentData = `sukarobotapp://payment?id=${tagihanIdParam}&amount=${vaNumberParam}`; // Generic data for app deep link
+            const deepLinkUrl = appScheme + encodeURIComponent(paymentData);
+
+            window.location.href = deepLinkUrl; // Attempt to open the app
+            
+            // Fallback for when the app doesn't open
+            setTimeout(() => {
+                if (!document.hidden) { // Check if the browser is still active
+                    alert(`Jika aplikasi ${selectedOptionParam} tidak terbuka, silakan lanjutkan pembayaran secara manual.`);
+                }
+            }, 1000); // Give a short delay for the app to open
+        }
+
+        /**
+         * Initializes the page content and event listeners based on URL parameters.
+         */
+        function initializePage() {
+            if (!tagihanIdParam || !titleParam || !vaNumberParam || !instructionsParam) {
+                alert('Detail pembayaran tidak lengkap. Kembali ke halaman sebelumnya.');
+                history.back();
+                return;
+            }
+
+            instructionsMainTitleEl.textContent = titleParam;
+            instructionsBankSelectedTitleEl.textContent = titleParam;
+            instructionsVirtualAccountNumberEl.textContent = vaNumberParam;
+            instructionsListEl.innerHTML = instructionsParam;
+
+            if (methodTypeParam === 'ewallet') {
+                instructionsCopyVaBtn.classList.add('hidden'); // Hide copy button for e-wallet
+                instructionsActionButton.innerHTML = '<i class="fas fa-wallet mr-2"></i> Bayar Sekarang';
+                instructionsActionButton.classList.add('bg-[#1DA1F2]', 'hover:bg-[#0f8fe6]'); // Example blue for pay button
+                instructionsActionButton.removeEventListener('click', handleConfirmPayment);
+                instructionsActionButton.addEventListener('click', handlePayNow);
+
+                if (imageUrlParam) {
+                    // Use a dummy QRIS URL if imageUrlParam is not a full QRIS image
+                    // In a real app, imageUrlParam would directly point to the QRIS image
+                    const qrisContent = `Pembayaran_Sukarobot_EWALLET_${selectedOptionParam}_Amount_${tagihanIdParam}`;
+                    const qrisDummyUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrisContent)}`;
+                    instructionsQrisImageEl.src = qrisDummyUrl;
+                    instructionsQrisImageEl.classList.remove('hidden');
+                } else {
+                    instructionsQrisImageEl.classList.add('hidden');
+                    instructionsQrisImageEl.src = '';
+                }
+            } else { // methodTypeParam === 'bank' or others
+                instructionsCopyVaBtn.classList.remove('hidden'); // Show copy button for bank
+                instructionsActionButton.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Saya Sudah Bayar (Konfirmasi)';
+                instructionsActionButton.classList.add('bg-[#28a745]', 'hover:bg-[#218838]'); // Green for confirm button
+                instructionsActionButton.removeEventListener('click', handlePayNow);
+                instructionsActionButton.addEventListener('click', handleConfirmPayment);
+                instructionsQrisImageEl.classList.add('hidden');
+                instructionsQrisImageEl.src = '';
+            }
+
+            // Always add event listener for copy button if visible
+            if (!instructionsCopyVaBtn.classList.contains('hidden')) {
+                instructionsCopyVaBtn.addEventListener('click', () => {
+                    copyToClipboard(instructionsCopyVaBtn, instructionsVirtualAccountNumberEl.textContent);
+                });
+            }
+
+            // Event listeners for the success modal buttons (for bank transfers)
+            modalBackToPaymentsBtn.addEventListener('click', () => {
+                closeSuccessModal();
+                window.location.href = 'pembayaran.html'; // Go back to main payments list
+            });
+
+            modalViewInvoiceBtn.addEventListener('click', () => {
+                closeSuccessModal();
+                // Pass relevant parameters to the invoice page
+                window.location.href = `invoice.html?id=${tagihanIdParam}&status=success&method=${methodTypeParam}&option=${selectedOptionParam}`;
+            });
+
+            // Close success modal when clicking outside
+            successModal.addEventListener('click', (e) => {
+                if (e.target === successModal) {
+                    closeSuccessModal();
+                }
+            });
+        }
+
+        // Initialize page when DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>

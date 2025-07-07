@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Invoice Pembayaran - Sukarobot Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        /* Base styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            background-color: #F7F9FC;
+            color: #374151;
+        }
+
+        /* Sidebar Mobile Styles - No changes as it's separate */
+        .sidebar-mobile-scroll {
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .sidebar-mobile-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .sidebar-mobile-item {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            gap: 0.5rem;
+            width: auto;
+            min-width: 80px;
+        }
+        .sidebar-mobile-item .icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 9999px;
+        }
+        .sidebar-mobile-item.active .icon-wrapper {
+            background-color: #0B4C66;
+            color: white;
+        }
+        .sidebar-mobile-item.active .text-label {
+            color: #0B4C66;
+            font-weight: 600;
+        }
+        .sidebar-mobile-item:not(.active) .icon-wrapper {
+            background-color: transparent;
+            color: #6B7280;
+        }
+        .sidebar-mobile-item:not(.active) .text-label {
+            color: #6B7280;
+            font-weight: 400;
+        }
+        .icon-box-size {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+
+        /* Invoice Container */
+        .invoice-container {
+            background-color: white;
+            border-radius: 0.75rem; /* Slightly larger border-radius */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08); /* Stronger shadow */
+            padding: 2.5rem; /* Increased padding */
+            max-width: 800px; /* Wider container */
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Academy Header */
+        .academy-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 2rem; /* More space */
+            padding-bottom: 1.5rem; /* More padding */
+            border-bottom: 3px solid #0B4C66; /* Thicker, more prominent border */
+        }
+        .academy-header .logo-img {
+            height: 80px; /* Larger logo */
+            width: auto;
+            margin-bottom: 0.8rem;
+            object-fit: contain;
+        }
+        .academy-header h1 {
+            font-size: 2.25rem; /* Larger font for title */
+            font-weight: 800;
+            color: #0B4C66;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+        .academy-header .address-info {
+            font-size: 0.95rem; /* Slightly larger text */
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 0.25rem;
+        }
+        .academy-header .contact-info {
+            font-size: 0.85rem; /* Slightly larger text */
+            color: #6b7280;
+        }
+
+        /* Invoice Main Info */
+        .invoice-main-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem; /* More space */
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+        }
+        .invoice-main-info .invoice-title-wrapper {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem; /* Space below title on mobile */
+            flex-basis: 100%;
+            /* text-align: left; REMOVED THIS */
+            justify-content: center; /* Center the content inside */
+        }
+        @media (min-width: 640px) {
+            .invoice-main-info .invoice-title-wrapper {
+                flex-basis: auto;
+                margin-bottom: 0; /* No space below title on desktop */
+                justify-content: flex-start; /* Align left on desktop */
+            }
+        }
+        .invoice-main-info .btn-back { /* Back button above title */
+            background-color: transparent;
+            color: #6B7280;
+            border: none;
+            padding: 0;
+            margin-right: 0.75rem;
+            cursor: pointer;
+            font-size: 1.1rem; /* Slightly larger icon */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .invoice-main-info .btn-back:hover {
+            color: #4A5568;
+        }
+        .invoice-main-info .invoice-title {
+            font-size: 1.75rem; /* Larger font */
+            font-weight: 800; /* Bolder */
+            color: #1a202c;
+            margin: 0;
+            flex-grow: 1; /* Allow title to grow */
+            text-align: center; /* Center the text for mobile */
+        }
+        @media (min-width: 640px) {
+            .invoice-main-info .invoice-title {
+                text-align: left; /* Align left on desktop */
+            }
+        }
+
+        .invoice-main-info .invoice-details {
+            text-align: right;
+            flex-grow: 1; /* Allow details to take available space */
+        }
+        @media (max-width: 639px) {
+            .invoice-main-info .invoice-details {
+                text-align: left; /* Align left on mobile */
+                width: 100%; /* Take full width on mobile */
+            }
+        }
+        .invoice-main-info .invoice-details p {
+            font-size: 0.9rem; /* Slightly larger text */
+            color: #4a5568;
+            margin-bottom: 0.2rem;
+        }
+        .invoice-main-info .invoice-details p strong {
+            color: #1a202c;
+            font-weight: 700; /* Bolder */
+        }
+        .invoice-status-badge {
+            display: inline-block;
+            font-size: 0.8rem; /* Slightly larger badge text */
+            font-weight: 700;
+            padding: 0.35rem 0.7rem; /* Slightly larger padding */
+            border-radius: 9999px;
+            text-transform: uppercase; /* Uppercase status */
+        }
+
+        /* Client & Billing Info Grid */
+        .info-grid > div {
+            padding-left: 1rem; /* Memberi sedikit padding di kiri untuk kolom pertama */
+        }
+        .info-grid > div:nth-child(2) { /* Targeting the second column specifically */
+            padding-left: 2rem; /* Geser kolom kedua lebih ke kanan */
+        }
+        @media (max-width: 639px) { /* Adjust for mobile */
+            .info-grid > div {
+                padding-left: 1rem; /* Maintain padding for single column on mobile */
+            }
+            .info-grid > div:nth-child(2) {
+                padding-left: 1rem; /* Reset to match first column on mobile */
+            }
+        }
+
+        .info-grid > div > p {
+            font-size: 0.9rem; /* Consistent font size */
+            color: #6B7280;
+            margin-bottom: 0.15rem;
+        }
+        .info-grid > div > p > strong {
+            font-weight: 700; /* Bolder */
+            color: #374151;
+        }
+        .info-grid .font-semibold {
+            font-weight: 700; /* Bolder label */
+            color: #1a202c;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        /* Item Table */
+        .item-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 1.5rem; /* More space */
+            font-size: 0.9rem; /* Larger font in table */
+            border: 1px solid #e2e8f0; /* Add border to table itself */
+            border-radius: 0.5rem; /* Rounded corners for table */
+            overflow: hidden; /* Ensures rounded corners apply to borders */
+        }
+        .item-table th,
+        .item-table td {
+            padding: 10px 15px; /* More padding */
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0; /* Only bottom borders for cells */
+        }
+        .item-table thead th {
+            background-color: #eef2f6; /* Lighter header background */
+            font-weight: 700; /* Bolder header text */
+            color: #2d3748;
+            text-transform: uppercase;
+            letter-spacing: 0.04em; /* Slightly less spacing */
+            font-size: 0.8rem; /* Smaller font in header */
+        }
+        .item-table tbody tr:last-child td {
+            border-bottom: none; /* No bottom border for last row in tbody */
+        }
+        .summary-row td {
+            font-weight: 600;
+            color: #1a202c;
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px dashed #cbd5e0; /* Dashed border for summary */
+        }
+        .total-row td {
+            font-weight: 800;
+            font-size: 1rem; /* Larger font for total */
+            color: #0B4C66;
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+        .total-row.grand-total td {
+            font-size: 1.25rem; /* Even larger for grand total */
+            font-weight: 800;
+        }
+
+        /* Other sections */
+        .thank-you-note {
+            text-align: center;
+            font-style: italic;
+            color: #6b7280;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        .signature-section {
+            display: flex;
+            justify-content: flex-end;
+            text-align: right;
+            margin-top: 2rem; /* More space */
+            flex-direction: column;
+            align-items: flex-end;
+            font-size: 0.85rem; /* Larger font */
+        }
+        .signature-section p {
+            color: #4a5568;
+            margin-bottom: 0.2rem;
+        }
+        .signature-section strong {
+            font-weight: 700; /* Bolder */
+            color: #1a202c;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            text-align: center;
+            margin-top: 2rem; /* More space */
+            padding-bottom: 1rem;
+        }
+        .action-buttons button, .action-buttons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center; /* Center content in button */
+            gap: 0.6rem; /* More space for icon */
+            padding: 0.75rem 1.5rem; /* Larger buttons */
+            border-radius: 0.5rem; /* More rounded */
+            font-size: 0.95rem; /* Slightly larger font */
+            font-weight: 700; /* Bolder */
+            transition: all 0.2s ease-in-out;
+            min-width: 120px; /* Minimum width for buttons */
+        }
+        .action-buttons .btn-primary {
+            background-color: #0B4C66;
+            color: white;
+            margin-right: 1rem; /* More space between buttons */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .action-buttons .btn-primary:hover {
+            background-color: #0A3C52;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .action-buttons .btn-secondary {
+            background-color: #e2e8f0;
+            color: #4a5568;
+            border: 1px solid #cbd5e0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .action-buttons .btn-secondary:hover {
+            background-color: #cbd5e0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background-color: white !important;
+                margin: 0;
+                padding: 0;
+                font-size: 10pt; /* Adjust print font size */
+                color: black !important;
+            }
+            .invoice-container {
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                padding: 0.5in !important; /* Standard print padding */
+                margin: 0 !important;
+            }
+            .action-buttons, .sidebar-mobile, .md\:hidden { /* Hide action buttons and sidebars in print */
+                display: none !important;
+            }
+            .academy-header {
+                border-bottom: 2px solid black !important;
+                margin-bottom: 1.5rem !important;
+            }
+            .academy-header h1, .academy-header .address-info, .academy-header .contact-info {
+                color: black !important;
+            }
+            .invoice-main-info {
+                margin-bottom: 1rem !important;
+            }
+            .invoice-main-info .invoice-title, .invoice-main-info .invoice-details p strong,
+            .info-grid p strong, .item-table th, .item-table td, .summary-row td, .total-row td,
+            .payment-method-details strong, .signature-section strong {
+                color: black !important;
+            }
+            .item-table, .item-table th, .item-table td, .summary-row td {
+                border-color: #ddd !important; /* Lighter borders for print */
+            }
+            .invoice-status-badge {
+                border: 1px solid black !important;
+                color: black !important;
+                background-color: transparent !important;
+            }
+        }
+
+        /* Responsive adjustments for main content padding on mobile */
+        @media (max-width: 767px) {
+            main {
+                padding-bottom: 5.5rem; /* Space for the fixed bottom sidebar */
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            .invoice-container {
+                padding: 1.5rem; /* Reduced padding on small screens */
+            }
+            .action-buttons {
+                flex-direction: column; /* Stack buttons on mobile */
+                gap: 0.75rem; /* Space between stacked buttons */
+            }
+            .action-buttons .btn-primary, .action-buttons .btn-secondary {
+                width: 100%; /* Full width buttons on mobile */
+                margin-right: 0; /* Remove right margin */
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#F7F9FC] min-h-screen text-gray-700 flex flex-col md:flex-row">
+    <aside class="w-full md:w-64 bg-white border-b md:border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col md:sticky md:top-0 md:h-screen">
+        <div>
+            <div class="px-6 py-5 border-b border-gray-200">
+                <img src="../asset/logo fix sukarobot.jpg" alt="Sukarobot Academy Logo" class="h-10 w-auto object-contain mx-auto">
+            </div>
+            <a href="pengaturan-profil.html" class="px-6 py-5 flex items-center space-x-4 border-b border-gray-200">
+            <img alt="Profile picture" class="w-10 h-10 rounded-full object-cover" height="40" src="/asset/real.jpg" width="40"/>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-gray-900 truncate">
+                Aripin Sihabudin
+                </p>
+                <p class="text-xs text-gray-400 truncate">
+                Siswa
+                </p>
+            </div>
+            <button aria-label="Logout" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+            </button>
+            </a>
+            <nav class="flex flex-col mt-6 space-y-1 px-2 flex-grow overflow-y-auto">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="/index.html">
+                    <i class="fas fa-home text-base"></i>
+                    Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="../public/kehadiran.html">
+                    <i class="fas fa-calendar-check text-base"></i>
+                    Kehadiran
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="../public/laporan.html">
+                    <i class="fas fa-file-alt text-base"></i>
+                    Laporan
+                </a>
+                <a aria-current="page" class="flex items-center gap-3 px-4 py-2 rounded-lg bg-[#D9E9FF] text-[#0B4C66] font-semibold text-sm" href="pembayaran.html">
+                    <i class="fas fa-credit-card text-base"></i>
+                    Pembayaran
+                </a>
+            </nav>
+        </div>
+        <button aria-label="Logout" class="w-full flex justify-center py-3 border-t border-gray-200 text-gray-500 hover:text-gray-700">
+        </button>
+    </aside>
+
+    <main class="flex-1 p-6">
+        <div class="flex items-center mb-4">
+            <a href="javascript:history.back()" class="text-gray-500 hover:text-gray-700 mr-4">
+                <i class="fas fa-arrow-left text-lg"></i>
+            </a>
+            <h2 class="text-xl font-extrabold select-none">
+                Detail Invoice
+            </h2>
+        </div>
+
+        <div class="invoice-container">
+            <div class="academy-header">
+                <img src="../asset/logo fix sukarobot.jpg" alt="Logo Sukarobot Academy" class="logo-img">
+                <h1>SUKAROBOT ACADEMY</h1>
+                <p class="address-info">Jl. Cikole, Kota Sukabumi, Jawa Barat, Indonesia</p>
+                <p class="contact-info">Telepon: 0800-0000-0000 | Email: sukarobotacademy@gmail.com</p>
+            </div>
+
+            <div class="invoice-main-info">
+                <div class="invoice-title-wrapper">
+                    <h2 class="invoice-title text-center sm:text-center">INVOICE PEMBAYARAN</h2>
+                </div>
+                <div class="invoice-details">
+                    <p>Invoice ID: <strong id="invoiceId">#INV00000</strong></p>
+                    <p>Status: <span class="invoice-status-badge" id="invoiceStatusBadge"></span></p>
+                    <p>Tanggal Pembayaran: <strong id="paidDate"></strong></p>
+                    <p>Metode Pembayaran: <strong id="paymentMethod"></strong></p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 mb-6 info-grid">
+                <div>
+                    <p class="font-semibold text-black mb-1">Ditujukan Kepada:</p>
+                    <p><strong>Aripin Sihabudin</strong></p>
+                    <p>Siswa</p>
+                    <p>Sukarobot Academy</p>
+                </div>
+                <div class="mt-4 sm:mt-0">
+                    <p class="font-semibold text-black mb-1">Detail Tagihan:</p>
+                    <p>Nama Tagihan: <strong id="billTitle"></strong></p>
+                    <p>Deskripsi: <strong id="billDescription"></strong></p>
+                    <p>Jatuh Tempo: <strong id="billDueDate"></strong></p>
+                </div>
+            </div>
+
+            <table class="item-table">
+                <thead>
+                    <tr>
+                        <th>Deskripsi</th>
+                        <th class="text-right">Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="itemDescription"></td>
+                        <td class="text-right" id="itemAmount"></td>
+                    </tr>
+                    <tr class="summary-row">
+                        <td>Biaya Admin</td>
+                        <td class="text-right" id="adminFee"></td>
+                    </tr>
+                    <tr class="total-row grand-total">
+                        <td>TOTAL DIBAYAR</td>
+                        <td class="text-right" id="totalPaidAmount"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="thank-you-note">Terima kasih atas pembayaran Anda.</p>
+
+            <div class="signature-section">
+                <p>Sukabumi, <span id="currentDateSignature"></span></p>
+                <strong>Admin</strong>
+                <p>Sukarobot Academy</p>
+            </div>
+
+            <div class="action-buttons">
+                <button onclick="window.print()" class="btn-primary">
+                    <i class="fas fa-print"></i> Download & Cetak
+                </button>
+                <button onclick="history.back()" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <aside class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 p-2 flex md:hidden">
+        <nav class="flex justify-around items-center w-full sidebar-mobile-scroll">
+            <a class="sidebar-mobile-item" href="/index.html">
+                <div class="icon-wrapper">
+                    <i class="fas fa-home text-base"></i>
+                </div>
+                <span class="text-label">Dashboard</span>
+            </a>
+            <a class="sidebar-mobile-item" href="../public/kehadiran.html">
+                <div class="icon-wrapper">
+                    <i class="fas fa-calendar-check text-base"></i>
+                </div>
+                <span class="text-label">Kehadiran</span>
+            </a>
+            <a class="sidebar-mobile-item" href="../public/laporan.html">
+                <div class="icon-wrapper">
+                    <i class="fas fa-file-alt text-base"></i>
+                </div>
+                <span class="text-label">Laporan</span>
+            </a>
+            <a aria-current="page" class="sidebar-mobile-item active" href="pembayaran.html">
+                <div class="icon-wrapper">
+                    <i class="fas fa-credit-card text-base"></i>
+                </div>
+                <span class="text-label">Pembayaran</span>
+            </a>
+            <a class="sidebar-mobile-item" href="pengaturan-profil.html">
+            <div class="icon-wrapper">
+                <i class="fas fa-user-circle text-base"></i>
+            </div>
+            <span class="text-label">Profil</span>
+            </a>
+        </nav>
+    </aside>
+
+    <script>
+        const paymentData = [
+            { id: 1, title: 'Biaya Kelas Robotik', description: 'Level Beginner - Batch 23', status: 'Belum Dibayar', dueDate: '28 Feb 2025', amount: 1500000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null },
+            { id: 2, title: 'Biaya Pendaftaran', description: 'Registrasi Awal', status: 'Sudah Dibayar', paidDate: '2025-01-15', amount: 500000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2025010002', deadlineTime: null },
+            { id: 3, title: 'SPP Bulan Januari 2025', description: 'Kelas Robotik - Level 2', status: 'Belum Dibayar', dueDate: '2025-01-10', amount: 550000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null },
+            { id: 4, title: 'Biaya Praktikum', description: 'Kelas Robotik - Level 2', status: 'Belum Dibayar', dueDate: '2025-01-15', amount: 250000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null },
+            { id: 5, title: 'SPP Bulan Juni 2024', description: 'Kelas Robotik - Level 1', status: 'Sudah Dibayar', paidDate: '2024-06-10', amount: 550000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2024060005', deadlineTime: null },
+            { id: 6, title: 'Pembelian Alat', description: 'Robot Sumo', status: 'Sudah Dibayar', paidDate: '2024-06-10', amount: 1000000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2024060006', deadlineTime: null },
+            { id: 7, title: 'Biaya Kelas Graphic Design', description: 'Level Basic - Batch 1', status: 'Belum Dibayar', dueDate: '2025-03-15', amount: 1200000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null },
+            { id: 8, title: 'SPP Bulan Februari 2025', description: 'Kelas Graphic Design - Level 1', status: 'Sudah Dibayar', paidDate: '2025-02-05', amount: 550000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2000, transactionId: '#INV2025020008', deadlineTime: null },
+            { id: 9, title: 'Biaya Ujian Sertifikasi', description: 'Ujian Nasional Robotik', status: 'Belum Dibayar', dueDate: '2025-04-30', amount: 300000, bankAccount: '8277 3322 1144 5566', bankName: 'Bank Central Asia (BCA)', virtualAccount: true, adminFee: 2500, deadlineTime: '16 Januari 2025 18:00 WIB', transactionId: null, paidDate: null },
+        ];
+
+        const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+        /**
+         * Formats a date string into a readable 'DD Month YYYY' format.
+         * @param {string} dateString - The date string (e.g., 'YYYY-MM-DD').
+         * @returns {string} Formatted date or empty string if invalid.
+         */
+        function formatDateForDisplay(dateString) {
+            if (!dateString) return '';
+            const dateObj = new Date(dateString);
+            // Check for invalid date
+            if (isNaN(dateObj.getTime())) {
+                return dateString; // Return original if parsing fails
+            }
+            const day = dateObj.getDate().toString().padStart(2, '0');
+            const month = monthNames[dateObj.getMonth()];
+            const year = dateObj.getFullYear();
+            return `${day} ${month} ${year}`;
+        }
+
+        /**
+         * Formats a number into Rupiah currency format.
+         * @param {number} amount - The amount to format.
+         * @returns {string} Formatted Rupiah string.
+         */
+        function formatRupiah(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        /**
+         * Extracts a URL parameter by name.
+         * @param {string} name - The name of the parameter to extract.
+         * @returns {string} The decoded parameter value or an empty string if not found.
+         */
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            const results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results && results.length > 1 ? results[1].replace(/\+/g, ' ') : '');
+        }
+
+        // --- Get URL Parameters ---
+        const invoiceIdParam = parseInt(getUrlParameter('id'));
+        const statusParam = getUrlParameter('status'); // 'success', 'pending', 'failed' etc.
+        const methodParam = getUrlParameter('method'); // 'otomatis', 'manual'
+        const optionParam = getUrlParameter('option'); // e.g., 'BCA', 'Gopay'
+
+        // --- Find Current Payment Data ---
+        const currentPayment = paymentData.find(item => item.id === invoiceIdParam);
+
+        // --- DOM Element References ---
+        const invoiceIdEl = document.getElementById('invoiceId');
+        const invoiceStatusBadgeEl = document.getElementById('invoiceStatusBadge');
+        const paidDateEl = document.getElementById('paidDate');
+        const paymentMethodEl = document.getElementById('paymentMethod');
+        const billTitleEl = document.getElementById('billTitle');
+        const billDescriptionEl = document.getElementById('billDescription');
+        const billDueDateEl = document.getElementById('billDueDate');
+        const itemDescriptionEl = document.getElementById('itemDescription');
+        const itemAmountEl = document.getElementById('itemAmount');
+        const adminFeeEl = document.getElementById('adminFee');
+        const totalPaidAmountEl = document.getElementById('totalPaidAmount');
+        const currentDateSignatureEl = document.getElementById('currentDateSignature');
+
+        /**
+         * Initializes the invoice details on page load.
+         */
+        function initializeInvoice() {
+            if (!currentPayment) {
+                console.error('Invoice data not found for ID:', invoiceIdParam);
+                alert('Invoice tidak ditemukan atau data tidak lengkap.');
+                window.location.href = 'pembayaran.html'; // Redirect if data is missing
+                return;
+            }
+
+            // Set current date for signature
+            const invoiceDate = new Date();
+            currentDateSignatureEl.textContent = formatDateForDisplay(invoiceDate.toISOString().split('T')[0]);
+
+            // Set Invoice ID
+            invoiceIdEl.textContent = currentPayment.transactionId || `#INV${invoiceIdParam.toString().padStart(5, '0')}`;
+
+            // Set Status Badge
+            let displayStatus = currentPayment.status.toUpperCase();
+            invoiceStatusBadgeEl.classList.remove('bg-[#B6EBD9]', 'text-[#0B4C66]', 'bg-[#FFD6D6]', 'text-[#E03E3E]', 'bg-[#FFF3D1]', 'text-[#D97706]', 'bg-gray-200', 'text-gray-700'); // Clean up existing classes
+
+            if (statusParam === 'success' || currentPayment.status === 'Sudah Dibayar') {
+                displayStatus = 'LUNAS';
+                invoiceStatusBadgeEl.classList.add('bg-[#B6EBD9]', 'text-[#0B4C66]');
+            } else if (currentPayment.status === 'Belum Dibayar') {
+                displayStatus = 'BELUM DIBAYAR';
+                invoiceStatusBadgeEl.classList.add('bg-[#FFD6D6]', 'text-[#E03E3E]');
+            } else if (currentPayment.status === 'Menunggu Konfirmasi') { // Example for 'pending' state
+                displayStatus = 'MENUNGGU KONFIRMASI';
+                invoiceStatusBadgeEl.classList.add('bg-[#FFF3D1]', 'text-[#D97706]');
+            } else {
+                invoiceStatusBadgeEl.classList.add('bg-gray-200', 'text-gray-700'); // Default grey
+            }
+            invoiceStatusBadgeEl.textContent = displayStatus;
+
+            // Set Payment Date
+            paidDateEl.textContent = currentPayment.paidDate ? formatDateForDisplay(currentPayment.paidDate) : 'Belum Dibayar';
+
+            // Set Payment Method
+            let methodText = 'Tidak Diketahui';
+            if (methodParam === 'otomatis') {
+                methodText = `Otomatis (${optionParam || currentPayment.bankName || 'E-wallet'})`;
+            } else if (methodParam === 'manual') {
+                methodText = `Manual (${currentPayment.bankName || 'Transfer Bank'})`;
+            } else {
+                methodText = currentPayment.bankName ? `${currentPayment.bankName} ${currentPayment.virtualAccount ? '(Virtual Account)' : '(Transfer)'}` : 'Tidak Diketahui';
+            }
+            paymentMethodEl.textContent = methodText;
+
+            // Set Bill Details
+            billTitleEl.textContent = currentPayment.title;
+            billDescriptionEl.textContent = currentPayment.description;
+            billDueDateEl.textContent = formatDateForDisplay(currentPayment.dueDate); // Format due date
+
+            // Set Item and Amount Details
+            itemDescriptionEl.textContent = currentPayment.title;
+            itemAmountEl.textContent = formatRupiah(currentPayment.amount);
+            adminFeeEl.textContent = formatRupiah(currentPayment.adminFee);
+            totalPaidAmountEl.textContent = formatRupiah(currentPayment.amount + currentPayment.adminFee);
+        }
+
+        // Initialize invoice details when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', initializeInvoice);
+    </script>
+</body>
+</html>

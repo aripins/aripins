@@ -1,0 +1,117 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0; /* Pastikan margin body 0 agar fixed sidebar berfungsi dengan baik */
+}
+
+/* Base styles for the main container (flex column by default) */
+.flex-col.md\:flex-row {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Sidebar behavior for desktop */
+@media (min-width: 768px) {
+  /* On medium screens and up (desktop), sidebar stays on the side */
+  .flex-col.md\:flex-row {
+    flex-direction: row; /* Main content and sidebar side-by-side */
+  }
+
+  aside {
+    position: fixed; /* Sidebar tetap diam saat di-scroll */
+    top: 0; /* Posisikan di bagian atas */
+    left: 0; /* Posisikan di bagian kiri */
+    bottom: 0; /* Ambil tinggi penuh layar */
+    width: 256px; /* md:w-64 (256px) */
+    height: 100vh; /* Pastikan tinggi 100% dari viewport height */
+    border-right: 1px solid #E5E7EB; /* Add right border */
+    border-top: none; /* Remove top border */
+    padding: 0; /* No special padding */
+    box-shadow: none; /* No shadow */
+    overflow-y: auto; /* Jika konten sidebar lebih panjang dari layar, bisa di-scroll */
+  }
+
+  /* Adjust padding for the main content to account for fixed sidebar */
+  main {
+    margin-left: 256px; /* Beri margin kiri pada main content selebar sidebar */
+    width: calc(100% - 256px); /* Pastikan main content mengisi sisa lebar */
+  }
+
+
+  aside > div:first-child, /* SubotApp title */
+  aside > div:nth-child(2) /* Profile section */ {
+    display: block !important; /* Ensure these are visible on desktop */
+  }
+
+  aside nav {
+    flex-direction: column; /* Stack navigation items vertically */
+    margin-top: 0.5rem; /* Mengurangi jarak antar menu, dari md:mt-6 (1.5rem) menjadi 0.5rem */
+    padding: 0 0.5rem; /* md:px-2 */
+    /* Menghilangkan space-y-1 karena akan diatur oleh margin-bottom pada link */
+    space-y: 0;
+  }
+
+  aside nav a {
+    text-align: left; /* Align text to the left */
+    flex: none; /* Do not flex distribute */
+    padding: 0.75rem 1rem; /* Menyesuaikan padding untuk jarak yang lebih rapat */
+    margin-bottom: 0.25rem; /* Jarak antar menu */
+  }
+
+  /* Remove padding-bottom from body on desktop */
+  body {
+    padding-bottom: 0;
+  }
+}
+
+/* Sidebar behavior for mobile/tablet */
+@media (max-width: 767px) {
+  /* On small screens (mobile/tablet), sidebar moves to the bottom */
+  aside {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    flex-direction: row; /* Make navigation items horizontal */
+    justify-content: space-around; /* Distribute items evenly */
+    align-items: center;
+    border-top: 1px solid #E5E7EB; /* Add a top border */
+    border-right: none; /* Remove right border */
+    padding: 0.5rem 0; /* Adjust padding for bottom bar */
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05); /* Add subtle shadow */
+  }
+
+  /* Hide specific elements on mobile sidebar */
+  aside > div:first-child, /* SubotApp title */
+  aside > div:nth-child(2) /* Profile section */ {
+    display: none !important; /* Hide these on mobile, !important to override md:block */
+  }
+
+  /* Ensure main content is above the fixed sidebar */
+  body {
+    padding-bottom: 70px; /* Adjust based on sidebar height on mobile */
+  }
+
+  /* Adjust navigation links for bottom bar */
+  aside nav {
+    width: 100%; /* Take full width of the bottom bar */
+    display: flex; /* Ensure navigation items are visible */
+    flex-direction: row; /* Arrange items horizontally */
+    justify-content: space-around; /* Evenly space items */
+    margin-top: 0; /* Remove top margin */
+  }
+
+  aside nav a {
+    text-align: center;
+    flex: 1; /* Make each item take equal width */
+    padding: 0.5rem; /* Adjust padding */
+    margin-bottom: 0; /* Remove margin-bottom for mobile */
+  }
+}
+
+/* Custom size for the icon boxes in "Jadwal Selanjutnya" */
+.icon-box-size {
+  width: 40px;
+  height: 40px;
+}

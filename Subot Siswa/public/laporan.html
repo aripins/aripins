@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Laporan - SubotApp</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    .sidebar-mobile-scroll {
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    .sidebar-mobile-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .sidebar-mobile-item {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      gap: 0.5rem;
+      width: auto;
+      min-width: 80px;
+    }
+    .sidebar-mobile-item .icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+    }
+    .sidebar-mobile-item.active .icon-wrapper {
+      background-color: #0B4C66;
+      color: white;
+    }
+    .sidebar-mobile-item.active .text-label {
+      color: #0B4C66;
+      font-weight: 600;
+    }
+    .sidebar-mobile-item:not(.active) .icon-wrapper {
+      background-color: transparent;
+      color: #6B7280;
+    }
+    .sidebar-mobile-item:not(.active) .text-label {
+      color: #6B7280;
+      font-weight: 400;
+    }
+
+    .icon-box-size {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    input[type="date"] {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      color: #1f2937;
+      background-color: #ffffff;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      width: 100%;
+      height: 2.5rem;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+    input[type="date"]:focus {
+      outline: none;
+      border-color: #0B4C66;
+      box-shadow: 0 0 0 1px #0B4C66;
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+    .date-input-wrapper {
+        position: relative;
+        width: 100%;
+    }
+    .date-input-wrapper .fa-calendar-alt {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6B7280;
+        pointer-events: none;
+    }
+
+    .filter-input {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      color: #1f2937;
+      background-color: #ffffff;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      width: 100%;
+      height: 2.5rem;
+    }
+    .filter-input:focus {
+      outline: none;
+      border-color: #0B4C66;
+      box-shadow: 0 0 0 1px #0B4C66;
+    }
+
+    .filter-section {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+    .filter-actions {
+        display: flex;
+        align-items: flex-end;
+    }
+    .filter-actions button {
+        width: 100%;
+    }
+
+    @media (min-width: 640px) {
+        .filter-section {
+            flex-direction: row;
+            align-items: flex-end;
+            gap: 1rem;
+        }
+        .filter-group {
+            flex-basis: calc(33.33% - 0.66rem);
+            max-width: calc(33.33% - 0.66rem);
+        }
+        .filter-actions {
+            flex-basis: auto;
+            width: auto;
+            margin-top: 0;
+        }
+        .filter-actions button {
+            width: auto;
+        }
+    }
+    @media (min-width: 768px) {
+        .filter-group {
+            flex-basis: calc(25% - 0.75rem);
+            max-width: calc(25% - 0.75rem);
+        }
+        .filter-actions {
+            flex-basis: auto;
+        }
+    }
+
+    @media (max-width: 767px) {
+      main {
+        padding-bottom: 80px;
+      }
+    }
+  </style>
+</head>
+<body class="bg-[#F7F9FC] min-h-screen text-gray-700">
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <aside class="w-full md:w-64 bg-white border-b md:border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col md:sticky md:top-0 md:h-screen">
+      <div>
+        <div class="px-6 py-5 border-b border-gray-200">
+            <img src="../asset/logo fix sukarobot.jpg" alt="Sukarobot Academy Logo" class="h-10 w-auto object-contain mx-auto">
+          </div>
+        <a href="pengaturan-profil.html" class="px-6 py-5 flex items-center space-x-4 border-b border-gray-200">
+        <img alt="Profile picture" class="w-10 h-10 rounded-full object-cover" height="40" src="/asset/real.jpg" width="40"/>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-gray-900 truncate">
+            Aripin Sihabudin
+          </p>
+          <p class="text-xs text-gray-400 truncate">
+            Siswa
+          </p>
+        </div>
+        <button aria-label="Logout" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+        </button>
+      </a>
+        <nav class="flex flex-col mt-6 space-y-1 px-2 flex-grow overflow-y-auto">
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="/index.html">
+            <i class="fas fa-home text-base"></i>
+            Dashboard
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="kehadiran.html">
+            <i class="fas fa-calendar-check text-base"></i>
+            Kehadiran
+          </a>
+          <a aria-current="page" class="flex items-center gap-3 px-4 py-2 rounded-lg bg-[#D9E9FF] text-[#0B4C66] font-semibold text-sm" href="laporan.html">
+            <i class="fas fa-file-alt text-base"></i>
+            Laporan
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="/pembayaran/pembayaran.html">
+            <i class="fas fa-credit-card text-base"></i>
+            Pembayaran
+          </a>
+        </nav>
+      </div>
+      <button aria-label="Logout" class="w-full flex justify-center py-3 border-t border-gray-200 text-gray-500 hover:text-gray-700">
+      </button>
+    </aside>
+
+    <main class="flex-1 p-6">
+      <nav class="text-xs text-gray-500 mb-4 font-normal">
+        <a class="hover:underline text-[#0B4C66]" href="/index.html">
+          Dashboard
+        </a>
+        <span class="mx-1 text-gray-400">›</span>
+        <span>Laporan</span>
+      </nav>
+      <h1 class="text-black font-extrabold text-xl leading-6 mb-6">
+        Laporan Siswa
+      </h1>
+      <section class="bg-white rounded-lg p-4 mb-6 filter-section">
+        <div class="filter-group">
+          <label class="mb-1 text-xs text-gray-500 select-none" for="startDate">Dari Tanggal</label>
+          <div class="date-input-wrapper">
+            <input type="date" id="startDate" name="startDate" class="filter-input">
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label class="mb-1 text-xs text-gray-500 select-none" for="endDate">Sampai Tanggal</label>
+          <div class="date-input-wrapper">
+            <input type="date" id="endDate" name="endDate" class="filter-input">
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label class="mb-1 text-xs text-gray-500 select-none" for="reportType">Tipe Laporan</label>
+          <select class="filter-input" id="reportType" name="reportType">
+            <option value="Semua">Semua Tipe Laporan</option>
+            <option value="Progres Laporan Bulanan">Progres Laporan Bulanan</option>
+            <option value="Raport Siswa">Raport Siswa</option>
+            <option value="Prestasi Siswa">Prestasi Siswa</option>
+          </select>
+        </div>
+        <div class="filter-actions">
+            <button id="applyFilterBtn" class="bg-[#0B4C66] hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-md text-sm focus:outline-none">
+                Terapkan Filter
+            </button>
+        </div>
+      </section>
+      
+      <section aria-label="Laporan list" class="bg-white rounded-lg border border-gray-200 p-4 flex flex-col gap-3">
+        <div id="reportListContainer">
+        </div>
+        <footer aria-label="Pagination" class="text-xs text-gray-500 pt-3 border-t border-gray-200 flex justify-end items-center gap-3">
+          <span id="paginationInfo" class="mr-auto"></span>
+          <button id="prevPageBtn" aria-label="Previous page" class="p-1 rounded hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <div id="pageNumbers" class="flex gap-1"></div>
+          <button id="nextPageBtn" aria-label="Next page" class="p-1 rounded hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <aside class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 p-2 flex md:hidden">
+    <nav class="flex justify-around items-center w-full sidebar-mobile-scroll">
+      <a class="sidebar-mobile-item" href="/index.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-home text-base"></i>
+        </div>
+        <span class="text-label">Dashboard</span>
+      </a>
+      <a class="sidebar-mobile-item" href="kehadiran.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-calendar-check text-base"></i>
+        </div>
+        <span class="text-label">Kehadiran</span>
+      </a>
+      <a class="sidebar-mobile-item active" href="laporan.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-file-alt text-base"></i>
+        </div>
+        <span class="text-label">Laporan</span>
+      </a>
+      <a class="sidebar-mobile-item" href="/pembayaran/pembayaran.html">
+        <div class="icon-wrapper">
+          <i class="fas fa-credit-card text-base"></i>
+        </div>
+        <span class="text-label">Pembayaran</span>
+      </a>
+      <a class="sidebar-mobile-item" href="pengaturan-profil.html">
+      <div class="icon-wrapper">
+        <i class="fas fa-user-circle text-base"></i>
+      </div>
+      <span class="text-label">Profil</span>
+    </a>
+    </nav>
+  </aside>
+
+  <script>
+    const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+    function formatDateForDisplay(dateString) {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString;
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = monthNames[date.getMonth()];
+      const year = date.getFullYear();
+      return `${day} ${month} ${year}`;
+    }
+
+    const reportsData = [
+      { id: 1, type: 'Raport Siswa', title: 'Raport Semester 1 - Tahun Ajaran 2024/2025', publishedDate: '2025-06-15', downloadLink: '#', icon: 'fas fa-graduation-cap' },
+      { id: 2, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - Juni 2025', publishedDate: '2025-06-30', downloadLink: '#', icon: 'fas fa-chart-line' },
+      { id: 3, type: 'Prestasi Siswa', title: 'Sertifikat Lomba Robotik Tingkat Provinsi', publishedDate: '2025-05-25', downloadLink: '#', icon: 'fas fa-award' },
+      { id: 4, type: 'Raport Siswa', title: 'Raport Tengah Semester - Tahun Ajaran 2024/2025', publishedDate: '2025-04-15', downloadLink: '#', icon: 'fas fa-graduation-cap' },
+      { id: 5, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - Mei 2025', publishedDate: '2025-05-31', downloadLink: '#', icon: 'fas fa-chart-line' },
+      { id: 6, type: 'Prestasi Siswa', title: 'Penghargaan Siswa Teladan April 2025', publishedDate: '2025-05-01', downloadLink: '#', icon: 'fas fa-star' },
+      { id: 7, type: 'Raport Siswa', title: 'Raport Semester 2 - Tahun Ajaran 2023/2024', publishedDate: '2024-12-15', downloadLink: '#', icon: 'fas fa-graduation-cap' },
+      { id: 8, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - April 2025', publishedDate: '2025-04-30', downloadLink: '#', icon: 'fas fa-chart-line' },
+      { id: 9, type: 'Prestasi Siswa', title: 'Partisipasi Workshop Coding Tingkat Nasional', publishedDate: '2025-03-20', downloadLink: '#', icon: 'fas fa-laptop-code' },
+      { id: 10, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - Maret 2025', publishedDate: '2025-03-31', downloadLink: '#', icon: 'fas fa-chart-line' },
+      { id: 11, type: 'Raport Siswa', title: 'Raport Semester 1 - Tahun Ajaran 2023/2024', publishedDate: '2024-06-15', downloadLink: '#', icon: 'fas fa-graduation-cap' },
+      { id: 12, type: 'Prestasi Siswa', title: 'Juara 3 Olimpiade Matematika Sains', publishedDate: '2025-02-10', downloadLink: '#', icon: 'fas fa-medal' },
+      { id: 13, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - Februari 2025', publishedDate: '2025-02-28', downloadLink: '#', icon: 'fas fa-chart-line' },
+      { id: 14, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - Januari 2025', publishedDate: '2025-01-31', downloadLink: '#', icon: 'fas fa-chart-line' },
+      { id: 15, type: 'Prestasi Siswa', title: 'Peserta Terbaik Kelas Desain Grafis', publishedDate: '2025-01-10', downloadLink: '#', icon: 'fas fa-award' },
+      { id: 16, type: 'Raport Siswa', title: 'Raport Semester 2 - Tahun Ajaran 2022/2023', publishedDate: '2023-12-15', downloadLink: '#', icon: 'fas fa-graduation-cap' },
+      { id: 17, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - Desember 2024', publishedDate: '2024-12-31', downloadLink: '#', icon: 'fas fa-chart-line' },
+      { id: 18, type: 'Prestasi Siswa', title: 'Finalis Lomba Sains Nasional', publishedDate: '2024-11-20', downloadLink: '#', icon: 'fas fa-trophy' },
+      { id: 19, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - November 2024', publishedDate: '2024-11-30', downloadLink: '#', icon: 'fas fa-chart-line' },
+      { id: 20, type: 'Raport Siswa', title: 'Raport Semester 1 - Tahun Ajaran 2022/2023', publishedDate: '2023-06-15', downloadLink: '#', icon: 'fas fa-graduation-cap' },
+      { id: 21, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - Oktober 2024', publishedDate: '2024-10-31', downloadLink: '#', icon: 'fas fa-chart-line' },
+    ];
+
+    let filteredReportsData = [];
+    const reportsPerPage = 5;
+    let currentPage = 1;
+
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+    const reportTypeSelect = document.getElementById('reportType');
+    const applyFilterBtn = document.getElementById('applyFilterBtn');
+    
+    const reportListContainer = document.getElementById('reportListContainer');
+    const paginationInfoSpan = document.getElementById('paginationInfo');
+    const prevPageBtn = document.getElementById('prevPageBtn');
+    const nextPageBtn = document.getElementById('nextPageBtn');
+    const pageNumbersContainer = document.getElementById('pageNumbers');
+
+    function displayReportsPage(page) {
+      currentPage = page;
+      const startIndex = (currentPage - 1) * reportsPerPage;
+      const endIndex = Math.min(startIndex + reportsPerPage, filteredReportsData.length);
+      const paginatedItems = filteredReportsData.slice(startIndex, endIndex);
+
+      reportListContainer.innerHTML = '';
+
+      if (paginatedItems.length === 0) {
+        reportListContainer.innerHTML = `<p class="text-center text-gray-500 py-4">Tidak ada laporan yang ditemukan untuk pilihan ini.</p>`;
+      }
+
+      paginatedItems.forEach(item => {
+        const article = document.createElement('article');
+        article.classList.add('flex', 'items-center', 'justify-between', 'border', 'border-gray-200', 'rounded-md', 'p-4', 'hover:shadow-sm');
+        
+        let iconClass = item.icon || 'fas fa-file-alt';
+
+        const downloadUrl = `format-laporan.html?id=${item.id}&type=${encodeURIComponent(item.type)}&title=${encodeURIComponent(item.title)}&date=${encodeURIComponent(item.publishedDate)}`;
+
+        article.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div aria-hidden="true" class="flex items-center justify-center w-10 h-10 rounded-md bg-[#D9E9FF] text-[#0B4C66]">
+              <i class="${iconClass} text-xl"></i>
+            </div>
+            <div class="flex flex-col text-xs">
+              <span class="font-semibold text-black text-sm leading-tight">
+                ${item.title}
+              </span>
+              <span class="text-gray-500 leading-tight">
+                Dipublikasikan pada ${formatDateForDisplay(item.publishedDate)}
+              </span>
+            </div>
+          </div>
+          <a class="text-[#0B4C66] text-sm flex items-center gap-1 hover:underline" href="${downloadUrl}" target="_blank">
+            <i class="fas fa-download"></i>
+            Download
+          </a>
+        `;
+        reportListContainer.appendChild(article);
+      });
+
+      prevPageBtn.disabled = currentPage === 1;
+      nextPageBtn.disabled = endIndex >= filteredReportsData.length;
+
+      paginationInfoSpan.textContent = `Menampilkan ${startIndex + 1} sampai ${endIndex} dari ${filteredReportsData.length} laporan`;
+      
+      renderPageNumbers();
+    }
+
+    function renderPageNumbers() {
+        pageNumbersContainer.innerHTML = '';
+        const totalPages = Math.ceil(filteredReportsData.length / reportsPerPage);
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.type = 'button';
+            pageButton.textContent = i;
+            pageButton.classList.add('rounded', 'px-3', 'py-1', 'hover:bg-gray-100', 'hover:text-gray-600');
+            if (i === currentPage) {
+                pageButton.classList.add('bg-[#0B4C66]', 'text-white', 'hover:bg-[#0B4C66]', 'hover:text-white');
+            }
+            pageButton.addEventListener('click', () => displayReportsPage(i));
+            pageNumbersContainer.appendChild(pageButton);
+        }
+        if (totalPages === 0 && filteredReportsData.length === 0) {
+            paginationInfoSpan.textContent = 'Menampilkan 0 dari 0 laporan';
+            prevPageBtn.disabled = true;
+            nextPageBtn.disabled = true;
+        } else if (totalPages === 0) {
+            paginationInfoSpan.textContent = `Menampilkan 1 dari ${filteredReportsData.length} laporan`;
+            prevPageBtn.disabled = true;
+            nextPageBtn.disabled = true;
+        }
+    }
+
+    function applyFilters() {
+        const selectedStartDate = startDateInput.value ? new Date(startDateInput.value + 'T00:00:00') : null;
+        const selectedEndDate = endDateInput.value ? new Date(endDateInput.value + 'T23:59:59') : null;
+        const selectedReportType = reportTypeSelect.value;
+
+        filteredReportsData = reportsData.filter(item => {
+            const itemDate = new Date(item.publishedDate + 'T00:00:00');
+
+            const matchDateRange = (!selectedStartDate || itemDate >= selectedStartDate) &&
+                                   (!selectedEndDate || itemDate <= selectedEndDate);
+            
+            const matchReportType = (selectedReportType === 'Semua' || item.type === selectedReportType);
+            
+            return matchDateRange && matchReportType;
+        });
+
+        filteredReportsData.sort((a, b) => new Date(b.publishedDate) - new Date(a.publishedDate));
+
+        currentPage = 1;
+        displayReportsPage(currentPage);
+    }
+
+    applyFilterBtn.addEventListener('click', applyFilters);
+
+    prevPageBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        displayReportsPage(currentPage - 1);
+      }
+    });
+
+    nextPageBtn.addEventListener('click', () => {
+      if (currentPage * reportsPerPage < filteredReportsData.length) {
+        displayReportsPage(currentPage + 1);
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const today = new Date();
+        const defaultEndDate = today.toISOString().split('T')[0];
+        const defaultStartDate = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate()).toISOString().split('T')[0];
+
+        startDateInput.value = defaultStartDate;
+        endDateInput.value = defaultEndDate;
+        
+        applyFilters();
+    });
+  </script>
+</body>
+</html>

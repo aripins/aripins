@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Detail Laporan - Sukarobot Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            background-color: #F7F9FC;
+            color: #374151;
+        }
+        .sidebar-mobile-scroll {
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .sidebar-mobile-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .sidebar-mobile-item {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            gap: 0.5rem;
+            width: auto;
+            min-width: 80px;
+        }
+        .sidebar-mobile-item .icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 9999px;
+        }
+        .sidebar-mobile-item.active .icon-wrapper {
+            background-color: #0B4C66;
+            color: white;
+        }
+        .sidebar-mobile-item.active .text-label {
+            color: #0B4C66;
+            font-weight: 600;
+        }
+        .sidebar-mobile-item:not(.active) .icon-wrapper {
+            background-color: transparent;
+            color: #6B7280;
+        }
+        .sidebar-mobile-item:not(.active) .text-label {
+            color: #6B7280;
+            font-weight: 400;
+        }
+        .icon-box-size {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+
+        /* Styling for the report container */
+        .report-page-container {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2.5rem 3rem; /* Increased padding for more formal look */
+            max-width: 800px; /* Slightly wider for better content display */
+            width: 100%;
+            margin: 2rem auto; /* Center the report and add top margin */
+            min-height: 80vh; /* Ensure it takes up enough vertical space */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Academy Header Styling */
+        .academy-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 2rem; /* Increased margin */
+            padding-bottom: 1.5rem; /* Increased padding */
+            border-bottom: 3px solid #0B4C66; /* Thicker, more prominent border */
+        }
+        .academy-header .logo-img {
+            height: 80px; /* Larger logo */
+            width: auto;
+            margin-bottom: 1rem; /* More space below logo */
+            object-fit: contain;
+        }
+        .academy-header h1 {
+            font-size: 2rem; /* Larger heading */
+            font-weight: 800;
+            color: #0B4C66;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+        .academy-header .address-info {
+            font-size: 0.95rem; /* Slightly larger text */
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 0.3rem;
+        }
+        .academy-header .contact-info {
+            font-size: 0.85rem; /* Slightly larger text */
+            color: #6b7280;
+        }
+
+        /* Report Main Title Styling (Simplified) */
+        .report-main-title {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center the title and date */
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed #cbd5e0;
+        }
+        .report-main-title h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a202c;
+            line-height: 1.25;
+            margin-bottom: 0.5rem; /* Space between title and date */
+        }
+        .report-main-title p {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        /* Section Title Styling */
+        .section-title {
+            font-size: 1.35rem; /* Slightly larger section titles */
+            font-weight: 700;
+            color: #0B4C66;
+            margin-top: 2rem; /* More space above sections */
+            margin-bottom: 1.2rem; /* More space below titles */
+            padding-bottom: 0.75rem; /* More padding below line */
+            border-bottom: 2px solid #D9E9FF;
+            text-transform: uppercase; /* Uppercase for formality */
+            letter-spacing: 0.025em; /* Slight letter spacing */
+        }
+
+        /* Report Table Styling */
+        .report-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 2rem; /* Increased margin */
+            font-size: 0.95rem; /* Slightly larger font */
+            border: 1px solid #e2e8f0; /* Add full border to table */
+        }
+        .report-table th,
+        .report-table td {
+            border: 1px solid #e2e8f0;
+            padding: 12px 18px; /* More padding in cells */
+            text-align: left;
+        }
+        .report-table th {
+            background-color: #edf2f7; /* Lighter background for headers */
+            font-weight: 700; /* Bolder header text */
+            color: #2d3748;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .report-table tbody tr:nth-child(even) {
+            background-color: #f8faff; /* Lighter zebra striping */
+        }
+        .report-table tbody tr:hover {
+            background-color: #e6f0fa; /* Subtle hover effect */
+        }
+        
+        /* Report List Styling */
+        .report-list {
+            list-style: disc;
+            list-style-position: outside; /* Bullets outside text block */
+            margin-bottom: 2rem;
+            padding-left: 1.5rem; /* More padding for list items */
+        }
+        .report-list li {
+            margin-bottom: 0.75rem; /* More space between list items */
+        }
+
+        /* Action Buttons Styling */
+        .action-buttons {
+            text-align: center;
+            margin-top: 3rem; /* More space above buttons */
+            padding-top: 1.5rem;
+            border-top: 1px dashed #cbd5e0; /* Subtle separator */
+        }
+        .action-buttons button, .action-buttons a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem; /* Slightly more space between icon and text */
+            padding: 0.85rem 1.8rem; /* Larger buttons */
+            border-radius: 0.5rem; /* More rounded corners */
+            font-size: 1.05rem; /* Slightly larger font */
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            text-decoration: none; /* Remove underline for links */
+        }
+        .action-buttons .btn-primary {
+            background-color: #0B4C66;
+            color: white;
+            margin-right: 1.25rem; /* More space between buttons */
+            box-shadow: 0 2px 4px rgba(11, 76, 102, 0.2); /* Subtle shadow */
+        }
+        .action-buttons .btn-primary:hover {
+            background-color: #0A3C52;
+            transform: translateY(-1px); /* Slight lift on hover */
+            box-shadow: 0 4px 8px rgba(11, 76, 102, 0.3);
+        }
+        .action-buttons .btn-secondary {
+            background-color: #e2e8f0;
+            color: #4a5568;
+            border: 1px solid #cbd5e0;
+        }
+        .action-buttons .btn-secondary:hover {
+            background-color: #d7e0eb; /* Darker secondary on hover */
+            transform: translateY(-1px);
+        }
+
+        /* Print Specific Styles */
+        @media print {
+            body {
+                background-color: white !important;
+                margin: 0;
+                padding: 0;
+                font-size: 11px; /* Adjust font size for print */
+                -webkit-print-color-adjust: exact; /* Ensure background colors and shadows are printed */
+                print-color-adjust: exact;
+            }
+            .report-page-container {
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                padding: 1rem !important; /* Adjust padding for print */
+                margin: 0 !important;
+                max-width: 100% !important;
+                width: auto !important;
+                min-height: auto !important;
+            }
+            .action-buttons, aside { /* Removed .report-main-title .btn-back */
+                display: none !important;
+            }
+            .academy-header h1, .academy-header .address-info, .academy-header .contact-info,
+            .report-main-title h2, .report-main-title p,
+            .section-title,
+            .report-table th, .report-table td,
+            .report-list li,
+            p, span {
+                color: black !important;
+            }
+            .academy-header {
+                border-bottom: 2px solid #999 !important; /* Darker border for print */
+                padding-bottom: 1rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+            .section-title {
+                border-bottom: 1px solid #ccc !important; /* Lighter border for section titles */
+                padding-bottom: 0.4rem !important;
+                margin-top: 1.5rem !important;
+                margin-bottom: 0.8rem !important;
+            }
+            .report-table th, .report-table td {
+                border-color: #bbb !important; /* Darker borders for tables */
+            }
+            .report-table th {
+                background-color: #f0f0f0 !important; /* Print header background */
+            }
+            .report-table tbody tr:nth-child(even) {
+                background-color: #f9f9f9 !important; /* Print zebra striping */
+            }
+            .report-main-title {
+                border-bottom: none !important; /* Remove dashed line for print */
+                margin-bottom: 1rem !important;
+            }
+            .report-main-title h2 {
+                font-size: 1.4rem !important;
+            }
+            .report-main-title p {
+                font-size: 0.8rem !important;
+            }
+            .report-table, .report-list {
+                margin-bottom: 1rem !important;
+            }
+            .text-gray-700 {
+                color: #333 !important;
+            }
+            .text-gray-600 {
+                color: #555 !important;
+            }
+            .text-gray-500 {
+                color: #777 !important;
+            }
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 767px) {
+            main {
+                padding: 1rem; /* Adjust main padding for smaller screens */
+                padding-bottom: 5rem; /* Space for mobile navigation */
+            }
+            .report-page-container {
+                padding: 1.5rem; /* Adjust container padding for smaller screens */
+                margin: 1rem auto;
+            }
+            .academy-header {
+                margin-bottom: 1.5rem;
+                padding-bottom: 1rem;
+            }
+            .academy-header h1 {
+                font-size: 1.5rem;
+            }
+            .academy-header .logo-img {
+                height: 60px;
+            }
+            .report-main-title {
+                margin-bottom: 1.5rem;
+            }
+            .report-main-title h2 {
+                font-size: 1.25rem;
+            }
+            .section-title {
+                font-size: 1.1rem;
+                margin-top: 1.5rem;
+                margin-bottom: 1rem;
+            }
+            .report-table th, .report-table td {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+            .report-list {
+                padding-left: 1rem;
+            }
+            .action-buttons {
+                flex-direction: column; /* Stack buttons on mobile */
+                gap: 1rem; /* Space between stacked buttons */
+                padding-top: 1rem;
+                margin-top: 2rem;
+            }
+            .action-buttons button, .action-buttons a {
+                width: 100%; /* Full width buttons on mobile */
+                margin-right: 0 !important; /* Remove right margin */
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#F7F9FC] min-h-screen text-gray-700 flex flex-col md:flex-row">
+    <aside class="w-full md:w-64 bg-white border-b md:border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col md:sticky md:top-0 md:h-screen">
+      <div>
+        <div class="px-6 py-5 border-b border-gray-200">
+          <img src="../asset/logo fix sukarobot.jpg" alt="Sukarobot Academy Logo" class="h-10 w-auto object-contain mx-auto">
+        </div>
+        <a href="pengaturan-profil.html" class="px-6 py-5 flex items-center space-x-4 border-b border-gray-200">
+        <img alt="Profile picture" class="w-10 h-10 rounded-full object-cover" height="40" src="/asset/real.jpg" width="40"/>
+        <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-gray-900 truncate">
+            Aripin Sihabudin
+            </p>
+            <p class="text-xs text-gray-400 truncate">
+            Siswa
+            </p>
+        </div>
+        <button aria-label="Logout" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+        </button>
+        </a>
+        <nav class="flex flex-col mt-6 space-y-1 px-2 flex-grow overflow-y-auto">
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="/index.html">
+            <i class="fas fa-home text-base"></i>
+            Dashboard
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="../public/kehadiran.html">
+            <i class="fas fa-calendar-check text-base"></i>
+            Kehadiran
+          </a>
+          <a aria-current="page" class="flex items-center gap-3 px-4 py-2 rounded-lg bg-[#D9E9FF] text-[#0B4C66] font-semibold text-sm" href="laporan.html">
+            <i class="fas fa-file-alt text-base"></i>
+            Laporan
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="#">
+            <i class="fas fa-credit-card text-base"></i>
+            Pembayaran
+          </a>
+        </nav>
+      </div>
+      <button aria-label="Logout" class="w-full flex justify-center py-3 border-t border-gray-200 text-gray-500 hover:text-gray-700">
+      </button>
+    </aside>
+
+    <main class="flex-1 p-6">
+        <div class="report-page-container">
+            <div class="academy-header">
+                <img src="/asset/logo fix sukarobot.jpg" alt="Logo Sukarobot Academy" class="logo-img">
+                <h1>SUKAROBOT ACADEMY</h1>
+                <p class="address-info">Jl. Cikole, Kota Sukabumi, Jawa Barat, Indonesia</p>
+                <p class="contact-info">Telepon: 0800-0000-0000 | Email: sukarobotacademy@gmail.com</p>
+            </div>
+
+            <div class="report-main-title">
+                <h2 id="reportTitle"></h2>
+                <p id="reportDate"></p>
+            </div>
+
+            <div id="reportContentArea" class="flex-grow">
+                <p class="text-center text-gray-500 italic">Memuat detail laporan...</p>
+            </div>
+
+            <div class="action-buttons">
+                <button onclick="window.print()" class="btn-primary">
+                    <i class="fas fa-print mr-2"></i> Cetak Laporan
+                </button>
+                <button onclick="window.print()" class="btn-primary">
+                    <i class="fas fa-download mr-2"></i> Download PDF
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <aside class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 p-2 flex md:hidden">
+        <nav class="flex justify-around items-center w-full sidebar-mobile-scroll">
+            <a class="sidebar-mobile-item" href="/index.html">
+                <div class="icon-wrapper">
+                    <i class="fas fa-home text-base"></i>
+                </div>
+                <span class="text-label">Dashboard</span>
+            </a>
+            <a class="sidebar-mobile-item" href="../public/kehadiran.html">
+                <div class="icon-wrapper">
+                    <i class="fas fa-calendar-check text-base"></i>
+                </div>
+                <span class="text-label">Kehadiran</span>
+            </a>
+            <a aria-current="page" class="sidebar-mobile-item active" href="laporan.html">
+                <div class="icon-wrapper">
+                    <i class="fas fa-file-alt text-base"></i>
+                </div>
+                <span class="text-label">Laporan</span>
+            </a>
+            <a class="sidebar-mobile-item" href="#">
+                <div class="icon-wrapper">
+                    <i class="fas fa-credit-card text-base"></i>
+                </div>
+                <span class="text-label">Pembayaran</span>
+            </a>
+            <a class="sidebar-mobile-item" href="pengaturan-profil.html">
+            <div class="icon-wrapper">
+                <i class="fas fa-user-circle text-base"></i>
+            </div>
+            <span class="text-label">Profil</span>
+            </a>
+        </nav>
+    </aside>
+
+    <script>
+        const reportsData = [
+            { id: 1, type: 'Raport Siswa', title: 'Raport Semester 1 - Robotik - TA 2024/2025', publishedDate: '2025-06-15', downloadLink: '#', icon: 'fas fa-graduation-cap' },
+            { id: 2, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - Juni 2025', publishedDate: '2025-06-30', downloadLink: '#', icon: 'fas fa-chart-line' },
+            { id: 3, type: 'Prestasi Siswa', title: 'Sertifikat Lomba Robotik Tingkat Provinsi', publishedDate: '2025-05-25', downloadLink: '#', icon: 'fas fa-award' },
+            { id: 4, type: 'Raport Siswa', title: 'Raport Tengah Semester - Coding - TA 2024/2025', publishedDate: '2025-04-15', downloadLink: '#', icon: 'fas fa-graduation-cap' },
+            { id: 5, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - Mei 2025', publishedDate: '2025-05-31', downloadLink: '#', icon: 'fas fa-chart-line' },
+            { id: 6, type: 'Prestasi Siswa', title: 'Penghargaan Siswa Teladan April 2025', publishedDate: '2025-05-01', downloadLink: '#', icon: 'fas fa-star' },
+            { id: 7, type: 'Raport Siswa', title: 'Raport Semester 2 - Microsoft Office - TA 2023/2024', publishedDate: '2024-12-15', downloadLink: '#', icon: 'fas fa-graduation-cap' },
+            { id: 8, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - April 2025', publishedDate: '2025-04-30', downloadLink: '#', icon: 'fas fa-chart-line' },
+            { id: 9, type: 'Prestasi Siswa', title: 'Partisipasi Workshop Coding Tingkat Nasional', publishedDate: '2025-03-20', downloadLink: '#', icon: 'fas fa-laptop-code' },
+            { id: 10, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - Maret 2025', publishedDate: '2025-03-31', downloadLink: '#', icon: 'fas fa-chart-line' },
+            { id: 11, type: 'Raport Siswa', title: 'Raport Semester 1 - Desain Grafis - TA 2023/2024', publishedDate: '2024-06-15', downloadLink: '#', icon: 'fas fa-graduation-cap' },
+            { id: 12, type: 'Prestasi Siswa', title: 'Juara 3 Olimpiade Matematika Sains', publishedDate: '2025-02-10', downloadLink: '#', icon: 'fas fa-medal' },
+            { id: 13, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - Februari 2025', publishedDate: '2025-02-28', downloadLink: '#', icon: 'fas fa-chart-line' },
+            { id: 14, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - Januari 2025', publishedDate: '2025-01-31', downloadLink: '#', icon: 'fas fa-chart-line' },
+            { id: 15, type: 'Prestasi Siswa', title: 'Peserta Terbaik Kelas Desain Grafis', publishedDate: '2025-01-10', downloadLink: '#', icon: 'fas fa-award' },
+            { id: 16, type: 'Raport Siswa', title: 'Raport Semester 2 - Robotik - TA 2022/2023', publishedDate: '2023-12-15', downloadLink: '#', icon: 'fas fa-graduation-cap' },
+            { id: 17, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - Desember 2024', publishedDate: '2024-12-31', downloadLink: '#', icon: 'fas fa-chart-line' },
+            { id: 18, type: 'Prestasi Siswa', title: 'Finalis Lomba Sains Nasional', publishedDate: '2024-11-20', downloadLink: '#', icon: 'fas fa-trophy' },
+            { id: 19, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - November 2024', publishedDate: '2024-11-30', downloadLink: '#', icon: 'fas fa-chart-line' },
+            { id: 20, type: 'Raport Siswa', title: 'Raport Semester 1 - Coding - TA 2022/2023', publishedDate: '2023-06-15', downloadLink: '#', icon: 'fas fa-graduation-cap' },
+            { id: 21, type: 'Progres Laporan Bulanan', title: 'Laporan Progres Belajar - Oktober 2024', publishedDate: '2024-10-31', downloadLink: '#', icon: 'fas fa-chart-line' },
+        ];
+        
+        const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+        function formatDateForDisplay(dateString) {
+            if (!dateString) return '';
+            const dateObj = new Date(dateString);
+            const day = dateObj.getDate().toString().padStart(2, '0');
+            const month = monthNames[dateObj.getMonth()];
+            const year = dateObj.getFullYear();
+            return `${day} ${month} ${year}`;
+        }
+
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            const results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results && results.length > 1 ? results[1].replace(/\+/g, ' ') : '');
+        }
+
+        const reportId = parseInt(getUrlParameter('id'));
+        const reportTitleElement = document.getElementById('reportTitle');
+        const reportDateElement = document.getElementById('reportDate');
+        const reportContentArea = document.getElementById('reportContentArea');
+        const logoImgElement = document.querySelector('.academy-header .logo-img');
+
+        function renderReportContent(type, reportData) {
+            let contentHtml = '';
+            
+            if (type === 'Raport Siswa') {
+                const subjectMatch = reportData.title.match(/-\s(.*?)\s-?/);
+                const subject = subjectMatch && subjectMatch[1] ? subjectMatch[1] : 'Umum';
+                
+                contentHtml = `
+                    <h3 class="section-title">Data Siswa</h3>
+                    <table class="report-table">
+                        <tbody>
+                            <tr><th>Nama Siswa</th><td>Aripin Sihabudin</td></tr>
+                            <tr><th>Kelas</th><td>Robotika Tingkat Menengah</td></tr>
+                            <tr><th>Subjek Raport</th><td>${subject}</td></tr>
+                            <tr><th>Tahun Ajaran</th><td>${reportData.title.split('TA ')[1] || 'Tidak Diketahui'}</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 class="section-title">Penilaian Kinerja Siswa</h3>
+                    <table class="report-table">
+                        <thead>
+                            <tr><th>Aspek Penilaian</th><th>Keterangan Capaian</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Pemahaman Konsep</td>
+                                <td>Siswa mampu memahami konsep dasar ${subject} dengan baik, seperti ${
+                                    subject === 'Robotik' ? 'prinsip kerja sensor dan aktuator' :
+                                    subject === 'Coding' ? 'struktur algoritma dan sintaks dasar' :
+                                    subject === 'Microsoft Office' ? 'fungsi dasar aplikasi perkantoran' :
+                                    subject === 'Desain Grafis' ? 'prinsip desain dan penggunaan tool dasar' :
+                                    'berbagai konsep penting'
+                                }.</td>
+                            </tr>
+                            <tr>
+                                <td>Keterampilan Praktis</td>
+                                <td>Mampu mengaplikasikan teori dalam praktik. Contohnya, ${
+                                    subject === 'Robotik' ? 'merakit robot sederhana dan melakukan pengkabelan' :
+                                    subject === 'Coding' ? 'menulis kode program untuk masalah sederhana' :
+                                    subject === 'Microsoft Office' ? 'menyusun dokumen profesional dan mengolah data di spreadsheet' :
+                                    subject === 'Desain Grafis' ? 'membuat desain visual menggunakan software' :
+                                    'menerapkan keterampilan yang diajarkan'
+                                }.</td>
+                            </tr>
+                            <tr>
+                                <td>Inisiatif & Problem Solving</td>
+                                <td>Menunjukkan inisiatif tinggi dalam mencari solusi masalah dan tidak ragu mencoba hal baru. Mampu memecahkan tantangan dengan bimbingan.</td>
+                            </tr>
+                            <tr>
+                                <td>Kerja Sama & Komunikasi</td>
+                                <td>Cukup aktif dalam kerja kelompok dan mampu mengutarakan ide. Perlu peningkatan dalam mendengarkan masukan dari teman.</td>
+                            </tr>
+                            <tr>
+                                <td>Disiplin & Ketekunan</td>
+                                <td>Sangat disiplin dalam mengikuti kelas dan tekun dalam menyelesaikan tugas.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 class="section-title">Catatan & Rekomendasi Trainer</h3>
+                    <p class="text-gray-700 mb-6 leading-relaxed">
+                        Aripin menunjukkan kemajuan yang sangat konsisten dan positif di subjek ${subject}. Dia memiliki dasar yang kuat dan semangat belajar yang tinggi. Untuk terus berkembang, disarankan untuk lebih banyak melakukan proyek mandiri di luar jam pelajaran dan mengikuti tantangan lanjutan yang disediakan akademi. Pertahankan semangat belajarmu! Kami optimis Aripin dapat mencapai potensi terbaiknya.
+                    </p>
+                    
+                    <div class="mt-8 text-right">
+                        <p class="text-sm text-gray-700">Sukabumi, ${formatDateForDisplay(reportData.publishedDate)}</p>
+                        <p class="text-sm font-semibold text-black mt-6">Kepala Akademik</p>
+                        <p class="text-sm text-gray-600">Sukarobot Academy</p>
+                    </div>
+                `;
+            } else if (type === 'Progres Laporan Bulanan') {
+                contentHtml = `
+                    <h3 class="section-title">Ringkasan Kemajuan Belajar</h3>
+                    <ul class="report-list text-gray-700">
+                        <li><strong>Periode Laporan:</strong> ${reportData.title.split(' - ')[1]}</li>
+                        <li><strong>Topik yang Dicakup:</strong> ${reportData.id === 2 ? 'Pengenalan pemrograman berbasis blok, dasar-dasar sirkuit elektronik, dan perancangan algoritma sederhana.' : (reportData.id === 5 ? 'Perakitan robot sederhana (line follower), pengenalan sensor jarak, dan kalibrasi motor.' : (reportData.id === 8 ? 'Algoritma navigasi robot yang kompleks, teknik debugging program lanjutan, dan optimasi kode.' : 'Berbagai topik sesuai kurikulum bulan ini.'))}</li>
+                        <li><strong>Proyek yang Diselesaikan:</strong> ${reportData.id === 2 ? 'Robot penghindar rintangan sederhana dengan sensor ultrasonik.' : (reportData.id === 5 ? 'Robot pengikut garis dengan respons kecepatan adaptif.' : (reportData.id === 8 ? 'Robot pengumpul objek otomatis dengan pengenalan warna.' : 'Proyek sesuai materi bulan ini yang menunjukkan pemahaman mendalam.'))}</li>
+                        <li><strong>Area Pengembangan:</strong> ${reportData.id === 2 ? 'Peningkatan pemahaman dalam debugging kode yang lebih kompleks dan struktur data dasar.' : (reportData.id === 5 ? 'Eksplorasi fitur lanjutan dalam perangkat lunak desain grafis dan optimasi alur kerja.' : (reportData.id === 8 ? 'Analisis data sensor lebih mendalam untuk pengambilan keputusan otonom.' : 'Area pengembangan yang relevan seperti adaptasi terhadap teknologi baru atau pemikiran kritis.'))}</li>
+                        <li><strong>Kehadiran Bulan Ini:</strong> Sangat baik (100%)</li>
+                        <li><strong>Partisipasi Kelas:</strong> Aktif dan kontributif</li>
+                    </ul>
+
+                    <h3 class="section-title">Umpan Balik Instruktur</h3>
+                    <p class="text-gray-700 mb-6 leading-relaxed">
+                        Aripin telah menunjukkan kemajuan yang sangat positif dalam pemahaman konsep dan aplikasi praktis selama bulan ini. Dia memiliki inisiatif tinggi dalam mencari solusi masalah, aktif berpartisipasi dalam diskusi kelompok, dan menunjukkan antusiasme yang luar biasa. Disarankan untuk terus memperbanyak praktik mandiri guna mengasah kemampuan analitis dan pemecahan masalah yang lebih kompleks. Kami melihat potensi besar dalam diri Aripin untuk menjadi seorang inovator di bidang robotika dan teknologi.
+                    </p>
+                    
+                    <h3 class="section-title">Grafik Progres</h3>
+                    <img src="https://via.placeholder.com/700x350/E0F2FE/0B4C66?text=Grafik+Progres+Bulanan+Siswa" alt="Grafik Progres Bulanan" class="w-full h-auto rounded-lg shadow-md mb-4">
+                    <p class="text-sm text-gray-600 text-center italic">Grafik di atas menunjukkan kemajuan belajar siswa selama periode laporan ini, dengan peningkatan signifikan pada pemahaman konseptual dan kinerja proyek.</p>
+                `;
+            } else if (type === 'Prestasi Siswa') {
+                contentHtml = `
+                    <h3 class="section-title">Detail Prestasi</h3>
+                    <table class="report-table">
+                        <tbody>
+                            <tr><th>Nama Siswa</th><td>Aripin Sihabudin</td></tr>
+                            <tr><th>Nama Prestasi</th><td>${reportData.title}</td></tr>
+                            <tr><th>Penyelenggara</th><td>${reportData.id === 3 ? 'Dinas Pendidikan Provinsi Jawa Barat' : (reportData.id === 6 ? 'Sukarobot Academy' : (reportData.id === 9 ? 'Asosiasi Coding Indonesia' : (reportData.id === 12 ? 'Pusat Olimpiade Sains Nasional' : (reportData.id === 15 ? 'Sukarobot Academy' : (reportData.id === 18 ? 'Kementerian Pendidikan dan Kebudayaan' : 'Institusi Terkait')))))}</td></tr>
+                            <tr><th>Tanggal Pelaksanaan</th><td>${formatDateForDisplay(reportData.publishedDate)}</td></tr>
+                            <tr><th>Kategori Lomba/Bidang</th><td>${reportData.id === 3 ? 'Robotik Tingkat Dasar' : (reportData.id === 6 ? 'Siswa Teladan' : (reportData.id === 9 ? 'Workshop Coding Tingkat Lanjut' : (reportData.id === 12 ? 'Matematika dan Fisika' : (reportData.id === 15 ? 'Desain Grafis Kreatif' : (reportData.id === 18 ? 'Penelitian Sains Remaja' : 'Bidang Terkait')))))}</td></tr>
+                            <tr><th>Tingkat Kompetisi</th><td>${reportData.id === 3 ? 'Provinsi' : (reportData.id === 12 || reportData.id === 9 || reportData.id === 18 ? 'Nasional' : 'Lokal/Akademi')}</td></tr>
+                            <tr><th>Pencapaian</th><td>${reportData.id === 3 ? 'Juara 1' : (reportData.id === 6 ? 'Penghargaan Terbaik' : (reportData.id === 9 ? 'Peserta Terbaik' : (reportData.id === 12 ? 'Juara 3' : (reportData.id === 15 ? 'Peserta Terbaik' : (reportData.id === 18 ? 'Finalis' : 'Pencapaian Spesifik')))))}</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 class="section-title">Deskripsi Prestasi</h3>
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        Aripin telah meraih prestasi gemilang dalam bidang ${reportData.title.includes('Robotik') ? 'robotika' : (reportData.title.includes('Coding') ? 'coding' : (reportData.title.includes('Matematika') ? 'matematika dan sains' : 'akademik'))} ini. Pencapaian ini menunjukkan dedikasi, kerja keras, dan bakat luar biasa Aripin dalam ${reportData.title.toLowerCase()}. Kami sangat bangga dengan kontribusi dan semangat belajarnya, yang telah membawa nama baik akademi. Prestasi ini menjadi bukti nyata komitmen Aripin terhadap keunggulan.
+                    </p>
+                    
+                    <h3 class="section-title">Dokumen Pendukung</h3>
+                    <p class="text-gray-700 mb-4">Salinan sertifikat atau piagam penghargaan dapat diunduh melalui tautan berikut:</p>
+                    <a href="https://via.placeholder.com/800x600/D9E9FF/0B4C66?text=Dokumen+Sertifikat+Prestasi.pdf" target="_blank" class="inline-flex items-center gap-2 text-[#0B4C66] hover:underline font-medium">
+                        <i class="fas fa-file-pdf text-xl"></i> Unduh Dokumen Prestasi (PDF)
+                    </a>
+                `;
+            } else {
+                contentHtml = `<p class="text-center text-gray-500 italic">Format laporan untuk tipe ini tidak tersedia atau belum lengkap.</p>`;
+            }
+            reportContentArea.innerHTML = contentHtml;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentReport = reportsData.find(report => report.id === reportId);
+
+            if (currentReport) {
+                // You can keep the placeholder or replace with a real logo path if available
+                logoImgElement.src = "https://via.placeholder.com/200x80/E0F2FE/0B4C66?text=LOGO+SUKAROBOT"; 
+                reportTitleElement.textContent = currentReport.title;
+                reportDateElement.textContent = `Tanggal Publikasi: ${formatDateForDisplay(currentReport.publishedDate)}`;
+                renderReportContent(currentReport.type, currentReport);
+            } else {
+                reportContentArea.innerHTML = `<p class="text-center text-red-500 font-semibold">Laporan tidak ditemukan. Silakan kembali ke daftar laporan.</p>`;
+                reportTitleElement.textContent = "Laporan Tidak Ditemukan";
+                reportDateElement.textContent = "";
+            }
+        });
+    </script>
+</body>
+</html>

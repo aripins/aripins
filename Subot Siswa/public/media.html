@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title id="pageTitle">Detail Media - SubotApp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --color-primary-bg: #F7F9FC;
+            --color-brand-blue: #0B4C66;
+            --color-sidebar-active: #D9E9FF;
+            --color-text-gray-600: #6B7280;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-primary-bg);
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 24px auto;
+            background-color: #fff;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid transparent;
+        }
+
+        .container:hover {
+            border-color: #e5e7eb;
+        }
+
+        .prose * {
+            max-width: 100%;
+        }
+
+        .prose iframe {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+        }
+
+        .aspect-w-16 {
+            position: relative;
+            width: 100%;
+        }
+
+        .aspect-h-9 {
+            padding-bottom: 56.25%;
+        }
+
+        .aspect-w-16 iframe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .sidebar-mobile-scroll {
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .sidebar-mobile-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sidebar-mobile-item {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            gap: 0.5rem;
+            width: auto;
+            min-width: 80px;
+        }
+
+        .sidebar-mobile-item .icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 9999px;
+        }
+
+        .sidebar-mobile-item.active .icon-wrapper {
+            background-color: var(--color-brand-blue);
+            color: white;
+        }
+
+        .sidebar-mobile-item.active .text-label {
+            color: var(--color-brand-blue);
+            font-weight: 600;
+        }
+
+        .sidebar-mobile-item:not(.active) .icon-wrapper {
+            background-color: transparent;
+            color: var(--color-text-gray-600);
+        }
+
+        .sidebar-mobile-item:not(.active) .text-label {
+            color: var(--color-text-gray-600);
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body class="bg-primary-bg min-h-screen text-gray-700">
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <aside class="w-full md:w-64 bg-white border-b md:border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col md:sticky md:top-0 md:h-screen">
+            <div class="px-6 py-5 border-b border-gray-200">
+                <img src="../asset/logo fix sukarobot.jpg" alt="Sukarobot Academy Logo" class="h-10 w-auto object-contain mx-auto">
+            </div>
+            <a href="pengaturan-profil.html" class="px-6 py-5 flex items-center space-x-4 border-b border-gray-200">
+            <img alt="Profile picture" class="w-10 h-10 rounded-full object-cover" height="40" src="/asset/real.jpg" width="40"/>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-gray-900 truncate">
+                Aripin Sihabudin
+                </p>
+                <p class="text-xs text-gray-400 truncate">
+                Siswa
+                </p>
+            </div>
+            <button aria-label="Logout" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+            </button>
+            </a>
+            <nav class="flex flex-col mt-6 space-y-1 px-2 flex-grow overflow-y-auto">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg bg-sidebar-active text-brand-blue font-semibold text-sm" href="../index.html">
+                    <i class="fas fa-home text-base"></i>
+                    Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="kehadiran.html">
+                    <i class="fas fa-calendar-check text-base"></i>
+                    Kehadiran
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="laporan.html">
+                    <i class="fas fa-file-alt text-base"></i>
+                    Laporan
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-900" href="../pembayaran/pembayaran.html">
+                    <i class="fas fa-credit-card text-base"></i>
+                    Pembayaran
+                </a>
+            </nav>
+            <button aria-label="Logout" class="w-full flex justify-center py-3 border-t border-gray-200 text-gray-500 hover:text-gray-700">
+            </button>
+        </aside>
+
+        <main class="flex-1 p-6 overflow-y-auto pb-20 md:pb-6">
+            <div class="container">
+                <div class="flex items-center mb-6">
+                    <a href="sisa-pertemuan.html" class="text-gray-500 hover:text-gray-700 mr-4">
+                        <i class="fas fa-arrow-left text-lg"></i>
+                    </a>
+                    <h2 class="font-extrabold text-black text-lg" id="mediaPageTitle">Detail Media</h2>
+                </div>
+
+                <section class="bg-gray-50 rounded-lg p-4 mb-6 border border-transparent">
+                    <p class="text-sm text-gray-600 mb-1">
+                        Subjek: <span class="font-semibold text-brand-blue" id="mediaSubject"></span>
+                    </p>
+                    <p class="text-sm text-gray-600">
+                        Pertemuan: <span class="font-semibold text-brand-blue" id="mediaMeetingDate"></span>
+                    </p>
+                </section>
+
+                <section class="bg-white rounded-lg p-4 mb-6 shadow-sm border border-transparent hover:border-gray-200">
+                    <h3 class="font-bold text-black text-base mb-2">Keterangan Singkat Materi</h3>
+                    <p class="text-gray-700 text-sm" id="mediaDescription">
+                        Keterangan singkat materi akan ditampilkan di sini.
+                    </p>
+                </section>
+
+                <section class="bg-white rounded-lg p-4 mb-6 shadow-sm border border-transparent hover:border-gray-200">
+                    <h3 class="font-bold text-black text-base mb-2">Modul Pembelajaran</h3>
+                    <div id="moduleContent" class="prose max-w-none text-gray-700 text-sm">
+                        <p><i class="fas fa-file-alt mr-2 text-blue-500"></i>Mohon maaf, modul pembelajaran belum tersedia untuk pertemuan ini.</p>
+                    </div>
+                </section>
+
+                <section class="bg-white rounded-lg p-4 mb-6 shadow-sm border border-transparent hover:border-gray-200">
+                    <h3 class="font-bold text-black text-base mb-2">Video Pembelajaran</h3>
+                    <div id="videoContent" class="prose max-w-none text-gray-700 text-sm">
+                        <p><i class="fas fa-video mr-2 text-red-500"></i>Mohon maaf, video pembelajaran belum tersedia untuk pertemuan ini.</p>
+                    </div>
+                </section>
+
+                <section class="bg-white rounded-lg p-4 mb-6 shadow-sm border border-transparent hover:border-gray-200">
+                    <h3 class="font-bold text-black text-base mb-2">Dokumentasi Pembelajaran</h3>
+                    <div id="documentationContent" class="prose max-w-none text-gray-700 text-sm">
+                        <p><i class="fas fa-camera mr-2 text-gray-500"></i>Mohon maaf, dokumentasi pembelajaran (foto/galeri) belum tersedia untuk pertemuan ini.</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <aside class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 p-2 flex md:hidden">
+            <nav class="flex justify-around items-center w-full sidebar-mobile-scroll">
+                <a class="sidebar-mobile-item active" href="index.html">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-home text-base"></i>
+                    </div>
+                    <span class="text-label">Dashboard</span>
+                </a>
+                <a class="sidebar-mobile-item" href="#">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-calendar-check text-base"></i>
+                    </div>
+                    <span class="text-label">Kehadiran</span>
+                </a>
+                <a class="sidebar-mobile-item" href="#">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-file-alt text-base"></i>
+                    </div>
+                    <span class="text-label">Laporan</span>
+                </a>
+                <a class="sidebar-mobile-item" href="#">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-credit-card text-base"></i>
+                    </div>
+                    <span class="text-label">Pembayaran</span>
+                </a>
+                <a class="sidebar-mobile-item" href="pengaturan-profil.html">
+                <div class="icon-wrapper">
+                    <i class="fas fa-user-circle text-base"></i>
+                </div>
+                <span class="text-label">Profil</span>
+                </a>
+            </nav>
+        </aside>
+    </div>
+
+    <script>
+        const allMediaDetails = {
+            'robotik-1': {
+                subject: 'Robotik',
+                meetingDate: '25 Juli 2025',
+                title: 'Modul Pengenalan Sensor & Aktuator',
+                description: 'Materi ini memperkenalkan siswa pada berbagai jenis sensor dan aktuator yang digunakan dalam robotika, serta cara kerjanya. Memahami komponen dasar ini adalah langkah pertama untuk membangun robot.',
+                module: {
+                    type: 'pdf',
+                    url: 'https://example.com/modul-robotik-sensor.pdf',
+                    label: 'Modul Sensor & Aktuator (PDF)'
+                },
+                video: null,
+                documentation: null
+            },
+            'robotik-2': {
+                subject: 'Robotik',
+                meetingDate: '27 Juli 2025',
+                title: 'Video Pemrograman Robot Dasar',
+                description: 'Video tutorial ini memandu siswa dalam langkah-langkah awal pemrograman robot menggunakan platform sederhana. Fokus pada logika dasar dan perintah gerakan.',
+                module: null,
+                video: {
+                    type: 'youtube',
+                    url: 'https://www.youtube.com/embed/your-youtube-video-id-1',
+                    label: 'Video Pembelajaran Pemrograman Robot'
+                },
+                documentation: null
+            },
+            'robotik-3': {
+                subject: 'Robotik',
+                meetingDate: '29 Juli 2025',
+                title: 'Modul Proyek Robot Sederhana',
+                description: 'Panduan lengkap untuk merakit dan memprogram robot sederhana dari awal hingga akhir, termasuk daftar komponen dan tips pemecahan masalah.',
+                module: {
+                    type: 'pdf',
+                    url: 'https://example.com/modul-proyek-robot.pdf',
+                    label: 'Modul Proyek Robot Sederhana (PDF)'
+                },
+                video: null,
+                documentation: null
+            },
+            'coding-1': {
+                subject: 'Coding',
+                meetingDate: '26 Juli 2025',
+                title: 'Modul Dasar-dasar Python',
+                description: 'Pengenalan fundamental bahasa pemrograman Python, meliputi sintaks dasar, tipe data, dan struktur kontrol.',
+                module: {
+                    type: 'pdf',
+                    url: 'https://example.com/modul-python-dasar.pdf',
+                    label: 'Modul Dasar Python (PDF)'
+                },
+                video: null,
+                documentation: null
+            },
+            'coding-2': {
+                subject: 'Coding',
+                meetingDate: '28 Juli 2025',
+                title: 'Video Pengenalan HTML & CSS',
+                description: 'Tutorial video untuk memahami struktur dasar halaman web dengan HTML dan styling dengan CSS.',
+                module: null,
+                video: {
+                    type: 'youtube',
+                    url: 'https://www.youtube.com/embed/your-youtube-video-id-2',
+                    label: 'Video HTML & CSS Fundamental'
+                },
+                documentation: null
+            },
+            'desain-1': {
+                subject: 'Desain Grafis',
+                meetingDate: '25 Juli 2025',
+                title: 'Modul Pengantar Adobe Photoshop',
+                description: 'Memulai perjalanan di dunia desain grafis dengan pengenalan fitur-fitur dasar Adobe Photoshop dan teknik manipulasi gambar.',
+                module: {
+                    type: 'pdf',
+                    url: 'https://example.com/modul-photoshop-intro.pdf',
+                    label: 'Modul Pengantar Photoshop (PDF)'
+                },
+                video: null,
+                documentation: null
+            },
+            'office-1': {
+                subject: 'Microsoft Office',
+                meetingDate: '28 Juli 2025',
+                title: 'Modul Mahir Microsoft Word',
+                description: 'Menguasai fitur-fitur lanjutan Microsoft Word untuk pembuatan dokumen profesional dan efisien.',
+                module: {
+                    type: 'pdf',
+                    url: 'https://example.com/modul-word-mahir.pdf',
+                    label: 'Modul Mahir Microsoft Word (PDF)'
+                },
+                video: null,
+                documentation: null
+            },
+        };
+
+        const getElement = (id) => document.getElementById(id);
+
+        const renderModuleContent = (moduleData, element) => {
+            if (moduleData) {
+                element.innerHTML = `
+                    <p class="flex items-center">
+                        <i class="fas fa-file-alt mr-2 text-blue-500"></i>
+                        <a href="${moduleData.url}" target="_blank" class="text-brand-blue hover:underline font-semibold">
+                            ${moduleData.label}
+                        </a>
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">Klik untuk mengunduh atau melihat modul.</p>
+                `;
+            } else {
+                element.innerHTML = `
+                    <p class="text-gray-600 flex items-center">
+                        <i class="fas fa-file-alt mr-2 text-gray-400"></i>Mohon maaf, modul pembelajaran belum tersedia untuk pertemuan ini.
+                    </p>
+                `;
+            }
+        };
+
+        const renderVideoContent = (videoData, element) => {
+            if (videoData) {
+                element.innerHTML = `
+                    <div class="aspect-w-16 aspect-h-9">
+                        <iframe src="${videoData.url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <p class="mt-3 text-sm text-gray-700">${videoData.label}</p>
+                `;
+            } else {
+                element.innerHTML = `
+                    <p class="text-gray-600 flex items-center">
+                        <i class="fas fa-video mr-2 text-gray-400"></i>Mohon maaf, video pembelajaran belum tersedia untuk pertemuan ini.
+                    </p>
+                `;
+            }
+        };
+
+        const renderDocumentationContent = (documentationData, element) => {
+            if (documentationData) {
+                element.innerHTML = `
+                    <p class="text-gray-700 flex items-center">
+                        <i class="fas fa-images mr-2 text-green-500"></i>
+                        <a href="${documentationData.url}" target="_blank" class="text-brand-blue hover:underline font-semibold">
+                            ${documentationData.label}
+                        </a>
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">Klik untuk melihat dokumentasi.</p>
+                `;
+            } else {
+                element.innerHTML = `
+                    <p class="text-gray-600 flex items-center">
+                        <i class="fas fa-camera mr-2 text-gray-400"></i>Mohon maaf, dokumentasi pembelajaran (foto/galeri) belum tersedia untuk pertemuan ini.
+                    </p>
+                `;
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const mediaId = urlParams.get('id');
+
+            const pageTitleElement = getElement('pageTitle');
+            const mediaPageTitleElement = getElement('mediaPageTitle');
+            const mediaSubjectElement = getElement('mediaSubject');
+            const mediaMeetingDateElement = getElement('mediaMeetingDate');
+            const mediaDescriptionElement = getElement('mediaDescription');
+            const moduleContentElement = getElement('moduleContent');
+            const videoContentElement = getElement('videoContent');
+            const documentationContentElement = getElement('documentationContent');
+            const mainContainer = document.querySelector('.container');
+
+            if (mediaId && allMediaDetails[mediaId]) {
+                const media = allMediaDetails[mediaId];
+                pageTitleElement.textContent = `${media.title} - SubotApp`;
+                mediaPageTitleElement.textContent = media.title;
+                mediaSubjectElement.textContent = media.subject;
+                mediaMeetingDateElement.textContent = media.meetingDate;
+                mediaDescriptionElement.textContent = media.description;
+
+                renderModuleContent(media.module, moduleContentElement);
+                renderVideoContent(media.video, videoContentElement);
+                renderDocumentationContent(media.documentation, documentationContentElement);
+
+            } else {
+                pageTitleElement.textContent = 'Media Tidak Ditemukan - SubotApp';
+                mediaPageTitleElement.textContent = 'Media Tidak Ditemukan';
+                mainContainer.innerHTML = `
+                    <div class="flex items-center mb-6">
+                        <a href="sisa-pertemuan.html" class="text-gray-500 hover:text-gray-700 mr-4">
+                            <i class="fas fa-arrow-left text-lg"></i>
+                        </a>
+                        <h2 class="font-extrabold text-black text-lg">Media Tidak Ditemukan</h2>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-sm text-center">
+                        <p class="text-red-500 text-lg mb-4">
+                            <i class="fas fa-exclamation-circle mr-2"></i>Maaf, konten media yang Anda cari tidak ditemukan.
+                        </p>
+                        <p class="text-gray-600 text-sm">
+                            Silakan kembali ke halaman sebelumnya atau hubungi admin jika ini adalah kesalahan.
+                        </p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   SubotApp Pembayaran
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+  <style>
+   body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+ </head>
+ <body class="bg-[#F7FAFC] min-h-screen flex">
+  <!-- Sidebar -->
+  <aside class="flex flex-col bg-white w-64 shadow-lg border-r border-gray-200 select-none">
+   <div class="px-6 py-5 border-b border-gray-200">
+    <h1 class="font-semibold text-[#0B4B60] text-lg leading-6">
+     SubotApp
+    </h1>
+   </div>
+   <div class="flex items-center gap-3 px-6 py-5 border-b border-gray-200">
+    <img alt="Profile photo of a young woman with long black hair, smiling" class="w-10 h-10 rounded-full object-cover" height="40" src="/asset/real.jpg" width="40"/>
+    <div class="flex flex-col">
+     <span class="font-semibold text-sm text-gray-900 leading-5">
+      Aripin
+     </span>
+     <span class="text-xs text-gray-500 leading-4">
+      Siswa
+     </span>
+    </div>
+   </div>
+   <nav class="flex flex-col mt-6 space-y-1 px-2">
+    <a class="flex items-center gap-3 px-4 py-3 rounded-md text-gray-600 hover:text-[#0B4B60] hover:bg-[#E6F2F7] transition-colors" href="#">
+     <i class="fas fa-home text-base w-5 text-gray-600">
+     </i>
+     <span class="text-sm font-medium leading-5">
+      Dashboard
+     </span>
+    </a>
+    <a class="flex items-center gap-3 px-4 py-3 rounded-md text-gray-600 hover:text-[#0B4B60] hover:bg-[#E6F2F7] transition-colors" href="#">
+     <i class="fas fa-calendar-check text-base w-5 text-gray-600">
+     </i>
+     <span class="text-sm font-medium leading-5">
+      Kehadiran
+     </span>
+    </a>
+    <a class="flex items-center gap-3 px-4 py-3 rounded-md text-gray-600 hover:text-[#0B4B60] hover:bg-[#E6F2F7] transition-colors" href="#">
+     <i class="fas fa-file-alt text-base w-5 text-gray-600">
+     </i>
+     <span class="text-sm font-medium leading-5">
+      Laporan
+     </span>
+    </a>
+    <a aria-current="page" class="flex items-center gap-3 px-4 py-3 rounded-md bg-[#E6F2F7] text-[#0B4B60] font-medium" href="#">
+     <i class="fas fa-credit-card text-base w-5 text-[#0B4B60]">
+     </i>
+     <span class="text-sm leading-5">
+      Pembayaran
+     </span>
+    </a>
+   </nav>
+   <div class="mt-auto p-3">
+    <button aria-label="Logout" class="text-gray-600 hover:text-gray-900 transition-colors">
+     </i>
+    </button>
+   </div>
+  </aside>
+  <!-- Main content -->
+  <main class="flex-1 p-8 max-w-7xl mx-auto">
+   <nav class="text-xs text-gray-500 mb-2 font-normal leading-5">
+    <a class="text-[#0B4B60] hover:underline font-medium" href="#">
+     Dashboard
+    </a>
+    <span class="mx-1">
+     &gt;
+    </span>
+    <span>
+     Pembayaran
+    </span>
+   </nav>
+   <h1 class="text-gray-900 font-semibold text-xl mb-8 leading-6">
+    Pembayaran
+   </h1>
+   <section class="mb-10 max-w-3xl">
+    <dl class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-gray-600">
+     <dt class="font-semibold col-span-1">
+      Informasi Pembayaran
+     </dt>
+     <dd>
+     </dd>
+     <dt>
+      Program
+     </dt>
+     <dd class="text-right font-normal">
+      SPP Bulan Januari 2025
+     </dd>
+     <dt>
+      Periode
+     </dt>
+     <dd class="text-right font-normal">
+      Januari 2025
+     </dd>
+     <dt>
+      Tenggat Waktu
+     </dt>
+     <dd class="text-right font-normal text-[#F87171]">
+      10 Januari 2025
+     </dd>
+     <dt>
+      Jumlah
+     </dt>
+     <dd class="text-right font-normal text-[#0B4B60]">
+      Rp 550,000
+     </dd>
+    </dl>
+   </section>
+   <section class="max-w-3xl mb-10">
+    <fieldset aria-labelledby="payment-methods-label" class="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
+     <legend class="text-sm font-semibold text-gray-900 mb-2" id="payment-methods-label">
+      Pilih Metode Pembayaran
+     </legend>
+     <label class="flex items-center gap-3 border border-gray-200 rounded-md p-3 cursor-pointer hover:border-[#0B4B60]" for="transfer-bank">
+      <input checked="" class="hidden peer" id="transfer-bank" name="payment-method" type="radio"/>
+      <i aria-hidden="true" class="fas fa-university text-[#0B4B60] w-5 flex-shrink-0">
+      </i>
+      <div class="flex flex-col text-sm">
+       <span class="font-semibold text-gray-900 leading-5">
+        Transfer Bank
+       </span>
+       <span class="text-xs text-gray-500 leading-4">
+        Transfer Ke Akun Bank
+       </span>
+      </div>
+     </label>
+     <label class="flex items-center gap-3 border border-gray-200 rounded-md p-3 cursor-pointer hover:border-[#0B4B60]" for="e-wallet">
+      <input class="hidden peer" id="e-wallet" name="payment-method" type="radio"/>
+      <i aria-hidden="true" class="fas fa-credit-card text-[#0B4B60] w-5 flex-shrink-0">
+      </i>
+      <div class="flex flex-col text-sm">
+       <span class="font-semibold text-gray-900 leading-5">
+        E-Wallet
+       </span>
+       <span class="text-xs text-gray-500 leading-4">
+        GoPay, OVO, DANA
+       </span>
+      </div>
+     </label>
+     <label class="flex items-center gap-3 border border-gray-200 rounded-md p-3 cursor-pointer hover:border-[#0B4B60]" for="qr-code">
+      <input class="hidden peer" id="qr-code" name="payment-method" type="radio"/>
+      <i aria-hidden="true" class="fas fa-qrcode text-[#0B4B60] w-5 flex-shrink-0">
+      </i>
+      <div class="flex flex-col text-sm">
+       <span class="font-semibold text-gray-900 leading-5">
+        QR Code
+       </span>
+       <span class="text-xs text-gray-500 leading-4">
+        Scan Untuk Melakukan Pembayaran
+       </span>
+      </div>
+     </label>
+     <label class="flex items-center gap-3 border border-gray-200 rounded-md p-3 cursor-pointer hover:border-[#0B4B60]" for="virtual-account">
+      <input class="hidden peer" id="virtual-account" name="payment-method" type="radio"/>
+      <i aria-hidden="true" class="fas fa-credit-card text-[#0B4B60] w-5 flex-shrink-0">
+      </i>
+      <div class="flex flex-col text-sm">
+       <span class="font-semibold text-gray-900 leading-5">
+        Virtual Account
+       </span>
+       <span class="text-xs text-gray-500 leading-4">
+        Bayar Melalui Virtual Account
+       </span>
+      </div>
+     </label>
+    </fieldset>
+   </section>
+   <section class="max-w-3xl">
+    <button class="w-full bg-[#0B4B60] text-white text-sm font-normal py-3 rounded-md hover:bg-[#0a3b4c] transition-colors" type="button">
+     Lanjutkan Pembayaran
+    </button>
+   </section>
+  </main>
+ </body>
+</html>
